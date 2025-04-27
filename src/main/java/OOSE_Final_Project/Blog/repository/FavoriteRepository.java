@@ -1,0 +1,10 @@
+package OOSE_Final_Project.Blog.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface FavoriteRepository extends JpaRepository<OOSE_Final_Project.Blog.entity.Favorite, Long> {
+
+
+}

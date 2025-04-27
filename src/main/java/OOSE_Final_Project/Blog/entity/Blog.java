@@ -2,12 +2,21 @@ package OOSE_Final_Project.Blog.entity;
 
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "blogs")
-public class Blog extends BaseEntity {
+public abstract class Blog extends BaseEntity {
 
     String title;
 

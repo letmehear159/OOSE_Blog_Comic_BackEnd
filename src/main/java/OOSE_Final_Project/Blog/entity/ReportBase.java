@@ -4,8 +4,12 @@ import OOSE_Final_Project.Blog.enums.EReportType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
 
 @MappedSuperclass
+@Getter
+@Setter
 public class ReportBase extends BaseEntity {
 
     String content;
