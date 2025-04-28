@@ -1,5 +1,7 @@
-package OOSE_Final_Project.Blog.entity;
+package OOSE_Final_Project.Blog.entity.report;
 
+import OOSE_Final_Project.Blog.entity.BaseEntity;
+import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.EReportType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,4 +25,8 @@ public class ReportBase extends BaseEntity {
     String url;
 
     EReportType type;
+
+    boolean isRead;
+
+    boolean isHandled;
 }

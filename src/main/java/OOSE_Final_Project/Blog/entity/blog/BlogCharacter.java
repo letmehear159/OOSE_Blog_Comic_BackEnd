@@ -1,4 +1,4 @@
-package OOSE_Final_Project.Blog.entity;
+package OOSE_Final_Project.Blog.entity.blog;
 
 import jakarta.persistence.*;
 import lombok.Getter;

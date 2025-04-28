@@ -1,5 +1,6 @@
-package OOSE_Final_Project.Blog.entity;
+package OOSE_Final_Project.Blog.entity.reaction;
 
+import OOSE_Final_Project.Blog.entity.blog.Blog;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

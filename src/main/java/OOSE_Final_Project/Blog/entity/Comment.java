@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.entity;
 
+import OOSE_Final_Project.Blog.entity.blog.Blog;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,11 +31,6 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "parent_id", nullable = true)
     Comment parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Comment> children;
-
-
-
-
-
 }

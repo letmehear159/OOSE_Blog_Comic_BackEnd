@@ -1,5 +1,6 @@
-package OOSE_Final_Project.Blog.entity;
+package OOSE_Final_Project.Blog.entity.reaction;
 
+import OOSE_Final_Project.Blog.entity.Comment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -9,13 +10,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "report_comments")
 @Entity
+@Table(name = "reaction_comments")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportComment extends ReportBase {
+public class ReactionComment extends ReactionBase {
 
     @ManyToOne
     @JoinColumn(name = "comment_id")

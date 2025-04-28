@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.entity;
 
+import OOSE_Final_Project.Blog.entity.blog.Blog;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -25,6 +26,6 @@ public class Rate extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User sender;
+    User user;
 
 }

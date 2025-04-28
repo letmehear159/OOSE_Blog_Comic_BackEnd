@@ -1,5 +1,9 @@
-package OOSE_Final_Project.Blog.entity;
+package OOSE_Final_Project.Blog.entity.blog;
 
+import OOSE_Final_Project.Blog.entity.BaseEntity;
+import OOSE_Final_Project.Blog.entity.Category;
+import OOSE_Final_Project.Blog.entity.Tag;
+import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
