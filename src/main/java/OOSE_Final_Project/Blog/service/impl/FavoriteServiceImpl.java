@@ -59,10 +59,6 @@ public class FavoriteServiceImpl implements IFavoriteService {
         return favoriteRepository.findAll();
     }
 
-    @Override
-    public Optional<Favorite> getFavoriteById(Long id) {
-        return favoriteRepository.findById(id);
-    }
 
     @Override
     public List<Favorite> getFavoritesByUserId(Long userId) {
@@ -86,4 +82,6 @@ public class FavoriteServiceImpl implements IFavoriteService {
         }
         favoriteRepository.deleteById(id);
     }
+
+
 }

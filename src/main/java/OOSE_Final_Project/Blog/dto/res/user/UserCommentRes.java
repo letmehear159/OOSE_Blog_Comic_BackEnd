@@ -31,22 +31,22 @@ public class UserCommentRes {
 
         private String avatar;
 
-        public Builder setAvatar(String avatar) {
+        public Builder avatar(String avatar) {
             this.avatar = avatar;
             return this;
         }
 
-        public Builder setDisplayName(String displayName) {
+        public Builder displayName(String displayName) {
             this.displayName = displayName;
             return this;
         }
 
-        public Builder setLevel(Long level) {
+        public Builder level(Long level) {
             this.level = level;
             return this;
         }
 
-        public Builder setUserId(Long userId) {
+        public Builder userId(Long userId) {
             this.userId = userId;
             return this;
         }

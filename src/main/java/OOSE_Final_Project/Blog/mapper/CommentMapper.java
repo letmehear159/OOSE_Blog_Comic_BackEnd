@@ -42,10 +42,10 @@ public abstract class CommentMapper {
     @Named("mapCommentResponse")
     UserCommentRes mapCommentResponse(User author) {
 
-        return new UserCommentRes.Builder().setUserId(author.getId())
-                                           .setAvatar(author.getAvatar())
-                                           .setDisplayName(author.getDisplayName())
-                                           .setLevel(author.getLevel())
+        return new UserCommentRes.Builder().userId(author.getId())
+                                           .avatar(author.getAvatar())
+                                           .displayName(author.getDisplayName())
+                                           .level(author.getLevel())
                                            .build();
     }
 

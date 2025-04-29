@@ -1,10 +1,11 @@
 package OOSE_Final_Project.Blog.mapper;
 
-import OOSE_Final_Project.Blog.dto.req.blog.BlogCharacterReq;
-import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
+import OOSE_Final_Project.Blog.dto.req.blog.BlogComicReq;
+import OOSE_Final_Project.Blog.dto.res.blog.BlogComicRes;
 import OOSE_Final_Project.Blog.dto.res.user.AuthorBlogRes;
+import OOSE_Final_Project.Blog.entity.Category;
+import OOSE_Final_Project.Blog.entity.Tag;
 import OOSE_Final_Project.Blog.entity.User;
-import OOSE_Final_Project.Blog.entity.blog.BlogCharacter;
 import OOSE_Final_Project.Blog.entity.blog.BlogComic;
 import OOSE_Final_Project.Blog.repository.BlogComicRepository;
 import OOSE_Final_Project.Blog.repository.CategoryRepository;
@@ -13,15 +14,14 @@ import OOSE_Final_Project.Blog.repository.UserRepository;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring",
         uses = {UserRepository.class, BlogComicRepository.class, CategoryRepository.class, TagRepository.class})
-public abstract class BlogCharacterMapper {
+public abstract class BlogComicMapper {
 
     @Autowired
     protected UserRepository userRepository;
-
-    @Autowired
-    protected BlogComicRepository blogComicRepository;
 
     @Autowired
     protected CategoryRepository categoryRepository;
@@ -30,25 +30,25 @@ public abstract class BlogCharacterMapper {
     protected TagRepository tagRepository;
 
     @Mapping(target = "author", source = "authorId", qualifiedByName = "mapAuthor")
-    @Mapping(target = "comic", source = "comicId", qualifiedByName = "mapComic")
+    @Mapping(target = "categories", source = "categories", qualifiedByName = "mapCategories")
+    @Mapping(target = "tags", source = "tags", qualifiedByName = "mapTags")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateBlogCharacterFromDto(BlogCharacterReq source, @MappingTarget BlogCharacter target);
+    public abstract void updateBlogComicFromDto(BlogComicReq source, @MappingTarget BlogComic target);
 
     @Mapping(target = "author", source = "author", qualifiedByName = "mapAuthorResponse")
-    public abstract void updateBlogCharacterResponseFromEntity(
-            BlogCharacter source, @MappingTarget BlogCharacterRes target);
+    public abstract void updateBlogComicResponseFromEntity(
+            BlogComic source, @MappingTarget BlogComicRes target);
 
     @Named("mapAuthorResponse")
     AuthorBlogRes mapAuthorResponse(User author) {
-        AuthorBlogRes authorBlogRes = new AuthorBlogRes.Builder().avatar(author.getAvatar())
-                                                                 .displayName(author.getDisplayName())
-                                                                 .email(author.getEmail())
-                                                                 .level(author.getLevel())
-                                                                 .userId(author.getId())
-                                                                 .build();
-        return authorBlogRes;
+        return new AuthorBlogRes.Builder().avatar(author.getAvatar())
+                                          .displayName(author.getDisplayName())
+                                          .email(author.getEmail())
+                                          .level(author.getLevel())
+                                          .userId(author.getId())
+                                          .build();
     }
 
     @Named("mapAuthor")
@@ -57,14 +57,19 @@ public abstract class BlogCharacterMapper {
                              .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + authorId));
     }
 
-    @Named("mapComic")
-    BlogComic mapComic(Long comicId) {
-        if (comicId == null) {
+    @Named("mapCategories")
+    List<Category> mapCategories(List<Long> categoryIds) {
+        if (categoryIds == null) {
             return null;
         }
-        return blogComicRepository.findById(comicId)
-                                  .orElseThrow(() -> new IllegalArgumentException(
-                                          "BlogComic not found with id:" + comicId));
+        return categoryRepository.findAllById(categoryIds);
     }
 
+    @Named("mapTags")
+    List<Tag> mapTags(List<Long> tagIds) {
+        if (tagIds == null) {
+            return null;
+        }
+        return tagRepository.findAllById(tagIds);
+    }
 }

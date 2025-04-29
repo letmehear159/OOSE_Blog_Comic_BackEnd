@@ -1,21 +1,21 @@
 package OOSE_Final_Project.Blog.service;
 
-import OOSE_Final_Project.Blog.dto.req.BlogCharacterReq;
-import OOSE_Final_Project.Blog.entity.blog.BlogCharacter;
+import OOSE_Final_Project.Blog.dto.req.blog.BlogCharacterReq;
+import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IBlogCharacterService {
-     BlogCharacter save(BlogCharacterReq blogCharacterRequest);
 
-    Optional<BlogCharacter> findById(Long id);
+    BlogCharacterRes save(BlogCharacterReq blogCharacterRequest);
 
-    List<BlogCharacter> findAll();
+    BlogCharacterRes findById(Long id);
+
+    List<BlogCharacterRes> findAll();
 
     void deleteById(Long id);
 
 
-    BlogCharacter update(Long id, BlogCharacter updatedBlogCharacter);
+    BlogCharacterRes update(Long id, BlogCharacterReq updatedBlogCharacter);
 
 }

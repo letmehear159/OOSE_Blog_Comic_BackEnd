@@ -82,10 +82,9 @@ public class FollowServiceImpl implements IFollowService {
     }
 
     @Override
-    public void deleteFollow(Long id) {
-        if (!followRepository.existsById(id)) {
-            throw new IllegalArgumentException("Follow not found with id: " + id);
-        }
-        followRepository.deleteById(id);
+    public void deleteFollow(FollowReq followReq) {
+        Follow follow = followRepository.findByUserIdAndBloggerId(followReq.getUserId(), followReq.getBloggerId())
+                                        .orElseThrow(() -> new RuntimeException("Follow not found"));
+        followRepository.delete(follow);
     }
 }

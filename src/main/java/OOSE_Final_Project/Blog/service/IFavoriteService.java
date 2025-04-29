@@ -11,8 +11,6 @@ public interface IFavoriteService {
 
     List<Favorite> getAllFavorites();
 
-    Optional<Favorite> getFavoriteById(Long id);
-
     List<Favorite> getFavoritesByUserId(Long userId);
 
     List<Favorite> getFavoritesByBlogId(Long blogId);

@@ -17,7 +17,8 @@ public interface IFollowService {
 
     List<Follow> getFollowsByBloggerId(Long bloggerId);
 
+    void deleteFollow(FollowReq follow);
+
     Optional<Follow> getFollowByUserIdAndBloggerId(Long userId, Long bloggerId);
 
-    void deleteFollow(Long id);
 }
