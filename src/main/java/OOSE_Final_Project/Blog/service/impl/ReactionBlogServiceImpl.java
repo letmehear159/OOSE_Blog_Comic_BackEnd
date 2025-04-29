@@ -1,11 +1,9 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.ReactionReq;
+import OOSE_Final_Project.Blog.dto.req.ReactionReq;
 import OOSE_Final_Project.Blog.entity.reaction.ReactionBlog;
 import OOSE_Final_Project.Blog.mapper.ReactionMapper;
-import OOSE_Final_Project.Blog.repository.BlogRepository;
 import OOSE_Final_Project.Blog.repository.ReactionBlogRepository;
-import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IReactionBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +16,15 @@ public class ReactionBlogServiceImpl implements IReactionBlogService {
 
     private final ReactionBlogRepository reactionBlogRepository;
 
-    private final UserRepository userRepository;
-
-    private final BlogRepository blogRepository;
 
     @Autowired
     private ReactionMapper reactionMapper;
 
     @Autowired
     public ReactionBlogServiceImpl(
-            ReactionBlogRepository reactionBlogRepository,
-            UserRepository userRepository,
-            BlogRepository blogRepository) {
+            ReactionBlogRepository reactionBlogRepository
+           ) {
         this.reactionBlogRepository = reactionBlogRepository;
-        this.userRepository = userRepository;
-        this.blogRepository = blogRepository;
     }
 
 

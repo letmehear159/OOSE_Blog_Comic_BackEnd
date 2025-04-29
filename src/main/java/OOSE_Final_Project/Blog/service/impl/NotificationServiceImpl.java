@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.NotificationReq;
+import OOSE_Final_Project.Blog.dto.req.NotificationReq;
 import OOSE_Final_Project.Blog.entity.Notification;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.repository.NotificationRepository;

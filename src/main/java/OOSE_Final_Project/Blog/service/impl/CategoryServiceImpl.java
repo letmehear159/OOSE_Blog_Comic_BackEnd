@@ -10,12 +10,15 @@ import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements OOSE_Final_Project.Blog.service.ICategoryService {
+
     @Autowired
-    private  CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
+
 
     @Override
     public Category createCategory(Category category) {
-        if (categoryRepository.findByName(category.getName()).isPresent()) {
+        if (categoryRepository.findByName(category.getName())
+                              .isPresent()) {
             throw new IllegalArgumentException("Category with name " + category.getName() + " already exists");
         }
         return categoryRepository.save(category);
@@ -39,7 +42,8 @@ public class CategoryServiceImpl implements OOSE_Final_Project.Blog.service.ICat
     @Override
     public Category updateCategory(Long id, Category categoryDetails) {
         Category category = categoryRepository.findById(id)
-                                              .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + id));
+                                              .orElseThrow(() -> new IllegalArgumentException(
+                                                      "Category not found with id: " + id));
 
         category.setName(categoryDetails.getName());
         category.setDescription(categoryDetails.getDescription());

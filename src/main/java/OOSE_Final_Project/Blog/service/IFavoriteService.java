@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service;
 
-import OOSE_Final_Project.Blog.dto.FavoriteReq;
+import OOSE_Final_Project.Blog.dto.req.FavoriteReq;
 import OOSE_Final_Project.Blog.entity.Favorite;
 
 import java.util.List;

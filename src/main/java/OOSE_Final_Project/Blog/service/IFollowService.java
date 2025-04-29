@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service;
 
-import OOSE_Final_Project.Blog.dto.FollowReq;
+import OOSE_Final_Project.Blog.dto.req.FollowReq;
 import OOSE_Final_Project.Blog.entity.Follow;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package OOSE_Final_Project.Blog.entity;
 
 import OOSE_Final_Project.Blog.entity.blog.Blog;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,10 +26,12 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
+    @JsonIgnore
     Blog blog;
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
+    @JsonIgnore
     Comment parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

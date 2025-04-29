@@ -1,17 +1,15 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.CommentReq;
+import OOSE_Final_Project.Blog.dto.req.CommentReq;
+import OOSE_Final_Project.Blog.dto.res.CommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
 import OOSE_Final_Project.Blog.mapper.CommentMapper;
-import OOSE_Final_Project.Blog.repository.BlogRepository;
 import OOSE_Final_Project.Blog.repository.CommentRepository;
-import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements ICommentService {
@@ -20,21 +18,22 @@ public class CommentServiceImpl implements ICommentService {
     private CommentRepository commentRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private BlogRepository blogRepository;
-
-    @Autowired
     CommentMapper commentMapper;
 
     @Override
-    public Comment createComment(CommentReq commentReq) {
+    public CommentRes createComment(CommentReq commentReq) {
 
         Comment comment = new Comment();
         commentMapper.updateCommentFromDto(commentReq, comment);
 
 
+        if (comment.getParent() != null) {
+            if (comment.getParent()
+                       .getBlog()
+                       .getId() != commentReq.getBlogId()) {
+                throw new IllegalArgumentException("Comment parent's blog id not match with comment request's blog id");
+            }
+        }
         // Đảm bảo content không rỗng
         if (comment.getContent() == null || comment.getContent()
                                                    .trim()
@@ -42,41 +41,41 @@ public class CommentServiceImpl implements ICommentService {
             throw new IllegalArgumentException("Comment content cannot be empty");
         }
 
-        return commentRepository.save(comment);
+        var result = commentRepository.save(comment);
+        CommentRes commentRes = new CommentRes();
+        commentMapper.updateCommentResponseFromEntity(comment, commentRes);
+        return commentRes;
     }
 
     @Override
-    public List<Comment> getAllComments() {
-        return commentRepository.findAll();
+    public List<CommentRes> getAllComments() {
+        var comments=commentRepository.findAll();
+        return this.changeEntityToRes(comments);
+    }
+
+
+    @Override
+    public List<CommentRes> getCommentsByBlogId(Long blogId) {
+        var comments = commentRepository.findByBlogId(blogId);
+        return this.changeEntityToRes(comments);
+
+    }
+
+
+    @Override
+    public List<CommentRes> getChildComments(Long parentId) {
+        var comments = commentRepository.findByParentId(parentId);
+        return this.changeEntityToRes(comments);
     }
 
     @Override
-    public Optional<Comment> getCommentById(Long id) {
-        return commentRepository.findById(id);
+    public List<CommentRes> getCommentsByParentIsNullAndBlogId(Long blogId) {
+        var comments = commentRepository.findByParentIsNullAndBlogId(blogId);
+        return this.changeEntityToRes(comments);
     }
 
     @Override
-    public List<Comment> getCommentsByBlogId(Long blogId) {
-        return commentRepository.findByBlogId(blogId);
-    }
-
-    @Override
-    public List<Comment> getCommentsByUserId(Long userId) {
-        return commentRepository.findByAuthorId(userId);
-    }
-
-    @Override
-    public List<Comment> getChildComments(Long parentId) {
-        return commentRepository.findByParentId(parentId);
-    }
-
-    @Override
-    public List<Comment> getCommentsByParentIsNullAndBlogId(Long blogId) {
-        return commentRepository.findByParentIsNullAndBlogId(blogId);
-    }
-
-    @Override
-    public Comment updateComment(Long id, Comment commentDetails) {
+    public CommentRes updateComment(Long id, Comment commentDetails) {
         Comment comment = commentRepository.findById(id)
                                            .orElseThrow(() -> new IllegalArgumentException(
                                                    "Comment not found with id: " + id));
@@ -89,7 +88,10 @@ public class CommentServiceImpl implements ICommentService {
         }
 
         // Không cho phép thay đổi author, blog, hoặc parent để đảm bảo tính nhất quán
-        return commentRepository.save(comment);
+        comment = commentRepository.save(comment);
+        CommentRes commentRes = new CommentRes();
+        commentMapper.updateCommentResponseFromEntity(comment, commentRes);
+        return commentRes;
     }
 
     @Override
@@ -100,5 +102,17 @@ public class CommentServiceImpl implements ICommentService {
 
         // Xóa tất cả comment con do cascade = CascadeType.ALL
         commentRepository.delete(comment);
+    }
+
+    public List<CommentRes> changeEntityToRes(List<Comment> comments) {
+        return comments.stream()
+                       .map(
+                               comment -> {
+                                   CommentRes commentRes = new CommentRes();
+                                   commentMapper.updateCommentResponseFromEntity(comment, commentRes);
+                                   return commentRes;
+                               }
+                       )
+                       .toList();
     }
 }

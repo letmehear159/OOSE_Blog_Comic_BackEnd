@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service;
 
-import OOSE_Final_Project.Blog.dto.BlogCharacterReq;
+import OOSE_Final_Project.Blog.dto.req.BlogCharacterReq;
 import OOSE_Final_Project.Blog.entity.blog.BlogCharacter;
 
 import java.util.List;

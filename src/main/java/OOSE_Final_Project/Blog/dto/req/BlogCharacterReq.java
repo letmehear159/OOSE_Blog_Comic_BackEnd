@@ -1,4 +1,4 @@
-package OOSE_Final_Project.Blog.dto;
+package OOSE_Final_Project.Blog.dto.req;
 
 import jakarta.annotation.Nullable;
 import lombok.Getter;

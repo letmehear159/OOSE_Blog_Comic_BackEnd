@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service;
 
-import OOSE_Final_Project.Blog.dto.ReactionReq;
+import OOSE_Final_Project.Blog.dto.req.ReactionReq;
 import OOSE_Final_Project.Blog.entity.reaction.ReactionBlog;
 
 import java.util.List;

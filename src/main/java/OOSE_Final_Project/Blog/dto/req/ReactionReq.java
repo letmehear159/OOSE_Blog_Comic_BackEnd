@@ -1,4 +1,4 @@
-package OOSE_Final_Project.Blog.dto;
+package OOSE_Final_Project.Blog.dto.req;
 
 import OOSE_Final_Project.Blog.enums.EReaction;
 import lombok.Getter;

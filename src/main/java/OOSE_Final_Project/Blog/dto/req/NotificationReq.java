@@ -1,4 +1,4 @@
-package OOSE_Final_Project.Blog.dto;
+package OOSE_Final_Project.Blog.dto.req;
 
 import lombok.Getter;
 import lombok.NonNull;

@@ -1,4 +1,4 @@
-package OOSE_Final_Project.Blog.dto;
+package OOSE_Final_Project.Blog.dto.req;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ public class CommentReq {
 
     long blogId;
 
-    long parentId;
+    Long parentId = null;
 
     long userId;
 }

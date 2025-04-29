@@ -1,12 +1,10 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.ReportReq;
+import OOSE_Final_Project.Blog.dto.req.ReportReq;
 import OOSE_Final_Project.Blog.entity.report.ReportComment;
 import OOSE_Final_Project.Blog.enums.EReportType;
 import OOSE_Final_Project.Blog.mapper.ReportMapper;
-import OOSE_Final_Project.Blog.repository.CommentRepository;
 import OOSE_Final_Project.Blog.repository.ReportCommentRepository;
-import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IReportCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,21 +17,15 @@ public class ReportCommentServiceImpl implements IReportCommentService {
 
     private final ReportCommentRepository reportCommentRepository;
 
-    private final UserRepository userRepository;
-
-    private final CommentRepository commentRepository;
 
     @Autowired
     ReportMapper reportMapper;
 
     @Autowired
     public ReportCommentServiceImpl(
-            ReportCommentRepository reportCommentRepository,
-            UserRepository userRepository,
-            CommentRepository commentRepository) {
+            ReportCommentRepository reportCommentRepository
+    ) {
         this.reportCommentRepository = reportCommentRepository;
-        this.userRepository = userRepository;
-        this.commentRepository = commentRepository;
     }
 
     @Override

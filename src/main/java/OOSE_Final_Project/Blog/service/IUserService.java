@@ -1,7 +1,7 @@
 package OOSE_Final_Project.Blog.service;
 
 
-import OOSE_Final_Project.Blog.dto.UserReq;
+import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 

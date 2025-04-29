@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.FavoriteReq;
+import OOSE_Final_Project.Blog.dto.req.FavoriteReq;
 import OOSE_Final_Project.Blog.entity.Favorite;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.entity.blog.Blog;

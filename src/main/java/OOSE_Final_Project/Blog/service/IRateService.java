@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service;
 
-import OOSE_Final_Project.Blog.dto.RateReq;
+import OOSE_Final_Project.Blog.dto.req.RateReq;
 import OOSE_Final_Project.Blog.entity.Rate;
 
 import java.util.List;

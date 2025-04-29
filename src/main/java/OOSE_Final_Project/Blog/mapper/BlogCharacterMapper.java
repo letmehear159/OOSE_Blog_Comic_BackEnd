@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.mapper;
 
-import OOSE_Final_Project.Blog.dto.BlogCharacterReq;
+import OOSE_Final_Project.Blog.dto.req.BlogCharacterReq;
 import OOSE_Final_Project.Blog.entity.Category;
 import OOSE_Final_Project.Blog.entity.Tag;
 import OOSE_Final_Project.Blog.entity.User;
@@ -10,10 +10,7 @@ import OOSE_Final_Project.Blog.repository.BlogComicRepository;
 import OOSE_Final_Project.Blog.repository.CategoryRepository;
 import OOSE_Final_Project.Blog.repository.TagRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -42,6 +39,7 @@ public abstract class BlogCharacterMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "status", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateBlogCharacterFromDto(BlogCharacterReq source, @MappingTarget BlogCharacter target);
 
     @Named("mapAuthor")
@@ -52,10 +50,9 @@ public abstract class BlogCharacterMapper {
 
     @Named("mapComic")
     BlogComic mapComic(Long comicId) {
-        if(comicId == null){
+        if(comicId == null) {
             return null;
         }
-
         return blogComicRepository.findById(comicId)
                                   .orElseThrow(() -> new IllegalArgumentException(
                                           "BlogComic not found with id:" + comicId));
@@ -63,11 +60,17 @@ public abstract class BlogCharacterMapper {
 
     @Named("mapCategories")
     List<Category> mapCategories(List<Long> categoryIds) {
+        if(categoryIds == null) {
+            return null;
+        }
         return categoryRepository.findAllById(categoryIds);
     }
 
     @Named("mapTags")
     List<Tag> mapTags(List<Long> tagIds) {
+        if(tagIds == null) {
+            return null;
+        }
         return tagRepository.findAllById(tagIds);
     }
 }

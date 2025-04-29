@@ -1,6 +1,6 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.FollowReq;
+import OOSE_Final_Project.Blog.dto.req.FollowReq;
 import OOSE_Final_Project.Blog.entity.Follow;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.repository.FollowRepository;

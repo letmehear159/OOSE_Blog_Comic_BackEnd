@@ -1,11 +1,9 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.ReactionReq;
+import OOSE_Final_Project.Blog.dto.req.ReactionReq;
 import OOSE_Final_Project.Blog.entity.reaction.ReactionComment;
 import OOSE_Final_Project.Blog.mapper.ReactionMapper;
-import OOSE_Final_Project.Blog.repository.CommentRepository;
 import OOSE_Final_Project.Blog.repository.ReactionCommentRepository;
-import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IReactionCommentService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +18,13 @@ public class ReactionCommentServiceImpl implements IReactionCommentService {
 
     private final ReactionCommentRepository reactionCommentRepository;
 
-    private final CommentRepository commentRepository;
-
-    private final UserRepository userRepository;
-
     @Autowired
     ReactionMapper reactionMapper;
 
     public ReactionCommentServiceImpl(
-            ReactionCommentRepository reactionCommentRepository,
-            CommentRepository commentRepository,
-            UserRepository userRepository) {
+            ReactionCommentRepository reactionCommentRepository
+    ) {
         this.reactionCommentRepository = reactionCommentRepository;
-        this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
