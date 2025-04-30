@@ -1,4 +1,4 @@
-package OOSE_Final_Project.Blog.dto.res;
+package OOSE_Final_Project.Blog.dto.res.comment;
 
 import OOSE_Final_Project.Blog.dto.res.user.UserCommentRes;
 import lombok.AllArgsConstructor;

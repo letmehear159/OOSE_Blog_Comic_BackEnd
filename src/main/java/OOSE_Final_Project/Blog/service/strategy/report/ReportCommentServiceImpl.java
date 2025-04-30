@@ -1,35 +1,28 @@
-package OOSE_Final_Project.Blog.service.impl;
+package OOSE_Final_Project.Blog.service.strategy.report;
 
 import OOSE_Final_Project.Blog.dto.req.ReportReq;
+import OOSE_Final_Project.Blog.dto.res.ReportRes;
 import OOSE_Final_Project.Blog.entity.report.ReportComment;
-import OOSE_Final_Project.Blog.enums.EReportType;
 import OOSE_Final_Project.Blog.mapper.ReportMapper;
 import OOSE_Final_Project.Blog.repository.ReportCommentRepository;
-import OOSE_Final_Project.Blog.service.IReportCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Service
+@Service("reportCommentServiceImpl")
 public class ReportCommentServiceImpl implements IReportCommentService {
 
-    private final ReportCommentRepository reportCommentRepository;
-
+    @Autowired
+    private ReportCommentRepository reportCommentRepository;
 
     @Autowired
     ReportMapper reportMapper;
 
-    @Autowired
-    public ReportCommentServiceImpl(
-            ReportCommentRepository reportCommentRepository
-    ) {
-        this.reportCommentRepository = reportCommentRepository;
-    }
 
     @Override
-    public ReportComment createReportComment(ReportReq reportReq) {
+    public ReportRes createReport(ReportReq reportReq) {
 
         ReportComment reportComment = new ReportComment();
         reportMapper.updateReportCommentFromDto(reportReq, reportComment);
@@ -43,43 +36,24 @@ public class ReportCommentServiceImpl implements IReportCommentService {
         }
 
         // Đảm bảo type không null
-        if (reportComment.getType() == null) {
+        if (reportComment.getEReportType() == null) {
             throw new IllegalArgumentException("Report type cannot be null");
         }
 
         // Content và url có thể null, không cần kiểm tra
 
-        return reportCommentRepository.save(reportComment);
+        reportComment = reportCommentRepository.save(reportComment);
+        return changeToRes(reportComment);
     }
 
     @Override
-    public List<ReportComment> getAllReportComments() {
-        return reportCommentRepository.findAll();
+    public List<ReportRes> getAllReports() {
+        var reports = reportCommentRepository.findAll();
+        return changeToRes(reports);
     }
 
     @Override
-    public Optional<ReportComment> getReportCommentById(Long id) {
-        return reportCommentRepository.findById(id);
-    }
-
-    @Override
-    public List<ReportComment> getReportCommentsByUserId(Long userId) {
-        return reportCommentRepository.findByReporterId(userId);
-    }
-
-    @Override
-    public List<ReportComment> getReportCommentsByCommentId(Long commentId) {
-        return reportCommentRepository.findByCommentId(commentId);
-    }
-
-    @Override
-    public List<ReportComment> getReportCommentsByType(EReportType type) {
-        return reportCommentRepository.findByType(type);
-    }
-
-
-    @Override
-    public void deleteReportComment(Long id) {
+    public void deleteReport(long id) {
         if (!reportCommentRepository.existsById(id)) {
             throw new IllegalArgumentException("ReportComment not found with id: " + id);
         }
@@ -87,22 +61,42 @@ public class ReportCommentServiceImpl implements IReportCommentService {
     }
 
     @Override
-    public ReportComment markAsRead(Long id) {
+    public List<ReportRes> getUnHandledReports() {
+        var reports = reportCommentRepository.findByHandledFalse();
+        return changeToRes(reports);
+    }
+
+    @Override
+    public ReportRes markAsRead(long id) {
         ReportComment reportComment = reportCommentRepository.findById(id)
                                                              .orElseThrow(() -> new IllegalArgumentException(
                                                                      "ReportBlog not found with id: " + id));
         reportComment.setRead(true);
-        return reportCommentRepository.save(reportComment);
+        reportComment = reportCommentRepository.save(reportComment);
+        return changeToRes(reportComment);
     }
 
     @Override
-    public ReportComment markAsHandled(Long id) {
+    public ReportRes markAsHandled(long id) {
         ReportComment reportComment = reportCommentRepository.findById(id)
                                                              .orElseThrow(() -> new IllegalArgumentException(
                                                                      "ReportBlog not found with id: " + id));
         reportComment.setHandled(true);
         reportComment.setRead(true);
-        return reportCommentRepository.save(reportComment);
+        reportComment = reportCommentRepository.save(reportComment);
+        return changeToRes(reportComment);
     }
 
+
+    ReportRes changeToRes(ReportComment reportComment) {
+        ReportRes reportRes = new ReportRes();
+        reportMapper.updateReportCommentResponseFromEntity(reportComment, reportRes);
+        return reportRes;
+    }
+
+    List<ReportRes> changeToRes(List<ReportComment> reportComments) {
+        return reportComments.stream()
+                             .map(this::changeToRes)
+                             .collect(Collectors.toList());
+    }
 }

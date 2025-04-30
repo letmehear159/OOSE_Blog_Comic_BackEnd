@@ -1,7 +1,7 @@
 package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.dto.req.CommentReq;
-import OOSE_Final_Project.Blog.dto.res.CommentRes;
+import OOSE_Final_Project.Blog.dto.res.comment.CommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
 import OOSE_Final_Project.Blog.mapper.CommentMapper;
 import OOSE_Final_Project.Blog.repository.CommentRepository;

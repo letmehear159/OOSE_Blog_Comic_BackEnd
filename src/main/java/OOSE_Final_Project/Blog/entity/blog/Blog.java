@@ -25,10 +25,9 @@ public abstract class Blog extends BaseEntity {
     User author;
 
 
-
     EBlogStatus status;
 
-
+    String thumbnail;
 
 
 }

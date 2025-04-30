@@ -1,20 +1,20 @@
 package OOSE_Final_Project.Blog.dto.req;
 
 import OOSE_Final_Project.Blog.enums.EReportType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
 public class ReportReq {
-    String content;
-
     long userId;
 
     String reason;
 
     String url;
 
+    @JsonProperty("reportType")
     EReportType eReportType;
 
     long blogId;

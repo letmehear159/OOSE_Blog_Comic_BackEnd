@@ -1,7 +1,7 @@
 package OOSE_Final_Project.Blog.service;
 
 import OOSE_Final_Project.Blog.dto.req.CommentReq;
-import OOSE_Final_Project.Blog.dto.res.CommentRes;
+import OOSE_Final_Project.Blog.dto.res.comment.CommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
 
 import java.util.List;

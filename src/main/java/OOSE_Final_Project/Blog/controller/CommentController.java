@@ -2,7 +2,7 @@ package OOSE_Final_Project.Blog.controller;
 
 import OOSE_Final_Project.Blog.dto.req.CommentReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
-import OOSE_Final_Project.Blog.dto.res.CommentRes;
+import OOSE_Final_Project.Blog.dto.res.comment.CommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
 import OOSE_Final_Project.Blog.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;

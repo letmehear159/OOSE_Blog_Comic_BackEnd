@@ -1,6 +1,10 @@
 package OOSE_Final_Project.Blog.mapper;
 
 import OOSE_Final_Project.Blog.dto.req.ReportReq;
+import OOSE_Final_Project.Blog.dto.res.ReportRes;
+import OOSE_Final_Project.Blog.dto.res.blog.BlogReportRes;
+import OOSE_Final_Project.Blog.dto.res.comment.CommentReportRes;
+import OOSE_Final_Project.Blog.dto.res.user.UserReportRes;
 import OOSE_Final_Project.Blog.entity.Comment;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.entity.blog.Blog;
@@ -35,9 +39,64 @@ public abstract class ReportMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateReportCommentFromDto(ReportReq source, @MappingTarget ReportComment target);
 
+    @Mapping(target = "reporterRes", source = "reporter", qualifiedByName = "mapReporterRes")
+    @Mapping(target = "blogRes", source = "blog", qualifiedByName = "mapBlogRes")
+    @Mapping(target = "violationType", source = "EReportType")
+    @Mapping(target = "reportType", expression = "java(\"Blog\")")
+    public abstract void updateReportBlogResponseFromEntity(ReportBlog source, @MappingTarget ReportRes target);
+
+    @Mapping(target = "reporterRes", source = "reporter", qualifiedByName = "mapReporterRes")
+    @Mapping(target = "commentRes", source = "comment", qualifiedByName = "mapCommentRes")
+    @Mapping(target = "violationType", source = "EReportType")
+    @Mapping(target = "reportType", expression = "java(\"Comment\")")
+    public abstract void updateReportCommentResponseFromEntity(ReportComment source, @MappingTarget ReportRes target);
+
+
+//    @Named("mapCommentReportType")
+//    String mapCommentReportType() {
+//        return "Comment";
+//    }
+//
+//    @Named("mapBlogReportType")
+//    String mapBlogReportType() {
+//        return "Blog";
+//    }
+
+    @Named("mapReporterRes")
+    UserReportRes mapReporterRes(User reporter) {
+        return new UserReportRes.Builder().avatar(reporter.getAvatar())
+                                          .level(reporter.getLevel())
+                                          .displayName(reporter.getDisplayName())
+                                          .build();
+    }
+
+    @Named("mapBlogRes")
+    BlogReportRes mapBlogRes(Blog blog) {
+        return BlogReportRes.builder()
+                            .authorDisplayName(blog.getAuthor()
+                                                   .getDisplayName())
+                            .blogTitle(blog.getTitle())
+                            .authorAvatar(blog.getAuthor()
+                                              .getAvatar())
+                            .blogThumbnail(blog.getThumbnail())
+                            .build();
+    }
+
+
+    @Named("mapCommentRes")
+    CommentReportRes mapCommentId(Comment comment) {
+        return CommentReportRes.builder()
+                               .content(comment.getContent())
+                               .userDisplayName(comment.getAuthor()
+                                                       .getUsername())
+                               .avatar(comment.getAuthor()
+                                              .getAvatar())
+                               .build();
+    }
+
     @Named("mapReporter")
     User mapAuthor(Long userId) {
-        if(userId == null) {
+        if (userId == null) {
             return null;
         }
         return userRepository.findById(userId)
@@ -46,7 +105,7 @@ public abstract class ReportMapper {
 
     @Named("mapBlog")
     Blog mapBlog(Long blogId) {
-        if(blogId == null) {
+        if (blogId == null) {
             return null;
         }
         return blogRepository.findById(blogId)
@@ -55,7 +114,7 @@ public abstract class ReportMapper {
 
     @Named("mapComment")
     Comment mapComment(Long commentId) {
-        if(commentId == null) {
+        if (commentId == null) {
             return null;
         }
         return commentRepository.findById(commentId)

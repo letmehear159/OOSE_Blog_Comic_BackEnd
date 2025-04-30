@@ -1,7 +1,7 @@
 package OOSE_Final_Project.Blog.mapper;
 
 import OOSE_Final_Project.Blog.dto.req.CommentReq;
-import OOSE_Final_Project.Blog.dto.res.CommentRes;
+import OOSE_Final_Project.Blog.dto.res.comment.CommentRes;
 import OOSE_Final_Project.Blog.dto.res.user.UserCommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
 import OOSE_Final_Project.Blog.entity.User;
