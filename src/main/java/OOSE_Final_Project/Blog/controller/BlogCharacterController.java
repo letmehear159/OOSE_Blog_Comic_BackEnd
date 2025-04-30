@@ -42,4 +42,9 @@ public class BlogCharacterController {
         return new ApiResponse<>(HttpStatus.OK, "Delete a blog character", Boolean.TRUE, null);
     }
 
+    @GetMapping("/{blogId}")
+    public ApiResponse<BlogCharacterRes> findById(@PathVariable String blogId) {
+        var result = blogCharacterService.findById(Long.valueOf(blogId));
+        return new ApiResponse<>(HttpStatus.OK, "Find a blog character", result, null);
+    }
 }

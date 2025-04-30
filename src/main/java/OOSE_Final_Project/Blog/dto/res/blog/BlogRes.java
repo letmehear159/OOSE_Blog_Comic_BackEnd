@@ -19,4 +19,5 @@ public class BlogRes {
 
     AuthorBlogRes author;
 
+    String thumbnail;
 }

@@ -2,10 +2,12 @@ package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.dto.req.blog.BlogCharacterReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
+import OOSE_Final_Project.Blog.entity.Character;
 import OOSE_Final_Project.Blog.entity.blog.BlogCharacter;
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
 import OOSE_Final_Project.Blog.mapper.BlogCharacterMapper;
 import OOSE_Final_Project.Blog.repository.BlogCharacterRepository;
+import OOSE_Final_Project.Blog.repository.CharacterRepository;
 import OOSE_Final_Project.Blog.service.IBlogCharacterService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
     @Autowired
     private BlogCharacterMapper blogCharacterMapper;
 
+    @Autowired
+    private CharacterRepository characterRepository;
+
     @Override
     public BlogCharacterRes save(BlogCharacterReq blogCharacterRequest) {
         BlogCharacter blogCharacter = new BlogCharacter();
@@ -31,11 +36,17 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
 
         blogCharacter.setStatus(EBlogStatus.PENDING);
 
+        Character character = blogCharacter.getCharacter();
+
+        character = characterRepository.save(character);
+
+        blogCharacter.setCharacter(character);
+
         blogCharacter = blogCharacterRepository.save(blogCharacter);
 
         BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
 
-        blogCharacterMapper.updateBlogCharacterResponseFromEntity(blogCharacter, blogCharacterRes);
+        blogCharacterMapper.updateBlogCharacterResponseFromEntityWithoutDetail(blogCharacter, blogCharacterRes);
 
         return blogCharacterRes;
     }
@@ -57,7 +68,7 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
                     .map(blog -> {
 
                         BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
-                        blogCharacterMapper.updateBlogCharacterResponseFromEntity(blog, blogCharacterRes);
+                        blogCharacterMapper.updateBlogCharacterResponseFromEntityWithoutDetail(blog, blogCharacterRes);
                         return blogCharacterRes;
                     })
                     .toList();
@@ -82,7 +93,7 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
 
         BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
 
-        blogCharacterMapper.updateBlogCharacterResponseFromEntity(existing, blogCharacterRes);
+        blogCharacterMapper.updateBlogCharacterResponseFromEntityWithoutDetail(existing, blogCharacterRes);
 
         return blogCharacterRes;
     }
