@@ -14,5 +14,7 @@ public interface ReactionBlogRepository extends JpaRepository<ReactionBlog, Long
     Optional<ReactionBlog> findByAuthorIdAndBlogId(Long id, Long id1);
 
     List<ReactionBlog> findByBlogId(Long blogId);
+
+    List<ReactionBlog> findAllByBlogId(Long id);
 }
 

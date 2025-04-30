@@ -1,6 +1,8 @@
 package OOSE_Final_Project.Blog.mapper;
 
 import OOSE_Final_Project.Blog.dto.req.ReactionReq;
+import OOSE_Final_Project.Blog.dto.res.ReactionRes;
+import OOSE_Final_Project.Blog.dto.res.user.UserReactionRes;
 import OOSE_Final_Project.Blog.entity.Comment;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.entity.blog.Blog;
@@ -36,9 +38,41 @@ public abstract class ReactionMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateReactionCommentFromDto(ReactionReq source, @MappingTarget ReactionComment target);
 
+
+    @Mapping(target = "user", source = "author", qualifiedByName = "mapUser")
+    @Mapping(target = "commentId", source = "comment", qualifiedByName = "mapCommentId")
+    public abstract void updateReactionCommentResponseFromEntity(
+            ReactionComment source,
+            @MappingTarget ReactionRes target);
+
+    @Mapping(target = "user", source = "author", qualifiedByName = "mapUser")
+    @Mapping(target = "blogId", source = "blog", qualifiedByName = "mapBlogId")
+    public abstract void updateReactionBlogResponseFromEntity(
+            ReactionBlog source,
+            @MappingTarget ReactionRes target);
+
+    @Named("mapBlogId")
+    long mapBlogId(Blog blog) {
+        return blog.getId();
+    }
+
+    @Named("mapUser")
+    UserReactionRes mapUser(User user) {
+        return UserReactionRes.builder()
+                              .userId(user.getId())
+                              .displayName(user.getDisplayName())
+                              .build();
+    }
+
+    @Named("mapCommentId")
+    long mapCommentId(Comment comment) {
+        return comment.getId();
+    }
+
+
     @Named("mapAuthor")
     User mapAuthor(Long authorId) {
-        if(authorId == null) {
+        if (authorId == null) {
             return null;
         }
         return userRepository.findById(authorId)
@@ -47,7 +81,7 @@ public abstract class ReactionMapper {
 
     @Named("mapBlog")
     Blog mapBlog(Long blogId) {
-        if(blogId == null) {
+        if (blogId == null) {
             return null;
         }
         return blogRepository.findById(blogId)
@@ -56,7 +90,7 @@ public abstract class ReactionMapper {
 
     @Named("mapComment")
     Comment mapComment(Long commentId) {
-        if(commentId == null) {
+        if (commentId == null) {
             return null;
         }
         return commentRepository.findById(commentId)
