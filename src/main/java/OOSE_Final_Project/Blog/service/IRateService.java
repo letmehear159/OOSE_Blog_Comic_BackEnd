@@ -1,27 +1,23 @@
 package OOSE_Final_Project.Blog.service;
 
 import OOSE_Final_Project.Blog.dto.req.RateReq;
-import OOSE_Final_Project.Blog.entity.Rate;
+import OOSE_Final_Project.Blog.dto.res.RateRes;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IRateService {
 
-    Rate createRate(RateReq rate);
+    RateRes createRate(RateReq rate);
 
-    List<Rate> getAllRates();
+    List<RateRes> getRatesByBlogId(Long blogId);
 
-    Optional<Rate> getRateById(Long id);
+    RateRes getRateByUserIdAndBlogId(Long userId, Long blogId);
 
-    List<Rate> getRatesByBlogId(Long blogId);
-
-    List<Rate> getRatesByUserId(Long userId);
-
-    Optional<Rate> getRateByUserIdAndBlogId(Long userId, Long blogId);
-
-    Rate updateRate(Long id, long rate);
+    RateRes updateRate(Long id, long rate);
 
 
     void deleteRate(Long id);
+
+    List<RateRes> getAllRates();
+
 }

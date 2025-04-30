@@ -1,18 +1,15 @@
 package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.dto.req.RateReq;
+import OOSE_Final_Project.Blog.dto.res.RateRes;
 import OOSE_Final_Project.Blog.entity.Rate;
-import OOSE_Final_Project.Blog.entity.User;
-import OOSE_Final_Project.Blog.entity.blog.Blog;
-import OOSE_Final_Project.Blog.repository.BlogRepository;
+import OOSE_Final_Project.Blog.mapper.RateMapper;
 import OOSE_Final_Project.Blog.repository.RateRepository;
-import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RateServiceImpl implements IRateService {
@@ -22,71 +19,60 @@ public class RateServiceImpl implements IRateService {
     private RateRepository rateRepository;
 
     @Autowired
-    private BlogRepository blogRepository;
-
-    @Autowired
-    UserRepository userRepository;
+    private RateMapper rateMapper;
 
     @Override
-    public Rate createRate(RateReq rateReq) {
+    public RateRes createRate(RateReq rateReq) {
 
         Rate rate = new Rate();
 
-        User user = userRepository.findById(rateReq.getUserId())
-                                  .orElseThrow(() -> new RuntimeException("User Not Found"));
-        Blog blog = blogRepository.findById(rateReq.getBlogId())
-                                  .orElseThrow(() -> new RuntimeException("Blog Not Found"));
-        rate.setUser(user);
-        rate.setBlog(blog);
-        rate.setRateStar(rateReq.getRating());
+        rateMapper.updateRateFromDto(rateReq, rate);
 
-        // Kiểm tra xem user đã đánh giá blog này chưa
-        Optional<Rate> existingRate = rateRepository.findByUserIdAndBlogId(
-                rate.getUser()
-                    .getId(), rate.getBlog()
-                                  .getId());
-        if (existingRate.isPresent()) {
-            throw new IllegalArgumentException("User " + rate.getUser()
-                                                             .getId() +
-                                                       " has already rated blog " + rate.getBlog()
-                                                                                        .getId());
+        if (rateRepository.findByUserIdAndBlogId(rateReq.getUserId(), rateReq.getBlogId())
+                          .isPresent()) {
+            throw new IllegalArgumentException("Rate already exists");
         }
-
+        
         // Kiểm tra giá trị rateStar hợp lệ (giả sử từ 1 đến 5)
         if (rate.getRateStar() < 1 || rate.getRateStar() > 5) {
             throw new IllegalArgumentException("Rate star must be between 1 and 5");
         }
 
-        return rateRepository.save(rate);
+
+
+        rate = rateRepository.save(rate);
+        RateRes res = new RateRes();
+        rateMapper.updateRateResponseFromEntity(rate, res);
+        return res;
+    }
+
+
+    @Override
+    public List<RateRes> getRatesByBlogId(Long blogId) {
+        var rates = rateRepository.findByBlogId(blogId);
+        return rates.stream()
+                    .map(
+                            rate -> {
+                                RateRes res = new RateRes();
+                                rateMapper.updateRateResponseFromEntity(rate, res);
+                                return res;
+                            }
+
+                    )
+                    .toList();
     }
 
     @Override
-    public List<Rate> getAllRates() {
-        return rateRepository.findAll();
+    public RateRes getRateByUserIdAndBlogId(Long userId, Long blogId) {
+        var rate = rateRepository.findByUserIdAndBlogId(userId, blogId)
+                                 .orElseThrow(() -> new RuntimeException("Rate not found"));
+        RateRes res = new RateRes();
+        rateMapper.updateRateResponseFromEntity(rate, res);
+        return res;
     }
 
     @Override
-    public Optional<Rate> getRateById(Long id) {
-        return rateRepository.findById(id);
-    }
-
-    @Override
-    public List<Rate> getRatesByBlogId(Long blogId) {
-        return rateRepository.findByBlogId(blogId);
-    }
-
-    @Override
-    public List<Rate> getRatesByUserId(Long userId) {
-        return rateRepository.findByUserId(userId);
-    }
-
-    @Override
-    public Optional<Rate> getRateByUserIdAndBlogId(Long userId, Long blogId) {
-        return rateRepository.findByUserIdAndBlogId(userId, blogId);
-    }
-
-    @Override
-    public Rate updateRate(Long id, long rateStar) {
+    public RateRes updateRate(Long id, long rateStar) {
         Rate rate = rateRepository.findById(id)
                                   .orElseThrow(() -> new IllegalArgumentException("Rate not found with id: " + id));
 
@@ -97,7 +83,10 @@ public class RateServiceImpl implements IRateService {
 
         rate.setRateStar(rateStar);
         // Không cho phép thay đổi blog hoặc sender để đảm bảo tính nhất quán
-        return rateRepository.save(rate);
+        rate = rateRepository.save(rate);
+        RateRes res = new RateRes();
+        rateMapper.updateRateResponseFromEntity(rate, res);
+        return res;
     }
 
     @Override
@@ -106,5 +95,20 @@ public class RateServiceImpl implements IRateService {
             throw new IllegalArgumentException("Rate not found with id: " + id);
         }
         rateRepository.deleteById(id);
+    }
+
+    @Override
+    public List<RateRes> getAllRates() {
+        var rates = rateRepository.findAll();
+        return rates.stream()
+                    .map(
+                            rate -> {
+                                RateRes res = new RateRes();
+                                rateMapper.updateRateResponseFromEntity(rate, res);
+                                return res;
+                            }
+
+                    )
+                    .toList();
     }
 }
