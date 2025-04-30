@@ -2,6 +2,7 @@ package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.entity.OTP;
 import OOSE_Final_Project.Blog.entity.User;
+import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.repository.OTPRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IOTPService;
@@ -28,9 +29,13 @@ public class OTPServiceImpl implements IOTPService {
     public OTP generateOTP(Long userId) {
         User user = userRepository.findById(userId)
                                   .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        if (user.getAccountStatus() != EUserStatus.VERIFYING) {
+            throw new IllegalArgumentException("User is not in verifying status");
+        }
 
         // Xóa OTP cũ nếu tồn tại
-        otpRepository.findByUserId(userId).ifPresent(otpRepository::delete);
+        otpRepository.findByUserId(userId)
+                     .ifPresent(otpRepository::delete);
 
         // Tạo OTP mới
         String otp = generateRandomOTP();
@@ -54,7 +59,9 @@ public class OTPServiceImpl implements IOTPService {
     @Override
     public boolean verifyOTP(Long userId, String otp) {
         Optional<OTP> otpEntity = otpRepository.findByUserId(userId);
-        if (otpEntity.isPresent() && otpEntity.get().getOtp().equals(otp)) {
+        if (otpEntity.isPresent() && otpEntity.get()
+                                              .getOtp()
+                                              .equals(otp)) {
             // Xóa OTP sau khi xác minh thành công
             otpRepository.delete(otpEntity.get());
             return true;

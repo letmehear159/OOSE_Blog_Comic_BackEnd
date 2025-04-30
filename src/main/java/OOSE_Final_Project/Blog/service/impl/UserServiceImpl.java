@@ -1,6 +1,5 @@
 package OOSE_Final_Project.Blog.service.impl;
 
-import OOSE_Final_Project.Blog.dto.MessageDTO;
 import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
@@ -8,7 +7,6 @@ import OOSE_Final_Project.Blog.enums.ERole;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.mapper.UserMapper;
 import OOSE_Final_Project.Blog.repository.UserRepository;
-import OOSE_Final_Project.Blog.service.IEmailService;
 import OOSE_Final_Project.Blog.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,8 +27,7 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    IEmailService emailService;
+
 
     @Override
     public UserRes createUser(UserReq userReq) {
@@ -56,14 +53,7 @@ public class UserServiceImpl implements IUserService {
 
 
         user = userRepository.save(user);
-        MessageDTO messageDTO = MessageDTO.builder()
-                                          .from("Nguyentruongpro19@gmail.com")
-                                          .to(user.getEmail())
-                                          .subject("Xác nhận mã OTP cho tài khoản của bạn")
-                                          .toName(user.getUsername())
-                                          .OTP("234234")
-                                          .build();
-        emailService.sendEmail(messageDTO);
+
 
         return changeToRes(user);
     }

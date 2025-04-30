@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.dto.res.user;
 
+import OOSE_Final_Project.Blog.enums.EUserStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,6 @@ public class UserRes {
     private String avatar;
 
     private long level;
+
+    EUserStatus accountStatus;
 }
