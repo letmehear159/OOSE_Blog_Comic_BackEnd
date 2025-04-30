@@ -1,6 +1,7 @@
 package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.dto.req.UserReq;
+import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.ERole;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -26,11 +27,10 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
 
-
     @Override
-    public User createUser(UserReq userReq) {
+    public UserRes createUser(UserReq userReq) {
         User user = new User();
-        userMapper.updateUserFromDTO(userReq, user);
+        userMapper.transformToEntityFromRequest(userReq, user);
         // Kiểm tra username đã tồn tại
         if (userRepository.findByUsername(user.getUsername())
                           .isPresent()) {
@@ -43,72 +43,67 @@ public class UserServiceImpl implements IUserService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        // Mã hóa mật khẩu
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         // Thiết lập giá trị mặc định
         user.setRole(ERole.USER);
-        user.setAccountStatus(user.getAccountStatus() != null ? user.getAccountStatus() : EUserStatus.ACTIVE);
-        user.setVerified(false);
+        user.setAccountStatus(EUserStatus.VERIFYING);
         user.setLevel(0);
 
-        return userRepository.save(user);
+
+        user = userRepository.save(user);
+        return changeToRes(user);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserRes> getAllUsers() {
+        var users = userRepository.findAll();
+        return users.stream()
+                    .map(this::changeToRes)
+                    .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public UserRes getUserById(Long id) {
+        var user = userRepository.findById(id)
+                                 .orElseThrow(() -> new IllegalArgumentException("User Not found"));
+        return changeToRes(user);
     }
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserRes getUserByUsername(String username) {
+        var user = userRepository.findByUsername(username)
+                                 .orElseThrow(() -> new IllegalArgumentException("User Not found"));
+        return changeToRes(user);
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserRes getUserByEmail(String email) {
+        var user = userRepository.findByEmail(email)
+                                 .orElseThrow(() -> new IllegalArgumentException("User Not found"));
+        return changeToRes(user);
     }
 
     @Override
-    public User updateUser(Long id, UserReq userDetails) {
+    public UserRes updateUser(Long id, UserReq userDetails) {
         User user = userRepository.findById(id)
                                   .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
 
         // Cập nhật username nếu không trùng
-        if (userDetails.getUsername() != null && !userDetails.getUsername()
-                                                             .equals(user.getUsername())) {
+        if (!userDetails.getUsername()
+                        .equals(user.getUsername())) {
             if (userRepository.findByUsername(userDetails.getUsername())
                               .isPresent()) {
                 throw new IllegalArgumentException("Username already exists");
             }
-            user.setUsername(userDetails.getUsername());
         }
 
-        // Cập nhật email nếu không trùng
-        if (userDetails.getEmail() != null && !userDetails.getEmail()
-                                                          .equals(user.getEmail())) {
-            if (userRepository.findByEmail(userDetails.getEmail())
-                              .isPresent()) {
-                throw new IllegalArgumentException("Email already exists");
-            }
-            user.setEmail(userDetails.getEmail());
+        if (checkNewPassword(userDetails.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("New passwords is same as current password");
         }
+        userMapper.updateEntityFromRequest(userDetails, user);
 
-        // Cập nhật mật khẩu nếu có
-        if (userDetails.getPassword() != null && !userDetails.getPassword()
-                                                             .isEmpty()) {
-            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-        }
-
-        userMapper.updateUserFromDTO(userDetails, user);
-
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        return changeToRes(user);
     }
 
     @Override
@@ -120,18 +115,21 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User verifyUser(Long id) {
-        User user = userRepository.findById(id)
-                                  .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
-        user.setVerified(true);
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User updateUserStatus(Long id, EUserStatus status) {
+    public UserRes updateUserStatus(Long id, EUserStatus status) {
         User user = userRepository.findById(id)
                                   .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
         user.setAccountStatus(status);
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        return changeToRes(user);
+    }
+
+    UserRes changeToRes(User user) {
+        UserRes userRes = new UserRes();
+        userMapper.updateUserResponseFromEntity(user, userRes);
+        return userRes;
+    }
+
+    boolean checkNewPassword(String newPassword, String oldPassword) {
+        return passwordEncoder.matches(newPassword, oldPassword);
     }
 }

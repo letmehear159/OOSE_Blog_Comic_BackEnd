@@ -1,0 +1,21 @@
+package OOSE_Final_Project.Blog.dto.res.user;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class UserRes {
+
+    Long id;
+
+    private String username;
+
+    private String email;
+
+    private String displayName;
+
+    private String avatar;
+
+    private long level;
+}

@@ -18,15 +18,20 @@ import lombok.Setter;
 public class User extends BaseEntity {
 
     private String username;
-    private String password;
-    private String email;
-    private String displayName;
-    private String avatar;
-    private ERole role;
-    private EUserStatus accountStatus;
-    private boolean isVerified;
-    private long level;
 
+    private String password;
+
+    private String email;
+
+    private String displayName;
+
+    private String avatar;
+
+    private ERole role;
+
+    private EUserStatus accountStatus;
+
+    private long level;
 
 
 }

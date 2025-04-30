@@ -2,28 +2,25 @@ package OOSE_Final_Project.Blog.service;
 
 
 import OOSE_Final_Project.Blog.dto.req.UserReq;
-import OOSE_Final_Project.Blog.entity.User;
+import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IUserService {
-    User createUser(UserReq user);
+    UserRes createUser(UserReq user);
 
-    List<User> getAllUsers();
+    List<UserRes> getAllUsers();
 
-    Optional<User> getUserById(Long id);
+    UserRes getUserById(Long id);
 
-    Optional<User> getUserByUsername(String username);
+    UserRes getUserByUsername(String username);
 
-    Optional<User> getUserByEmail(String email);
+    UserRes getUserByEmail(String email);
 
-    User updateUser(Long id, UserReq userDetails);
+    UserRes updateUser(Long id, UserReq userDetails);
 
     void deleteUser(Long id);
 
-    User verifyUser(Long id);
-
-    User updateUserStatus(Long id, EUserStatus status);
+    UserRes updateUserStatus(Long id, EUserStatus status);
 }
