@@ -4,10 +4,13 @@ package OOSE_Final_Project.Blog.service;
 import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IUserService {
+
     UserRes createUser(UserReq user);
 
     List<UserRes> getAllUsers();
@@ -23,4 +26,7 @@ public interface IUserService {
     void deleteUser(Long id);
 
     UserRes updateUserStatus(Long id, EUserStatus status);
+
+    UserRes updateUserAvatar(Long id, MultipartFile avatar) throws IOException;
+
 }

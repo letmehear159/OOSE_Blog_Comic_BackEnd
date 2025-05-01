@@ -8,10 +8,13 @@ import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.mapper.UserMapper;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IUserService;
+import OOSE_Final_Project.Blog.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +29,6 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
-
 
 
     @Override
@@ -126,6 +128,22 @@ public class UserServiceImpl implements IUserService {
         user = userRepository.save(user);
         return changeToRes(user);
     }
+
+    @Override
+    public UserRes updateUserAvatar(Long id, MultipartFile avatar) throws IOException {
+        User user = userRepository.findById(id)
+                                  .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+
+        String avatarPath = FileUtil.storeFile(avatar);
+        if(user.getAvatar()!=null) {
+            FileUtil.deleteFile(user.getAvatar());
+        }
+        user.setAvatar(avatarPath);
+        user = userRepository.save(user);
+        return changeToRes(user);
+    }
+
+
 
     UserRes changeToRes(User user) {
         UserRes userRes = new UserRes();

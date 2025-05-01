@@ -9,10 +9,13 @@ import OOSE_Final_Project.Blog.mapper.BlogCharacterMapper;
 import OOSE_Final_Project.Blog.repository.BlogCharacterRepository;
 import OOSE_Final_Project.Blog.repository.CharacterRepository;
 import OOSE_Final_Project.Blog.service.IBlogCharacterService;
+import OOSE_Final_Project.Blog.util.FileUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -29,7 +32,7 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
     private CharacterRepository characterRepository;
 
     @Override
-    public BlogCharacterRes save(BlogCharacterReq blogCharacterRequest) {
+    public BlogCharacterRes save(BlogCharacterReq blogCharacterRequest, MultipartFile thumbnail) throws IOException {
         BlogCharacter blogCharacter = new BlogCharacter();
 
         blogCharacterMapper.updateBlogCharacterFromDto(blogCharacterRequest, blogCharacter);
@@ -38,9 +41,14 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
 
         Character character = blogCharacter.getCharacter();
 
+
         character = characterRepository.save(character);
 
         blogCharacter.setCharacter(character);
+
+        String thumbnailName = FileUtil.storeFile(thumbnail);
+
+        blogCharacter.setThumbnail(thumbnailName);
 
         blogCharacter = blogCharacterRepository.save(blogCharacter);
 

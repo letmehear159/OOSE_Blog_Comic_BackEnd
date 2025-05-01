@@ -25,8 +25,8 @@ public class UserOTPFacade {
 
     public UserRes createUser(UserReq req) {
         UserRes res = userService.createUser(req);
-        OTP otp = otpService.generateOTP(res.getId());
-        sendOTPToEmail(res, otp);
+//        OTP otp = otpService.generateOTP(res.getId());
+//        sendOTPToEmail(res, otp);
         return res;
     }
 

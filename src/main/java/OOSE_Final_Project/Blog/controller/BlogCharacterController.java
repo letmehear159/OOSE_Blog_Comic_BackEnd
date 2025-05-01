@@ -3,11 +3,14 @@ package OOSE_Final_Project.Blog.controller;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogCharacterReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
+import OOSE_Final_Project.Blog.facade.BlogFacade;
 import OOSE_Final_Project.Blog.service.IBlogCharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/api/v1/blog-character")
@@ -17,9 +20,14 @@ public class BlogCharacterController {
     @Autowired
     IBlogCharacterService blogCharacterService;
 
-    @PostMapping("")
-    public ApiResponse<BlogCharacterRes> save(@RequestBody BlogCharacterReq blogCharacterRequest) {
-        var result = blogCharacterService.save(blogCharacterRequest);
+    @Autowired
+    BlogFacade blogFacade;
+
+    @PostMapping(value = "", consumes = {"multipart/form-data"})
+    public ApiResponse<BlogCharacterRes> save(
+            @RequestPart("blogCharacterRequest") BlogCharacterReq blogCharacterRequest,
+            @RequestPart("thumbnail") MultipartFile thumbnail) throws IOException {
+        var result = blogFacade.saveBlogCharacter(blogCharacterRequest, thumbnail);
         return new ApiResponse<>(HttpStatus.CREATED, "Create a blog character", result, null);
     }
 

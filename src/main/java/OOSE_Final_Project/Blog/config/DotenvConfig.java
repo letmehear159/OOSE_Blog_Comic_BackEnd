@@ -15,6 +15,7 @@ public class DotenvConfig {
         // Đặt các biến môi trường vào System property để Spring Boot đọc được
         setIfPresent("MAIL_USERNAME", dotenv);
         setIfPresent("MAIL_PASSWORD", dotenv);
+        setIfPresent("FRONT_END_URL", dotenv);
     }
 
     private void setIfPresent(String key, Dotenv dotenv) {

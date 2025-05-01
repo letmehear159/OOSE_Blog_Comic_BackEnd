@@ -9,7 +9,9 @@ import OOSE_Final_Project.Blog.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -61,6 +63,14 @@ public class UserController {
     public ApiResponse<UserRes> updateUser(@PathVariable Long id, @RequestBody UserReq userDetails) {
         UserRes updated = userService.updateUser(id, userDetails);
         return new ApiResponse<>(HttpStatus.OK, "User updated successfully", updated, null);
+    }
+
+    @PatchMapping("/avatar")
+    public ApiResponse<UserRes> updateUserAvatar(
+            @RequestPart("userId") Long userId,
+            @RequestPart("avatar") MultipartFile avatar) throws IOException {
+        UserRes userRes = userService.updateUserAvatar(userId, avatar);
+        return new ApiResponse<>(HttpStatus.OK, "User updated successfully", userRes, null);
     }
 
     // Cập nhật trạng thái user
