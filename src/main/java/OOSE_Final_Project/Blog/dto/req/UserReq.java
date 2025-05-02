@@ -3,11 +3,13 @@ package OOSE_Final_Project.Blog.dto.req;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class UserReq {
 
     @NotBlank(message = "Tên tài khoản không được để trống")
@@ -25,5 +27,7 @@ public class UserReq {
 
     @Nullable
     private String avatar;
+
+
 
 }

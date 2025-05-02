@@ -18,6 +18,7 @@ public class DotenvConfig {
         setIfPresent("MAIL_PASSWORD", dotenv);
         setIfPresent("FRONT_END_URL", dotenv);
         setIfPresent("SECRET_KEY", dotenv);
+        setIfPresent("GOOGLE_CLIENT_SECRET", dotenv);
     }
 
     private void setIfPresent(String key, Dotenv dotenv) {

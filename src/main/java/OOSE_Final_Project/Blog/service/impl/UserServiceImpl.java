@@ -3,6 +3,7 @@ package OOSE_Final_Project.Blog.service.impl;
 import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
+import OOSE_Final_Project.Blog.enums.ELoginType;
 import OOSE_Final_Project.Blog.enums.ERole;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.mapper.UserMapper;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements IUserService {
             throw new IllegalArgumentException("Username already exists");
         }
 
+
         // Kiểm tra email đã tồn tại
         if (userRepository.findByEmail(user.getEmail())
                           .isPresent()) {
@@ -53,7 +55,7 @@ public class UserServiceImpl implements IUserService {
         user.setRole(ERole.USER);
         user.setAccountStatus(EUserStatus.VERIFYING);
         user.setLevel(0);
-
+        user.setLoginType(ELoginType.LOCAL);
 
         user = userRepository.save(user);
 

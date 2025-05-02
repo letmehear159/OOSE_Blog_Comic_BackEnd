@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.entity;
 
+import OOSE_Final_Project.Blog.enums.ELoginType;
 import OOSE_Final_Project.Blog.enums.ERole;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import jakarta.persistence.Entity;
@@ -30,6 +31,8 @@ public class User extends BaseEntity {
     private EUserStatus accountStatus;
 
     private long level;
+
+    private ELoginType loginType;
 
 
 }
