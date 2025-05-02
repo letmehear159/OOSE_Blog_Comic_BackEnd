@@ -3,6 +3,7 @@ package OOSE_Final_Project.Blog.service;
 
 import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
+import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,5 +29,8 @@ public interface IUserService {
     UserRes updateUserStatus(Long id, EUserStatus status);
 
     UserRes updateUserAvatar(Long id, MultipartFile avatar) throws IOException;
+
+    User findByUsernameOrEmail(String id);
+
 
 }

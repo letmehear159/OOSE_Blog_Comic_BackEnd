@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DotenvConfig {
+
     @PostConstruct
     public void loadEnv() {
         Dotenv dotenv = Dotenv.configure()
@@ -16,6 +17,7 @@ public class DotenvConfig {
         setIfPresent("MAIL_USERNAME", dotenv);
         setIfPresent("MAIL_PASSWORD", dotenv);
         setIfPresent("FRONT_END_URL", dotenv);
+        setIfPresent("SECRET_KEY", dotenv);
     }
 
     private void setIfPresent(String key, Dotenv dotenv) {

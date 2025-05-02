@@ -6,6 +6,7 @@ import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.facade.UserOTPFacade;
 import OOSE_Final_Project.Blog.service.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class UserController {
     UserOTPFacade userOTPFacade;
 
     @PostMapping
-    public ApiResponse<UserRes> createUser(@RequestBody UserReq user) {
+    public ApiResponse<UserRes> createUser(@Valid @RequestBody UserReq user) {
         UserRes created = userOTPFacade.createUser(user);
         return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", created, null);
     }
