@@ -44,9 +44,7 @@ public class SecurityConfiguration {
     private long jwtValidInSeconds;
 
     private static final List<String> PUBLIC_URLS = List.of(
-            "/api/v1/login", "/api/v1/logout", "/api/v1" +
-                    "/auth" +
-                    "/refresh");
+            "/api/v1/auth/login", "/api/v1/auth/logout", "/api/v1" + "/auth" + "/refresh");
 
     @Bean
     public SecurityFilterChain securityFilterChain(

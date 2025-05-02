@@ -144,5 +144,25 @@ public class AuthController {
                                      null));
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity<ApiResponse<Boolean>> logout() {
+        String username = SecurityUtil.getCurrentUserLogin()
+                                      .isPresent() ? SecurityUtil.getCurrentUserLogin()
+                                                                 .get() : null;
+
+        User user = userService.findByUsernameOrEmail(username);
+        refreshTokenRepository.deleteByUserId(user.getId());
+        ResponseCookie responseCookie = ResponseCookie.from("refresh_token", null)
+                                                      .httpOnly(true)
+                                                      .path("/")
+                                                      .secure(true)
+                                                      .maxAge(0)
+                                                      .build();
+        return ResponseEntity.ok()
+                             .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                             .body(new ApiResponse<>(
+                                     HttpStatus.OK, "Log out", Boolean.TRUE,
+                                     null));
+    }
 
 }
