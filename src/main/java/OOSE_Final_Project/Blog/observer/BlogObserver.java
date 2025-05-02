@@ -29,6 +29,7 @@ public class BlogObserver implements Observer {
                                                          .url(null)
                                                          .receiverId(blog.getAuthor()
                                                                          .getUserId())
+                                                         .senderId(null)
                                                          .message("Bài viết của bạn vừa được thông qua")
                                                          .build();
         notificationService.createNotification(notificationReq);
@@ -36,13 +37,16 @@ public class BlogObserver implements Observer {
         var follows = followService.getFollowsByBloggerId(blog.getAuthor()
                                                               .getUserId());
         var users = follows.stream()
-                           .map(f -> userService.getUserById(f.getId()))
+                           .map(f -> userService.getUserById(f.getUser()
+                                                              .getId()))
                            .toList();
 
         users.forEach(
                 u -> {
                     NotificationReq notificationReq1 = NotificationReq.builder()
                                                                       .url(null)
+                                                                      .senderId(blog.getAuthor()
+                                                                                    .getUserId())
                                                                       .receiverId(u.getId())
                                                                       .message("Blogger bạn đang theo dõi " +
                                                                                        blog.getAuthor()
@@ -55,5 +59,10 @@ public class BlogObserver implements Observer {
 
         );
 
+    }
+
+    @Override
+    public String getPublisherType() {
+        return "BlogPublisher";
     }
 }

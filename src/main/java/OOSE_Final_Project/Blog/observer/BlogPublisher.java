@@ -6,8 +6,4 @@ import org.springframework.stereotype.Component;
 @Component
 public class BlogPublisher extends Publisher {
 
-    @Override
-    public void notifyObservers(Object data) {
-        observers.forEach(observer -> observer.update(data));
-    }
 }

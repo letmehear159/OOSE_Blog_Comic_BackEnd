@@ -2,12 +2,11 @@ package OOSE_Final_Project.Blog.service;
 
 import OOSE_Final_Project.Blog.dto.req.NotificationReq;
 import OOSE_Final_Project.Blog.dto.res.NotificationRes;
-import OOSE_Final_Project.Blog.entity.Notification;
 
 import java.util.List;
 
 public interface INotificationService {
-    Notification createNotification(NotificationReq notification);
+    NotificationRes createNotification(NotificationReq notification);
 
     List<NotificationRes> getAllNotifications();
 

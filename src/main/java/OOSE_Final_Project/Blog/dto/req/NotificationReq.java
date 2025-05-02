@@ -16,4 +16,6 @@ public class NotificationReq {
     String message;
 
     String url;
+
+    Long senderId;
 }

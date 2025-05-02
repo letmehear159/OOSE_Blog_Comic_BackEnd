@@ -4,6 +4,7 @@ import OOSE_Final_Project.Blog.dto.req.CommentReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.comment.CommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
+import OOSE_Final_Project.Blog.observer.CommentPublisher;
 import OOSE_Final_Project.Blog.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,12 @@ public class CommentController {
     @Autowired
     ICommentService commentService;
 
+    @Autowired
+    CommentPublisher commentPublisher;
+
     @GetMapping("/comment-in-blog/{blogId}")
     public ApiResponse<List<CommentRes>> getParentCommentByBlogId(@PathVariable String blogId) {
         List<CommentRes> result = commentService.getCommentsByParentIsNullAndBlogId(Long.valueOf(blogId));
-
         return new ApiResponse<List<CommentRes>>(
                 HttpStatus.OK, "Get highest comments (parent=null) in a blog", result, null);
     }
@@ -42,6 +45,8 @@ public class CommentController {
     public ApiResponse<CommentRes> createComment(@RequestBody CommentReq commentReq) {
 
         CommentRes result = commentService.createComment(commentReq);
+        commentPublisher.notifyObservers(result);
+
         return new ApiResponse<>(HttpStatus.OK, "Create comment", result, null);
     }
 

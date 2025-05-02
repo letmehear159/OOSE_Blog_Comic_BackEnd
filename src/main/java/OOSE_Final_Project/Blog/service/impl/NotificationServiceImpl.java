@@ -3,7 +3,6 @@ package OOSE_Final_Project.Blog.service.impl;
 import OOSE_Final_Project.Blog.dto.req.NotificationReq;
 import OOSE_Final_Project.Blog.dto.res.NotificationRes;
 import OOSE_Final_Project.Blog.entity.Notification;
-import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.mapper.NotificationMapper;
 import OOSE_Final_Project.Blog.repository.NotificationRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
@@ -27,16 +26,12 @@ public class NotificationServiceImpl implements INotificationService {
     NotificationMapper notificationMapper;
 
     @Override
-    public Notification createNotification(NotificationReq notificationReq) {
+    public NotificationRes createNotification(NotificationReq notificationReq) {
         Notification notification = new Notification();
-        User receiver = userRepository.findById(notificationReq.getReceiverId())
-                                      .orElseThrow(() -> new RuntimeException("User not found"));
-        notification.setReceiver(receiver);
-        notification.setUrl(notificationReq.getUrl());
-        notification.setMessage(notificationReq.getMessage());
+        notificationMapper.updateNotificationFromDto(notificationReq, notification);
         notification.setRead(false); // Mặc định thông báo mới chưa đọc
 
-        return notificationRepository.save(notification);
+        return changeToRes(notificationRepository.save(notification));
     }
 
     @Override

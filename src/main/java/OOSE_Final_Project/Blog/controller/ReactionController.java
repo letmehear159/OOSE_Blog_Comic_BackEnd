@@ -4,6 +4,7 @@ import OOSE_Final_Project.Blog.dto.req.ReactionReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.ReactionRes;
 import OOSE_Final_Project.Blog.enums.EReaction;
+import OOSE_Final_Project.Blog.observer.ReactionPublisher;
 import OOSE_Final_Project.Blog.service.strategy.reaction.IReactionService;
 import OOSE_Final_Project.Blog.service.strategy.reaction.ReactionStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,14 @@ public class ReactionController {
     @Autowired
     ReactionStrategyFactory reactionStrategyFactory;
 
+    @Autowired
+    ReactionPublisher reactionPublisher;
+
     @PostMapping("")
     public ApiResponse<ReactionRes> createReaction(@RequestBody ReactionReq req) {
         IReactionService reactionService = reactionStrategyFactory.getStrategy(req.getType());
         ReactionRes res = reactionService.createReaction(req);
+        reactionPublisher.notifyObservers(res);
         return (new ApiResponse<>(HttpStatus.OK, "Reaction created", res, null));
     }
 

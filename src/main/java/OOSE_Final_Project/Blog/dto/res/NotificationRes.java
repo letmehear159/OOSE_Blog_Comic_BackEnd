@@ -10,7 +10,7 @@ public class NotificationRes {
 
     long id;
 
-    UserNotificationRes receiver;
+    UserNotificationRes sender;
 
     String message;
 

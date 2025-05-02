@@ -18,9 +18,16 @@ import lombok.Setter;
 public class Notification extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "receiver_id")
     User receiver;
+
     String message;
+
     boolean isRead;
+
     String url;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    User sender;
 }

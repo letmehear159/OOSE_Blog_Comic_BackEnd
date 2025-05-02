@@ -7,17 +7,18 @@ public abstract class Publisher {
 
     protected List<Observer> observers = new ArrayList<>();
 
-    protected void subscribe(Observer observer) {
+
+    public void subscribe(Observer observer) {
         observers.add(observer);
     }
 
-    protected void unsubscribe(Observer observer) {
+    public void unsubscribe(Observer observer) {
         observers.remove(observer);
     }
 
-    Publisher() {
-
+    public void notifyObservers(Object data) {
+        for (Observer observer : observers) {
+            observer.update(data);
+        }
     }
-
-    abstract void notifyObservers(Object data);
 }

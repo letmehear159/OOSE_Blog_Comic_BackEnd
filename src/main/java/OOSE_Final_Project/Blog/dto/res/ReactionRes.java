@@ -15,8 +15,8 @@ public class ReactionRes {
 
     UserReactionRes user;
 
-    long blogId;
+    Long blogId;
 
-    long commentId;
+    Long commentId;
 
 }
