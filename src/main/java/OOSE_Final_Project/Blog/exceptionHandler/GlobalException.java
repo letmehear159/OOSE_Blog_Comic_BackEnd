@@ -18,19 +18,20 @@ public class GlobalException {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiResponse<?>> handleEntityNotFoundException(NoSuchElementException ex) {
-        var result = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "HandleNotFound", null, ex.getMessage());
+        var result = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "HandleNotFound", ex.getMessage(),
+                                       "ENTITY_NOT_FOUND");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
     }
 
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity<ApiResponse<?>> handleEntityNotFoundException(InternalAuthenticationServiceException ex) {
-        var result = new ApiResponse<>(HttpStatus.BAD_REQUEST, "HandleNotFound", null, "Bad credentials");
+        var result = new ApiResponse<>(HttpStatus.BAD_REQUEST, "HandleNotFound", null, "AUTHENTICATION_FAILURE");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleAllException(Exception ex) {
-        var result = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Handle All exception", null, ex.getMessage());
+        var result = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Handle All exception", ex.getMessage(), "INTERNAL_SERVER_ERROR");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
     }
 

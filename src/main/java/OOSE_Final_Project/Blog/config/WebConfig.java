@@ -12,6 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${project.upload-file.base-uri}")
     private String uploadPath;
 
+    @Value("${FRONT_END_URL}")
+    private String url;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
@@ -21,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("${FRONT_END_URL}")
+                .allowedOrigins(url)
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true);
