@@ -3,6 +3,7 @@ package OOSE_Final_Project.Blog.service.impl;
 import OOSE_Final_Project.Blog.entity.Tag;
 import OOSE_Final_Project.Blog.repository.TagRepository;
 import OOSE_Final_Project.Blog.service.ITagService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class TagServiceImpl implements ITagService {
 
     @Autowired

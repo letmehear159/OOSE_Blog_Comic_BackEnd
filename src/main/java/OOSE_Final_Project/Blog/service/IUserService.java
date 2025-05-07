@@ -2,6 +2,7 @@ package OOSE_Final_Project.Blog.service;
 
 
 import OOSE_Final_Project.Blog.dto.req.UserReq;
+import OOSE_Final_Project.Blog.dto.req.UserUpdateReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
@@ -22,7 +23,7 @@ public interface IUserService {
 
     UserRes getUserByEmail(String email);
 
-    UserRes updateUser(Long id, UserReq userDetails);
+    UserRes updateUser(Long id, UserUpdateReq userDetails);
 
     void deleteUser(Long id);
 
@@ -31,6 +32,5 @@ public interface IUserService {
     UserRes updateUserAvatar(Long id, MultipartFile avatar) throws IOException;
 
     User findByUsernameOrEmail(String id);
-
 
 }

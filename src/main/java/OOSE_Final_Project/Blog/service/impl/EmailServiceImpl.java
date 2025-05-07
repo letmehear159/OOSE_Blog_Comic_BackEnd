@@ -4,6 +4,7 @@ import OOSE_Final_Project.Blog.dto.MessageDTO;
 import OOSE_Final_Project.Blog.service.IEmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.nio.charset.StandardCharsets;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 class EmailServiceImpl implements IEmailService {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());

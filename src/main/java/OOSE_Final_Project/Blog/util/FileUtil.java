@@ -18,7 +18,7 @@ public class FileUtil {
 
     public static boolean isImageFile(MultipartFile file) throws FileUploadException {
 
-        List<String> allowedExtensions = Arrays.asList("pdf", "jpg", "jpeg", "png");
+        List<String> allowedExtensions = Arrays.asList("pdf", "jpg", "jpeg", "png","webp");
         final String fileName = file.getOriginalFilename();
 
         // Check file empty
@@ -46,6 +46,27 @@ public class FileUtil {
         String uniqueFilename = UUID.randomUUID() + "_" + filename;
 
         String absPath = new File(UploadPathHolder.uploadDir).getAbsolutePath();
+        File folder = new File(absPath);
+        if (!folder.exists()) {
+            folder.mkdirs(); // Tạo thư mục nếu chưa có
+        }
+
+        File dest = new File(folder, uniqueFilename);
+        file.transferTo(dest);
+        return uniqueFilename;
+    }
+
+    public static String storePreviewFile(MultipartFile file) throws IOException {
+        if (!isImageFile(file) || file.getOriginalFilename() == null) {
+            throw new IOException("Invalid image format");
+        }
+
+        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+        // Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
+        String uniqueFilename = UUID.randomUUID() + "_" + filename;
+
+        String absPath = new File(UploadPathHolder.previewDir).getAbsolutePath();
         File folder = new File(absPath);
         if (!folder.exists()) {
             folder.mkdirs(); // Tạo thư mục nếu chưa có

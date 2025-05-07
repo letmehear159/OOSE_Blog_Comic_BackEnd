@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(rollbackOn = Exception.class)
 public class BlogCharacterServiceImpl implements IBlogCharacterService {
 
     @Autowired

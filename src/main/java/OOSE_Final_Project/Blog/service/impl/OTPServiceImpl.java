@@ -6,6 +6,7 @@ import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.repository.OTPRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IOTPService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.security.SecureRandom;
 import java.util.Optional;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class OTPServiceImpl implements IOTPService {
 
     @Autowired
@@ -47,6 +49,23 @@ public class OTPServiceImpl implements IOTPService {
     }
 
     @Override
+    public OTP generateOTPForgotPassword(Long userId) {
+        User user = userRepository.findById(userId)
+                                  .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        // Xóa OTP cũ nếu tồn tại
+        otpRepository.findByUserId(userId)
+                     .ifPresent(otpRepository::delete);
+
+        // Tạo OTP mới
+        String otp = generateRandomOTP();
+        OTP newOTP = new OTP();
+        newOTP.setUser(user);
+        newOTP.setOtp(otp);
+
+        return otpRepository.save(newOTP);
+    }
+
+    @Override
     public Optional<OTP> getOTPById(Long id) {
         return otpRepository.findById(id);
     }
@@ -57,13 +76,22 @@ public class OTPServiceImpl implements IOTPService {
     }
 
     @Override
-    public boolean verifyOTP(Long userId, String otp) {
-        Optional<OTP> otpEntity = otpRepository.findByUserId(userId);
+    public boolean verifyOTP(Long userId, String otp, String email) {
+        Optional<OTP> otpEntity = null;
+        if (userId != null) {
+            otpEntity = otpRepository.findByUserId(userId);
+        } else {
+            var user = userRepository.findByEmail(email)
+                                     .orElseThrow(
+                                             () -> new IllegalArgumentException("User not found with email: " + email));
+            otpEntity = otpRepository.findByUserId(user.getId());
+        }
         if (otpEntity.isPresent() && otpEntity.get()
                                               .getOtp()
                                               .equals(otp)) {
             // Xóa OTP sau khi xác minh thành công
-            otpRepository.delete(otpEntity.get());
+            otpRepository.deleteById(otpEntity.get()
+                                              .getId());
             return true;
         }
         return false;

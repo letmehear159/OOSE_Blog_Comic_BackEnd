@@ -6,12 +6,14 @@ import OOSE_Final_Project.Blog.entity.Comment;
 import OOSE_Final_Project.Blog.mapper.CommentMapper;
 import OOSE_Final_Project.Blog.repository.CommentRepository;
 import OOSE_Final_Project.Blog.service.ICommentService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class CommentServiceImpl implements ICommentService {
 
     @Autowired

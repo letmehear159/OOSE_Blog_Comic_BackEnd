@@ -2,6 +2,7 @@ package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.entity.Category;
 import OOSE_Final_Project.Blog.repository.CategoryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class CategoryServiceImpl implements OOSE_Final_Project.Blog.service.ICategoryService {
 
     @Autowired

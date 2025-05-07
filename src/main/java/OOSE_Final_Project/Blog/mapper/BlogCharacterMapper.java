@@ -23,11 +23,7 @@ public abstract class BlogCharacterMapper {
     @Autowired
     protected BlogComicRepository blogComicRepository;
 
-    @Autowired
-    protected CategoryRepository categoryRepository;
 
-    @Autowired
-    protected TagRepository tagRepository;
 
     @Mapping(target = "author", source = "authorId", qualifiedByName = "mapAuthor")
     @Mapping(target = "comic", source = "comicId", qualifiedByName = "mapComic")
@@ -37,11 +33,13 @@ public abstract class BlogCharacterMapper {
     public abstract void updateBlogCharacterFromDto(BlogCharacterReq source, @MappingTarget BlogCharacter target);
 
     @Mapping(target = "author", source = "author", qualifiedByName = "mapAuthorResponse")
-    @Mapping(target = "character",ignore = true)
+    @Mapping(target = "character", ignore = true)
     public abstract void updateBlogCharacterResponseFromEntityWithoutDetail(
             BlogCharacter source, @MappingTarget BlogCharacterRes target);
 
     @Mapping(target = "author", source = "author", qualifiedByName = "mapAuthorResponse")
+    @Mapping(target = "comicId", source = "comic", qualifiedByName = "mapComicId")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateBlogCharacterResponseFromEntity(
             BlogCharacter source, @MappingTarget BlogCharacterRes target);
 
@@ -54,6 +52,11 @@ public abstract class BlogCharacterMapper {
                                                                  .userId(author.getId())
                                                                  .build();
         return authorBlogRes;
+    }
+
+    @Named("mapComicId")
+    Long mapComicId(BlogComic comic) {
+        return comic.getId();
     }
 
     @Named("mapAuthor")

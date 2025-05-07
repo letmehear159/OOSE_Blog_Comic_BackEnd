@@ -5,6 +5,7 @@ import OOSE_Final_Project.Blog.entity.blog.Blog;
 import OOSE_Final_Project.Blog.repository.BlogRepository;
 import OOSE_Final_Project.Blog.repository.ViewRepository;
 import OOSE_Final_Project.Blog.service.IViewService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class ViewServiceImpl implements IViewService {
+
     @Autowired
-    private  ViewRepository viewRepository;
+    private ViewRepository viewRepository;
+
     @Autowired
-    private  BlogRepository blogRepository;
+    private BlogRepository blogRepository;
 
 
     @Override

@@ -6,6 +6,7 @@ import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.repository.FollowRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IFollowService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class FollowServiceImpl implements IFollowService {
 
     @Autowired

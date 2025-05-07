@@ -1,10 +1,15 @@
 package OOSE_Final_Project.Blog.controller;
 
 import OOSE_Final_Project.Blog.dto.req.LoginReq;
+import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.LoginRes;
+import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.RefreshToken;
 import OOSE_Final_Project.Blog.entity.User;
+import OOSE_Final_Project.Blog.enums.EUserStatus;
+import OOSE_Final_Project.Blog.enums.ErrorCode;
+import OOSE_Final_Project.Blog.facade.UserOTPFacade;
 import OOSE_Final_Project.Blog.repository.RefreshTokenRepository;
 import OOSE_Final_Project.Blog.service.IUserService;
 import OOSE_Final_Project.Blog.util.SecurityUtil;
@@ -40,6 +45,9 @@ public class AuthController {
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
 
+    @Autowired
+    UserOTPFacade userOTPFacade;
+
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginRes>> login(@Valid @RequestBody LoginReq loginReq) {
 
@@ -55,10 +63,17 @@ public class AuthController {
                              .setAuthentication(authentication);
 
         var currentUser = userService.findByUsernameOrEmail(loginReq.getIdentifier());
+        if (!currentUser.getAccountStatus()
+                        .equals(EUserStatus.ACTIVE)) {
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .body(new ApiResponse<>(
+                                         ErrorCode.VERIFYING_EMAIL.getHttpStatus(),
+                                         ErrorCode.VERIFYING_EMAIL.getMessage(),
+                                         new LoginRes(null, currentUser.getId()),
+                                         ErrorCode.VERIFYING_EMAIL.name()));
+        }
 
         String accessToken = securityUtil.createAccessToken(currentUser);
-
-
         LoginRes loginRes = new LoginRes();
 
         loginRes.setAccessToken(accessToken);
@@ -84,21 +99,6 @@ public class AuthController {
                                      null));
     }
 
-
-    @GetMapping("/account")
-    public ResponseEntity<ApiResponse<LoginReq.UserLogin>> getAccount() {
-
-        String username = SecurityUtil.getCurrentUserLogin()
-                                      .isPresent() ? SecurityUtil.getCurrentUserLogin()
-                                                                 .get() : null;
-
-        var user = userService.getUserByUsername(username);
-        LoginReq.UserLogin userLogin = new LoginReq.UserLogin(user.getId(), user.getUsername(), user.getEmail());
-        return ResponseEntity.ok()
-                             .body(new ApiResponse<>(
-                                     HttpStatus.CREATED, "Logging successfully", userLogin,
-                                     null));
-    }
 
     @GetMapping("/refresh")
     public ResponseEntity<ApiResponse<LoginRes>> getRefreshToken(
@@ -163,6 +163,27 @@ public class AuthController {
                              .body(new ApiResponse<>(
                                      HttpStatus.OK, "Log out", Boolean.TRUE,
                                      null));
+    }
+
+
+    @GetMapping("/account")
+    public ResponseEntity<ApiResponse<UserRes>> fetchAccount() {
+        String username = SecurityUtil.getCurrentUserLogin()
+                                      .isPresent() ? SecurityUtil.getCurrentUserLogin()
+                                                                 .get() : null;
+
+        var user = userService.getUserByUsername(username);
+        return ResponseEntity.ok()
+                             .body(new ApiResponse<>(
+                                     HttpStatus.CREATED, "Fetch user successfully", user,
+                                     null));
+    }
+
+
+    @PostMapping("/register")
+    public ApiResponse<UserRes> registerUser(@Valid @RequestBody UserReq user) {
+        UserRes created = userOTPFacade.createUser(user);
+        return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", created, null);
     }
 
 }

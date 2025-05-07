@@ -7,6 +7,7 @@ import OOSE_Final_Project.Blog.mapper.NotificationMapper;
 import OOSE_Final_Project.Blog.repository.NotificationRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.INotificationService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class NotificationServiceImpl implements INotificationService {
 
     @Autowired

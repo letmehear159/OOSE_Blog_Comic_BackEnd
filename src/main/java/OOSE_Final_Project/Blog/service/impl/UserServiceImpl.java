@@ -1,6 +1,7 @@
 package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.dto.req.UserReq;
+import OOSE_Final_Project.Blog.dto.req.UserUpdateReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.ELoginType;
@@ -10,6 +11,7 @@ import OOSE_Final_Project.Blog.mapper.UserMapper;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IUserService;
 import OOSE_Final_Project.Blog.util.FileUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class UserServiceImpl implements IUserService {
 
     @Autowired
@@ -63,7 +66,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-//    @PreAuthorize("hasRole('ADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')")
     public List<UserRes> getAllUsers() {
         var users = userRepository.findAll();
         return users.stream()
@@ -93,20 +96,20 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserRes updateUser(Long id, UserReq userDetails) {
+    public UserRes updateUser(Long id, UserUpdateReq userDetails) {
         User user = userRepository.findById(id)
                                   .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
 
         // Cập nhật username nếu không trùng
-        if (!userDetails.getUsername()
-                        .equals(user.getUsername())) {
+        if (userDetails.getUsername() != null && !userDetails.getUsername()
+                                                             .equals(user.getUsername())) {
             if (userRepository.findByUsername(userDetails.getUsername())
                               .isPresent()) {
                 throw new IllegalArgumentException("Username already exists");
             }
         }
 
-        if (checkNewPassword(userDetails.getPassword(), user.getPassword())) {
+        if (userDetails.getPassword() != null && checkNewPassword(userDetails.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("New passwords is same as current password");
         }
         userMapper.updateEntityFromRequest(userDetails, user);
@@ -151,6 +154,16 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findByUsernameOrEmail(id)
                              .orElseThrow(() -> new IllegalArgumentException("User Not found"));
     }
+
+    //    @Override
+    //    public UserRes updateUserPassword(Long id, String newPassword) {
+    //        var user = userRepository.findById(id)
+    //                                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " +
+    //                                 id));
+    //        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+    //            throw new IllegalArgumentException("New passwords is same as current password");
+    //        }
+    //    }
 
 
     UserRes changeToRes(User user) {

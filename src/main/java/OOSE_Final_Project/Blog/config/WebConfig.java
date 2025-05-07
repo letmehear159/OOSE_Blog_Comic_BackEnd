@@ -12,6 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${project.upload-file.base-uri}")
     private String uploadPath;
 
+    @Value("${project.upload-file.base-preview-uri}")
+    private String uploadPreviewPath;
+
     @Value("${FRONT_END_URL}")
     private String url;
 
@@ -19,6 +22,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:" + uploadPath);
+
+        registry.addResourceHandler("/previews/**")
+                .addResourceLocations("file:" + uploadPreviewPath);
     }
 
     @Override

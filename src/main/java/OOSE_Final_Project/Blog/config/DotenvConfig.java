@@ -19,6 +19,8 @@ public class DotenvConfig {
         setIfPresent("FRONT_END_URL", dotenv);
         setIfPresent("SECRET_KEY", dotenv);
         setIfPresent("GOOGLE_CLIENT_SECRET", dotenv);
+        setIfPresent("BACK_END_URL", dotenv);
+
     }
 
     private void setIfPresent(String key, Dotenv dotenv) {

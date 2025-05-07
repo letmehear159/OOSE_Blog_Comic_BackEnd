@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.controller;
 
+import OOSE_Final_Project.Blog.dto.req.OTPReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.facade.UserOTPFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,15 @@ public class OtpController {
     }
 
     @PostMapping("")
-    public ApiResponse<Boolean> verifyOTP(@RequestBody String otp, @RequestParam("userId") String userId) {
-        var result = userOTPFacade.verifyOTP(Long.valueOf(userId), otp);
+    public ApiResponse<Boolean> verifyOTP(@RequestBody OTPReq otpReq) {
+        var result = userOTPFacade.verifyOTP(otpReq.getUserId(), otpReq.getOtp(), otpReq.getEmail());
         return new ApiResponse<>(HttpStatus.OK, "Verify OTP", result, null);
+    }
+
+    @GetMapping("/forgot-password")
+    public ApiResponse<Boolean> generateNewOTPForgotPassword(@RequestParam("email") String email) {
+        userOTPFacade.generateOTPForPassword(email);
+        return new ApiResponse<>(HttpStatus.CREATED, "Generate new OTP for forgot password", Boolean.TRUE, null);
     }
 
 

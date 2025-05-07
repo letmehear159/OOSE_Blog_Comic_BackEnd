@@ -6,12 +6,14 @@ import OOSE_Final_Project.Blog.entity.Rate;
 import OOSE_Final_Project.Blog.mapper.RateMapper;
 import OOSE_Final_Project.Blog.repository.RateRepository;
 import OOSE_Final_Project.Blog.service.IRateService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class RateServiceImpl implements IRateService {
 
 

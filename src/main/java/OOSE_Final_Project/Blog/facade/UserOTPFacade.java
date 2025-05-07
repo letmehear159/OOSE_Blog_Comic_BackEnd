@@ -25,8 +25,8 @@ public class UserOTPFacade {
 
     public UserRes createUser(UserReq req) {
         UserRes res = userService.createUser(req);
-//        OTP otp = otpService.generateOTP(res.getId());
-//        sendOTPToEmail(res, otp);
+        OTP otp = otpService.generateOTP(res.getId());
+        sendOTPToEmail(res, otp);
         return res;
     }
 
@@ -54,10 +54,18 @@ public class UserOTPFacade {
         }
     }
 
-    public boolean verifyOTP(Long userId, String otp) {
-        var result = otpService.verifyOTP(userId, otp);
+    public void generateOTPForPassword(String email) {
+        var user = userService.getUserByEmail(email);
+        var userId = user.getId();
+        OTP otp = otpService.generateOTPForgotPassword(userId);
+        sendOTPToEmail(user, otp);
+
+    }
+
+    public boolean verifyOTP(Long userId, String otp,String email) {
+        var result = otpService.verifyOTP(userId, otp,email);
         if (!result) {
-            return false;
+            throw new IllegalArgumentException("OTP verification failed");
         }
         userService.updateUserStatus(userId, EUserStatus.ACTIVE);
         return true;

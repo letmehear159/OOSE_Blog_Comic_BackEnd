@@ -8,4 +8,6 @@ import lombok.Setter;
 @Setter
 public class BlogCharacterRes extends BlogRes {
     Character character;
+
+    Long comicId;
 }

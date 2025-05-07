@@ -1,10 +1,9 @@
 package OOSE_Final_Project.Blog.controller;
 
-import OOSE_Final_Project.Blog.dto.req.UserReq;
+import OOSE_Final_Project.Blog.dto.req.UserUpdateReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
-import OOSE_Final_Project.Blog.facade.UserOTPFacade;
 import OOSE_Final_Project.Blog.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +21,6 @@ public class UserController {
     @Autowired
     IUserService userService;
 
-    @Autowired
-    UserOTPFacade userOTPFacade;
-
-    @PostMapping
-    public ApiResponse<UserRes> createUser(@Valid @RequestBody UserReq user) {
-        UserRes created = userOTPFacade.createUser(user);
-        return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", created, null);
-    }
 
     // Lấy tất cả user
     @GetMapping
@@ -61,10 +52,19 @@ public class UserController {
 
     // Cập nhật thông tin user
     @PutMapping("/{id}")
-    public ApiResponse<UserRes> updateUser(@PathVariable Long id, @RequestBody UserReq userDetails) {
+    public ApiResponse<UserRes> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateReq userDetails) {
         UserRes updated = userService.updateUser(id, userDetails);
         return new ApiResponse<>(HttpStatus.OK, "User updated successfully", updated, null);
     }
+
+    // Cập nhật thông tin user
+    @PutMapping("/email/{email}")
+    public ApiResponse<UserRes> updateUser(@PathVariable String email, @Valid @RequestBody UserUpdateReq userDetails) {
+        var user = userService.findByUsernameOrEmail(email);
+        UserRes updated = userService.updateUser(user.getId(), userDetails);
+        return new ApiResponse<>(HttpStatus.OK, "User updated successfully", updated, null);
+    }
+
 
     @PatchMapping("/avatar")
     public ApiResponse<UserRes> updateUserAvatar(

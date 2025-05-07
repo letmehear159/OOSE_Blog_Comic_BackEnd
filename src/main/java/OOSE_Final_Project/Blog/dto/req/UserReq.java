@@ -28,6 +28,4 @@ public class UserReq {
     @Nullable
     private String avatar;
 
-
-
 }
