@@ -33,6 +33,12 @@ public class BlogComicController {
         return new ApiResponse<>(HttpStatus.CREATED, "Get all blog", result, null);
     }
 
+    @GetMapping("/{blogId}")
+    public ApiResponse<BlogComicRes> getBlogCharacterById(@PathVariable Long blogId) {
+        var result = blogComicService.findById(blogId);
+        return new ApiResponse<>(HttpStatus.CREATED, "Get bloc comic by Id", result, null);
+    }
+
     @PutMapping("/{blogId}")
     public ApiResponse<BlogComicRes> update(
             @PathVariable Long blogId, @RequestBody BlogComicReq blogComicReq) {

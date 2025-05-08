@@ -17,6 +17,8 @@ public interface IBlogCharacterService {
 
     void deleteById(Long id);
 
-    BlogCharacterRes update(Long id, BlogCharacterReq updatedBlogCharacter);
+    BlogCharacterRes update(Long id, BlogCharacterReq updatedBlogCharacter,MultipartFile thumbnail) throws IOException;
+
+    List<BlogCharacterRes> getRelatedCharacters(Long comicId);
 
 }

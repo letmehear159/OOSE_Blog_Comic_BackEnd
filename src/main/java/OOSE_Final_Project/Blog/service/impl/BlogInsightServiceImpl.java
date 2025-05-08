@@ -81,7 +81,7 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
     public BlogInsightRes update(Long id, BlogInsightReq updatedBlogInsightReq) {
         BlogInsight existing = blogInsightRepository.findById(id)
                                                     .orElseThrow(() -> new IllegalArgumentException(
-                                                            "BlogComic not found with id: " + id));
+                                                            "Blog insight not found with id: " + id));
         blogInsightMapper.updateBlogInsightFromDto(updatedBlogInsightReq, existing);
 
         existing = blogInsightRepository.save(existing);
@@ -91,5 +91,18 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
         blogInsightMapper.updateBlogInsightResponseFromEntity(existing, blogInsightRes);
 
         return blogInsightRes;
+    }
+
+    @Override
+    public List<BlogInsightRes> findByCharacterId(Long characterId) {
+        var blogs = blogInsightRepository.findByBlogCharacterId(characterId);
+        return blogs.stream()
+                    .map(blog -> {
+
+                        BlogInsightRes blogInsightRes = new BlogInsightRes();
+                        blogInsightMapper.updateBlogInsightResponseFromEntity(blog, blogInsightRes);
+                        return blogInsightRes;
+                    })
+                    .toList();
     }
 }

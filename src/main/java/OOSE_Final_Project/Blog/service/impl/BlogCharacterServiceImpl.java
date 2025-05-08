@@ -91,11 +91,24 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
     }
 
     @Override
-    public BlogCharacterRes update(Long id, BlogCharacterReq updatedBlogCharacter) {
+    public BlogCharacterRes update(Long id, BlogCharacterReq updatedBlogCharacter, MultipartFile thumbnail)
+            throws IOException {
         BlogCharacter existing = blogCharacterRepository.findById(id)
                                                         .orElseThrow(() -> new IllegalArgumentException(
                                                                 "BlogCharacter not found with id: " + id));
         blogCharacterMapper.updateBlogCharacterFromDto(updatedBlogCharacter, existing);
+
+        var character = characterRepository.save(existing.getCharacter());
+
+        if (thumbnail != null) {
+            FileUtil.deleteFile(existing.getThumbnail());
+
+            var fileName = FileUtil.storeFile(thumbnail);
+            existing.setThumbnail(fileName);
+        }
+
+
+        existing.setCharacter(character);
 
         existing = blogCharacterRepository.save(existing);
 
@@ -104,6 +117,19 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
         blogCharacterMapper.updateBlogCharacterResponseFromEntityWithoutDetail(existing, blogCharacterRes);
 
         return blogCharacterRes;
+    }
+
+    @Override
+    public List<BlogCharacterRes> getRelatedCharacters(Long comicId) {
+        var blogs = blogCharacterRepository.findByComicId(comicId);
+        return blogs.stream()
+                    .map(blog -> {
+
+                        BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
+                        blogCharacterMapper.updateBlogCharacterResponseFromEntityWithoutDetail(blog, blogCharacterRes);
+                        return blogCharacterRes;
+                    })
+                    .toList();
     }
 
 

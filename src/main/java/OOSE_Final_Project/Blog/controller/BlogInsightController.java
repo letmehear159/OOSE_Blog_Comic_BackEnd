@@ -30,7 +30,7 @@ public class BlogInsightController {
     @GetMapping("")
     public ApiResponse<List<BlogInsightRes>> getAllBlogCharacter() {
         var result = blogInsightService.findAll();
-        return new ApiResponse<>(HttpStatus.CREATED, "Get all blog", result, null);
+        return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight", result, null);
     }
 
     @PutMapping("/{blogId}")
@@ -44,5 +44,12 @@ public class BlogInsightController {
     public ApiResponse<Boolean> delete(@PathVariable Long blogId) {
         blogInsightService.deleteById(blogId);
         return new ApiResponse<>(HttpStatus.OK, "Delete a blog insight", Boolean.TRUE, null);
+    }
+
+    @GetMapping("/character/{characterId}")
+    public ApiResponse<List<BlogInsightRes>> getAllByCharacterId(@PathVariable Long characterId) {
+
+        var result = blogInsightService.findByCharacterId(characterId);
+        return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight by character ID", result, null);
     }
 }

@@ -39,8 +39,9 @@ public class BlogCharacterController {
 
     @PutMapping("/{blogId}")
     public ApiResponse<BlogCharacterRes> update(
-            @PathVariable Long blogId, @RequestBody BlogCharacterReq blogCharacterRequest) {
-        var result = blogCharacterService.update(blogId, blogCharacterRequest);
+            @PathVariable Long blogId, @RequestPart("blogCharacterRequest") BlogCharacterReq blogCharacterRequest,
+            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
+        var result = blogCharacterService.update(blogId, blogCharacterRequest,thumbnail);
         return new ApiResponse<>(HttpStatus.OK, "Update a blog character", result, null);
     }
 
@@ -54,5 +55,11 @@ public class BlogCharacterController {
     public ApiResponse<BlogCharacterRes> findById(@PathVariable String blogId) {
         var result = blogCharacterService.findById(Long.valueOf(blogId));
         return new ApiResponse<>(HttpStatus.OK, "Find a blog character", result, null);
+    }
+
+    @GetMapping("/related-characters/{comicId}")
+    public ApiResponse<List<BlogCharacterRes>> getRelatedCharacters(@PathVariable String comicId) {
+        var result = blogCharacterService.getRelatedCharacters(Long.valueOf(comicId));
+        return new ApiResponse<>(HttpStatus.CREATED, "Get blog character related to this character", result, null);
     }
 }

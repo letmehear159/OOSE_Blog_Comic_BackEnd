@@ -19,4 +19,6 @@ public interface IBlogInsightService {
 
 
     BlogInsightRes update(Long id, BlogInsightReq updatedBlogInsightReq);
+
+    List<BlogInsightRes> findByCharacterId(Long characterId);
 }
