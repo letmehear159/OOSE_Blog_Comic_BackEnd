@@ -3,9 +3,14 @@ package OOSE_Final_Project.Blog.controller;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogComicReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogComicRes;
+import OOSE_Final_Project.Blog.entity.blog.BlogComic;
+import OOSE_Final_Project.Blog.repository.BlogComicRepository;
 import OOSE_Final_Project.Blog.service.IBlogComicService;
+import OOSE_Final_Project.Blog.specification.BlogComicSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +23,9 @@ public class BlogComicController {
 
     @Autowired
     IBlogComicService blogComicService;
+
+    @Autowired
+    BlogComicRepository blogComicRepository;
 
     @PostMapping("")
     public ApiResponse<BlogComicRes> save(
@@ -51,4 +59,26 @@ public class BlogComicController {
         blogComicService.deleteById(blogId);
         return new ApiResponse<>(HttpStatus.OK, "Delete a blog comic", Boolean.TRUE, null);
     }
+
+    @GetMapping("/searchByCat")
+    public ResponseEntity<?> searchByCat(
+            @RequestParam List<Long> categoryIds,
+            @RequestParam List<Long> tagIds
+    ) {
+        Specification<BlogComic> spec;
+        if (tagIds.isEmpty() && categoryIds.isEmpty()) {
+            return ResponseEntity.ok(blogComicService.findAll());
+        }
+        if (tagIds.isEmpty()) {
+            spec = BlogComicSpecification.hasAllCategories(categoryIds);
+        } else if (categoryIds.isEmpty()) {
+            spec = BlogComicSpecification.hasAllTags(tagIds);
+        } else {
+            spec = BlogComicSpecification.hasAllCategoriesAndTags(categoryIds, tagIds);
+        }
+        var result = blogComicRepository.findAll(spec);
+        return ResponseEntity.ok(result);
+    }
+
+
 }

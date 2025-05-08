@@ -18,12 +18,12 @@ public class BlogInsight extends Blog {
     String content;
 
     @ManyToMany
-    @JoinTable(name = "blog_category", joinColumns = @JoinColumn(name = "blog_id"), inverseJoinColumns =
+    @JoinTable(name = "blog-insight_category", joinColumns = @JoinColumn(name = "blog_id"), inverseJoinColumns =
     @JoinColumn(name = "category_id"))
     List<Category> categories;
 
     @ManyToMany
-    @JoinTable(name = "blog_tag", joinColumns = @JoinColumn(name = "blog_id"), inverseJoinColumns =
+    @JoinTable(name = "blog-insight_tag", joinColumns = @JoinColumn(name = "blog_id"), inverseJoinColumns =
     @JoinColumn(name = "tag_id"))
     List<Tag> tags;
 
