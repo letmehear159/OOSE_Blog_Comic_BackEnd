@@ -16,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@Service
 @Transactional(rollbackOn = Exception.class)
+@Service
 public class BlogComicServiceImpl implements IBlogComicService {
 
     @Autowired

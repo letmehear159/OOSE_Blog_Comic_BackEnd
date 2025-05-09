@@ -3,7 +3,8 @@ package OOSE_Final_Project.Blog.controller;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogCharacterReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
-import OOSE_Final_Project.Blog.facade.BlogFacade;
+import OOSE_Final_Project.Blog.enums.EBlogStatus;
+import OOSE_Final_Project.Blog.observer.BlogPublisher;
 import OOSE_Final_Project.Blog.service.IBlogCharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,13 @@ public class BlogCharacterController {
     IBlogCharacterService blogCharacterService;
 
     @Autowired
-    BlogFacade blogFacade;
+    BlogPublisher blogPublisher;
 
     @PostMapping(value = "", consumes = {"multipart/form-data"})
     public ApiResponse<BlogCharacterRes> save(
             @RequestPart("blogCharacterRequest") BlogCharacterReq blogCharacterRequest,
             @RequestPart("thumbnail") MultipartFile thumbnail) throws IOException {
-        var result = blogFacade.saveBlogCharacter(blogCharacterRequest, thumbnail);
+        var result = blogCharacterService.save(blogCharacterRequest, thumbnail);
         return new ApiResponse<>(HttpStatus.CREATED, "Create a blog character", result, null);
     }
 
@@ -41,7 +42,7 @@ public class BlogCharacterController {
     public ApiResponse<BlogCharacterRes> update(
             @PathVariable Long blogId, @RequestPart("blogCharacterRequest") BlogCharacterReq blogCharacterRequest,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
-        var result = blogCharacterService.update(blogId, blogCharacterRequest,thumbnail);
+        var result = blogCharacterService.update(blogId, blogCharacterRequest, thumbnail);
         return new ApiResponse<>(HttpStatus.OK, "Update a blog character", result, null);
     }
 
@@ -61,5 +62,14 @@ public class BlogCharacterController {
     public ApiResponse<List<BlogCharacterRes>> getRelatedCharacters(@PathVariable String comicId) {
         var result = blogCharacterService.getRelatedCharacters(Long.valueOf(comicId));
         return new ApiResponse<>(HttpStatus.CREATED, "Get blog character related to this character", result, null);
+    }
+
+    @PatchMapping("/review/{id}")
+    public ApiResponse<BlogCharacterRes> updateBlogStatus(
+            @PathVariable Long id, @RequestBody
+            EBlogStatus status) {
+        var result = blogCharacterService.updateBlogStatus(id, status);
+        blogPublisher.notifyObservers(result);
+        return new ApiResponse<>(HttpStatus.OK, "Update status of blogs", result, null);
     }
 }

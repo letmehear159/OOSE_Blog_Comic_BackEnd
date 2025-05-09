@@ -20,6 +20,9 @@ public abstract class Blog extends BaseEntity {
 
     String title;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
+    String content;
+
     @ManyToOne
     @JoinColumn(name = "blogger_id")
     User author;

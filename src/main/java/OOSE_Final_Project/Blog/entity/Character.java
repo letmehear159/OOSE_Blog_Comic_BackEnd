@@ -9,10 +9,10 @@ import lombok.*;
 @Setter
 @Entity
 @Table(name = "characters")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 public class Character extends BaseEntity {
 
     String vietName;

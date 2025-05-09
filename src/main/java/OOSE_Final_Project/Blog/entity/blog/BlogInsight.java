@@ -14,15 +14,12 @@ import java.util.List;
 @Setter
 public class BlogInsight extends Blog {
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    String content;
-
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "blog-insight_category", joinColumns = @JoinColumn(name = "blog_id"), inverseJoinColumns =
     @JoinColumn(name = "category_id"))
     List<Category> categories;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "blog-insight_tag", joinColumns = @JoinColumn(name = "blog_id"), inverseJoinColumns =
     @JoinColumn(name = "tag_id"))
     List<Tag> tags;

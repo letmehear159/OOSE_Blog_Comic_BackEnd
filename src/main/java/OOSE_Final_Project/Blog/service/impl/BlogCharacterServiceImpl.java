@@ -18,8 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@Service
 @Transactional(rollbackOn = Exception.class)
+@Service
 public class BlogCharacterServiceImpl implements IBlogCharacterService {
 
     @Autowired
@@ -130,6 +130,18 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
                         return blogCharacterRes;
                     })
                     .toList();
+    }
+
+    @Override
+    public BlogCharacterRes updateBlogStatus(Long id, EBlogStatus status) {
+        var blog = blogCharacterRepository.findById(id)
+                                          .orElseThrow(
+                                                  () -> new IllegalArgumentException("Blog not found with id: " + id));
+        blog.setStatus(status);
+        blog = blogCharacterRepository.save(blog);
+        BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
+        blogCharacterMapper.updateBlogCharacterResponseFromEntity(blog, blogCharacterRes);
+        return blogCharacterRes;
     }
 
 

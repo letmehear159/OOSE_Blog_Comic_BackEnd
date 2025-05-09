@@ -22,29 +22,28 @@ public class CommentBlogObserver implements Observer {
         // Cần có dữ liệu author id
         CommentRes commentRes = (CommentRes) data;
         Comment comment = commentRepository.findById(commentRes.getCommentId())
-                                           .orElseThrow(() -> new RuntimeException("Error in saving comment"));
+                .orElseThrow(() -> new RuntimeException("Error in saving comment"));
 
         long authorId = comment.getBlog()
-                               .getAuthor()
-                               .getId();
+                .getAuthor()
+                .getId();
 
         if (authorId == commentRes.getUserCommentResponse()
-                                  .getUserId()) {
+                .getUserId()) {
             return;
         }
 
         NotificationReq notificationReq = NotificationReq.builder()
-                                                         .url(null)
-                                                         .receiverId(authorId)
-                                                         .senderId(commentRes.getUserCommentResponse()
-                                                                             .getUserId())
-                                                         .message(commentRes.getUserCommentResponse()
-                                                                            .getDisplayName() +
-                                                                          " vừa bình luận về blog của bạn")
-                                                         .build();
+                .url(null)
+                .receiverId(authorId)
+                .senderId(commentRes.getUserCommentResponse()
+                        .getUserId())
+                .message(commentRes.getUserCommentResponse()
+                        .getDisplayName() +
+                        " vừa bình luận về blog của bạn")
+                .build();
 
         notificationService.createNotification(notificationReq);
-
 
     }
 

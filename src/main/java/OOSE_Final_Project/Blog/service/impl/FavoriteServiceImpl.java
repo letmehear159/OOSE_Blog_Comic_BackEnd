@@ -32,26 +32,28 @@ public class FavoriteServiceImpl implements IFavoriteService {
     public Favorite createFavorite(FavoriteReq favoriteReq) {
         Favorite favorite = new Favorite();
         Blog blog = blogRepository.findById(favoriteReq.getBlogId())
-                                  .orElseThrow(() -> new IllegalArgumentException("Blog not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Blog not found"));
 
         favorite.setBlog(blog);
 
         User user = userRepository.findById(favoriteReq.getUserId())
-                                  .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         favorite.setUser(user);
 
         // Kiểm tra xem favorite đã tồn tại với userId và blogId
         Optional<Favorite> existingFavorite = favoriteRepository.findByUserIdAndBlogId(
                 favorite.getUser()
-                        .getId(), favorite.getBlog()
-                                          .getId());
+                        .getId(),
+                favorite.getBlog()
+                        .getId());
 
         if (existingFavorite.isPresent()) {
             throw new IllegalArgumentException("Favorite already exists for user " +
-                                                       favorite.getUser()
-                                                               .getId() + " and blog " + favorite.getBlog()
-                                                                                                 .getId());
+                    favorite.getUser()
+                            .getId()
+                    + " and blog " + favorite.getBlog()
+                            .getId());
         }
         return favoriteRepository.save(favorite);
     }
@@ -60,7 +62,6 @@ public class FavoriteServiceImpl implements IFavoriteService {
     public List<Favorite> getAllFavorites() {
         return favoriteRepository.findAll();
     }
-
 
     @Override
     public List<Favorite> getFavoritesByUserId(Long userId) {
@@ -84,6 +85,5 @@ public class FavoriteServiceImpl implements IFavoriteService {
         }
         favoriteRepository.deleteById(id);
     }
-
 
 }

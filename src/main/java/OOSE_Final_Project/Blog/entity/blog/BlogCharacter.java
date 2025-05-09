@@ -12,17 +12,14 @@ import lombok.Setter;
 
 public class BlogCharacter extends Blog {
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    String content;
 
     @ManyToOne
     @JoinColumn(name = "comic_id")
     BlogComic comic;
 
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "character_id")
     Character character;
-
 
 
 }

@@ -18,10 +18,6 @@ import static OOSE_Final_Project.Blog.util.SecurityUtil.JWT_ALGORITHM;
 
 @Configuration
 public class JwtConfig {
-
-
-
-
     @Value("${secrect-key}")
     private String jwtKey;
 

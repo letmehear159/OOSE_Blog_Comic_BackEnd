@@ -25,16 +25,15 @@ public class ObserverRegistry {
     @PostConstruct
     public void registerObservers() {
         Map<String, Publisher> publisherMap = publishers.stream()
-                                                        .collect(Collectors.toMap(
-                                                                publisher -> {
-                                                                    String className = publisher.getClass()
-                                                                                                .getName();
-                                                                    className = className.substring(
-                                                                            className.lastIndexOf(".") + 1);
-                                                                    return className;
-                                                                },
-                                                                Function.identity()));
-
+                .collect(Collectors.toMap(
+                        publisher -> {
+                            String className = publisher.getClass()
+                                    .getName();
+                            className = className.substring(
+                                    className.lastIndexOf(".") + 1);
+                            return className;
+                        },
+                        Function.identity()));
 
         for (Observer observer : observers) {
             if (observer instanceof Observer typedObserver) {

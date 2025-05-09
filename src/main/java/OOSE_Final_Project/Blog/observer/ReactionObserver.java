@@ -16,7 +16,6 @@ public class ReactionObserver implements Observer {
     @Autowired
     CommentRepository commentRepository;
 
-
     @Autowired
     INotificationService notificationService;
 
@@ -30,31 +29,31 @@ public class ReactionObserver implements Observer {
 
         if (reactionRes.getBlogId() == null) {
             Comment comment = commentRepository.findById(reactionRes.getCommentId())
-                                               .orElseThrow(() -> new RuntimeException("Error in saving reaction"));
+                    .orElseThrow(() -> new RuntimeException("Error in saving reaction"));
 
             NotificationReq notificationReq = NotificationReq.builder()
-                                                             .url(null)
-                                                             .receiverId(comment.getAuthor()
-                                                                                .getId())
-                                                             .senderId(sender.getUserId())
-                                                             .message(sender.getDisplayName() +
-                                                                              " đã thả cảm xúc về bình luận của bạn")
-                                                             .build();
+                    .url(null)
+                    .receiverId(comment.getAuthor()
+                            .getId())
+                    .senderId(sender.getUserId())
+                    .message(sender.getDisplayName() +
+                            " đã thả cảm xúc về bình luận của bạn")
+                    .build();
             notificationService.createNotification(notificationReq);
         } else {
             var blog = blogRepository.findById(reactionRes.getBlogId())
-                                     .orElseThrow(() -> new RuntimeException("Error in saving reaction"));
+                    .orElseThrow(() -> new RuntimeException("Error in saving reaction"));
 
             NotificationReq notificationReq = NotificationReq.builder()
-                                                             .url(null)
-                                                             .receiverId(blog.getAuthor()
-                                                                             .getId())
-                                                             .senderId(sender.getUserId())
-                                                             .message(sender.getDisplayName() +
-                                                                              " đã thả cảm xúc về bài viết của bạn " +
-                                                                              "của " +
-                                                                              "bạn")
-                                                             .build();
+                    .url(null)
+                    .receiverId(blog.getAuthor()
+                            .getId())
+                    .senderId(sender.getUserId())
+                    .message(sender.getDisplayName() +
+                            " đã thả cảm xúc về bài viết của bạn " +
+                            "của " +
+                            "bạn")
+                    .build();
             notificationService.createNotification(notificationReq);
         }
     }

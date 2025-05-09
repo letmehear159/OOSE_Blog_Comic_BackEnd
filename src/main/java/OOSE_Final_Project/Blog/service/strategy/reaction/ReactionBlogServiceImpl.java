@@ -21,7 +21,6 @@ public class ReactionBlogServiceImpl implements IReactionBlogService {
     @Autowired
     private ReactionMapper reactionMapper;
 
-
     @Override
     public ReactionRes createReaction(ReactionReq reactionReq) {
 
@@ -52,8 +51,8 @@ public class ReactionBlogServiceImpl implements IReactionBlogService {
     @Override
     public ReactionRes updateReaction(Long id, EReaction reaction) {
         var oldReaction = reactionBlogRepository.findById(id)
-                                                .orElseThrow(
-                                                        () -> new IllegalArgumentException("Reaction not found"));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Reaction not found"));
         if (oldReaction.getReaction() == reaction) {
             return changeToResponse(oldReaction);
         }
@@ -70,7 +69,6 @@ public class ReactionBlogServiceImpl implements IReactionBlogService {
         reactionBlogRepository.deleteById(id);
     }
 
-
     ReactionRes changeToResponse(ReactionBlog reactionBlog) {
         ReactionRes reactionRes = new ReactionRes();
         reactionMapper.updateReactionBlogResponseFromEntity(reactionBlog, reactionRes);
@@ -79,7 +77,7 @@ public class ReactionBlogServiceImpl implements IReactionBlogService {
 
     List<ReactionRes> changeToResponse(List<ReactionBlog> reactionBlogs) {
         return reactionBlogs.stream()
-                            .map(this::changeToResponse)
-                            .collect(Collectors.toList());
+                .map(this::changeToResponse)
+                .collect(Collectors.toList());
     }
 }
