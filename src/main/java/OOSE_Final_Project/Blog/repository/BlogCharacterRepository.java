@@ -1,6 +1,8 @@
 package OOSE_Final_Project.Blog.repository;
 
 import OOSE_Final_Project.Blog.entity.blog.BlogCharacter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,5 @@ public interface BlogCharacterRepository extends JpaRepository<BlogCharacter, Lo
 
     List<BlogCharacter> findByComicId(Long comicId);
 
+    Page<BlogCharacter> findAll(Pageable pageable);
 }

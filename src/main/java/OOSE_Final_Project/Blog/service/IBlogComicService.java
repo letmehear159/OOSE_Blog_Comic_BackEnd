@@ -1,7 +1,9 @@
 package OOSE_Final_Project.Blog.service;
 
+import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogComicReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogComicRes;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,5 +21,7 @@ public interface IBlogComicService {
 
 
     BlogComicRes update(Long id, BlogComicReq updatedBlogComicReq);
+
+    ResultPaginationDTO findAll(Pageable pageable);
 
 }

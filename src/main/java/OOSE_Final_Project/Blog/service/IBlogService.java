@@ -14,4 +14,7 @@ public interface IBlogService {
 
     List<BlogRes> getAllBlogs();
 
+    ResultPaginationDTO getBlogsWithFilterAndPageable(List<Long> categoryIds, List<Long> tagIds, Pageable pageable);
+
+
 }

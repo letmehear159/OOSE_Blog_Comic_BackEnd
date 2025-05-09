@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.service.impl;
 
+import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogCharacterReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
 import OOSE_Final_Project.Blog.entity.Character;
@@ -11,13 +12,17 @@ import OOSE_Final_Project.Blog.repository.CharacterRepository;
 import OOSE_Final_Project.Blog.service.IBlogCharacterService;
 import OOSE_Final_Project.Blog.util.FileUtil;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Transactional(rollbackOn = Exception.class)
 @Service
 public class BlogCharacterServiceImpl implements IBlogCharacterService {
@@ -142,6 +147,32 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
         BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
         blogCharacterMapper.updateBlogCharacterResponseFromEntity(blog, blogCharacterRes);
         return blogCharacterRes;
+    }
+
+    @Override
+    public ResultPaginationDTO findAll(Pageable pageable) {
+        Page<BlogCharacter> blogPage = blogCharacterRepository.findAll(pageable);
+        var blogCharacterRes = blogPage.getContent()
+                                       .stream()
+                                       .map(b -> {
+                                           BlogCharacterRes blogCharacterRes1 = new BlogCharacterRes();
+                                           blogCharacterMapper.updateBlogCharacterResponseFromEntityWithoutDetail(
+                                                   b, blogCharacterRes1);
+                                           return blogCharacterRes1;
+                                       })
+                                       .toList();
+
+        var meta = ResultPaginationDTO.Meta.builder()
+                                           .pages(blogPage.getTotalPages())
+                                           .total(blogPage.getTotalElements())
+                                           .pageSize(blogPage.getSize())
+                                           .page(blogPage.getNumber() + 1)
+                                           .build();
+        return ResultPaginationDTO.builder()
+                                  .meta(meta)
+                                  .result(blogCharacterRes)
+                                  .build();
+
     }
 
 

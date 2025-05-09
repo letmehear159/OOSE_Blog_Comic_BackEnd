@@ -24,7 +24,7 @@ public class BlogController {
     @Autowired
     IBlogService blogService;
 
-    @GetMapping("")
+    @GetMapping("/search")
     public ApiResponse<ResultPaginationDTO> getAllBlogCharacter(
             @RequestParam("keyword") String keyword,
             Pageable pageable) {
@@ -38,5 +38,15 @@ public class BlogController {
     public ApiResponse<List<BlogRes>> getAllBlog() {
         var result = blogService.getAllBlogs();
         return new ApiResponse<>(HttpStatus.OK, "Get all blogs", result, null);
+    }
+
+    @GetMapping("/filter")
+    public ApiResponse<ResultPaginationDTO> searchByCat(
+            @RequestParam List<Long> categoryIds,
+            @RequestParam List<Long> tagIds,
+            Pageable pageable
+    ) {
+        var result = blogService.getBlogsWithFilterAndPageable(categoryIds, tagIds, pageable);
+        return new ApiResponse<>(HttpStatus.OK, "Get all blogs with filter and pagination", result, null);
     }
 }

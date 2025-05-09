@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.service.impl;
 
+import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogComicReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogComicRes;
 import OOSE_Final_Project.Blog.entity.blog.BlogComic;
@@ -10,6 +11,8 @@ import OOSE_Final_Project.Blog.service.IBlogComicService;
 import OOSE_Final_Project.Blog.util.FileUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,6 +93,32 @@ public class BlogComicServiceImpl implements IBlogComicService {
         blogComicMapper.updateBlogComicResponseFromEntity(existing, BlogComicRes);
 
         return BlogComicRes;
+    }
+
+    @Override
+    public ResultPaginationDTO findAll(Pageable pageable) {
+        Page<BlogComic> blogPage = blogComicRepository.findAll(pageable);
+        var blogComicResList = blogPage.getContent()
+                                       .stream()
+                                       .map(b -> {
+                                           BlogComicRes blogComicRes = new BlogComicRes();
+                                           blogComicMapper.updateBlogComicResponseFromEntity(
+                                                   b, blogComicRes);
+                                           return blogComicRes;
+                                       })
+                                       .toList();
+
+        var meta = ResultPaginationDTO.Meta.builder()
+                                           .pages(blogPage.getTotalPages())
+                                           .total(blogPage.getTotalElements())
+                                           .pageSize(blogPage.getSize())
+                                           .page(blogPage.getNumber() + 1)
+                                           .build();
+        return ResultPaginationDTO.builder()
+                                  .meta(meta)
+                                  .result(blogComicResList)
+                                  .build();
+
     }
 
 
