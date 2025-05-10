@@ -20,4 +20,8 @@ public interface IRateService {
 
     List<RateRes> getAllRates();
 
+    long getRatesCountForBlogId(Long blogId);
+
+    double getRatesForBlogId(Long blogId);
+
 }

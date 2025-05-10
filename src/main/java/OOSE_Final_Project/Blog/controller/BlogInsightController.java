@@ -3,7 +3,9 @@ package OOSE_Final_Project.Blog.controller;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogInsightReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogInsightRes;
+import OOSE_Final_Project.Blog.observer.BlogViewLevelPublisher;
 import OOSE_Final_Project.Blog.service.IBlogInsightService;
+import OOSE_Final_Project.Blog.service.IViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,12 @@ public class BlogInsightController {
 
     @Autowired
     IBlogInsightService blogInsightService;
+
+    @Autowired
+    private IViewService viewService;
+
+    @Autowired
+    private BlogViewLevelPublisher publisher;
 
     @PostMapping("")
     public ApiResponse<BlogInsightRes> save(
@@ -35,8 +43,9 @@ public class BlogInsightController {
 
     @PutMapping("/{blogId}")
     public ApiResponse<BlogInsightRes> update(
-            @PathVariable Long blogId, @RequestBody BlogInsightReq blogComicReq) {
-        var result = blogInsightService.update(blogId, blogComicReq);
+            @PathVariable String blogId, @RequestPart("blogInsightReq") BlogInsightReq blogComicReq,
+            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
+        var result = blogInsightService.update(Long.valueOf(blogId), blogComicReq, thumbnail);
         return new ApiResponse<>(HttpStatus.OK, "Update a blog insight", result, null);
     }
 
@@ -48,8 +57,14 @@ public class BlogInsightController {
 
     @GetMapping("/character/{characterId}")
     public ApiResponse<List<BlogInsightRes>> getAllByCharacterId(@PathVariable Long characterId) {
-
         var result = blogInsightService.findByCharacterId(characterId);
+        return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight by character ID", result, null);
+    }
+
+    @GetMapping("/{blogId}")
+    public ApiResponse<BlogInsightRes> getById(@PathVariable Long blogId) {
+        var result = blogInsightService.findById(blogId);
+        publisher.notifyObservers(result);
         return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight by character ID", result, null);
     }
 }

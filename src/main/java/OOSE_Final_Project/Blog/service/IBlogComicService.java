@@ -20,7 +20,7 @@ public interface IBlogComicService {
     void deleteById(Long id);
 
 
-    BlogComicRes update(Long id, BlogComicReq updatedBlogComicReq);
+    BlogComicRes update(Long id, BlogComicReq updatedBlogComicReq,MultipartFile thumbnail) throws IOException;
 
     ResultPaginationDTO findAll(Pageable pageable);
 

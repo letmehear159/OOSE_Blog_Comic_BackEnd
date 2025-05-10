@@ -3,6 +3,7 @@ package OOSE_Final_Project.Blog.entity.blog;
 import OOSE_Final_Project.Blog.entity.BaseEntity;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
+import OOSE_Final_Project.Blog.enums.EBlogType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +33,8 @@ public abstract class Blog extends BaseEntity {
 
     String thumbnail;
 
+    String introduction;
 
+    @Enumerated(EnumType.STRING)
+    private EBlogType type;
 }

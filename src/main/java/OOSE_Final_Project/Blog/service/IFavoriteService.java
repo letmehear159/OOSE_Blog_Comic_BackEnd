@@ -18,4 +18,6 @@ public interface IFavoriteService {
     Optional<Favorite> getFavoriteByUserIdAndBlogId(Long userId, Long blogId);
 
     void deleteFavorite(Long id);
+
+
 }

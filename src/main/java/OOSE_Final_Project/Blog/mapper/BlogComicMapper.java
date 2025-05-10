@@ -11,6 +11,10 @@ import OOSE_Final_Project.Blog.repository.BlogComicRepository;
 import OOSE_Final_Project.Blog.repository.CategoryRepository;
 import OOSE_Final_Project.Blog.repository.TagRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
+import OOSE_Final_Project.Blog.service.IFavoriteService;
+import OOSE_Final_Project.Blog.service.IRateService;
+import OOSE_Final_Project.Blog.service.IViewService;
+import OOSE_Final_Project.Blog.service.strategy.reaction.ReactionStrategyFactory;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +33,18 @@ public abstract class BlogComicMapper {
     @Autowired
     protected TagRepository tagRepository;
 
+    @Autowired
+    IRateService rateService;
+
+    @Autowired
+    IFavoriteService favoriteService;
+
+    @Autowired
+    IViewService viewService;
+
+    @Autowired
+    ReactionStrategyFactory reactionStrategyFactory;
+
     @Mapping(target = "author", source = "authorId", qualifiedByName = "mapAuthor")
     @Mapping(target = "categories", source = "categories", qualifiedByName = "mapCategories")
     @Mapping(target = "tags", source = "tags", qualifiedByName = "mapTags")
@@ -38,6 +54,11 @@ public abstract class BlogComicMapper {
     public abstract void updateBlogComicFromDto(BlogComicReq source, @MappingTarget BlogComic target);
 
     @Mapping(target = "author", source = "author", qualifiedByName = "mapAuthorResponse")
+    @Mapping(target = "rating", source = "id", qualifiedByName = "mapRating")
+    @Mapping(target = "favourite", source = "id", qualifiedByName = "mapFavourite")
+    @Mapping(target = "view", source = "id", qualifiedByName = "mapView")
+    @Mapping(target = "reaction", source = "id", qualifiedByName = "mapReaction")
+    @Mapping(target = "rateCount", source = "id", qualifiedByName = "mapRateCount")
     public abstract void updateBlogComicResponseFromEntity(
             BlogComic source, @MappingTarget BlogComicRes target);
 
@@ -57,6 +78,8 @@ public abstract class BlogComicMapper {
                              .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + authorId));
     }
 
+
+
     @Named("mapCategories")
     List<Category> mapCategories(List<Long> categoryIds) {
         if (categoryIds == null) {
@@ -71,5 +94,38 @@ public abstract class BlogComicMapper {
             return null;
         }
         return tagRepository.findAllById(tagIds);
+    }
+
+
+    @Named("mapRateCount")
+    public long mapRateCount(long blogId) {
+        return rateService.getRatesCountForBlogId(blogId);
+    }
+
+    @Named("mapRating")
+    public double mapRating(long blogId) {
+        return rateService.getRatesForBlogId(blogId);
+    }
+
+    @Named("mapFavourite")
+    public long mapFavourite(long blogId) {
+        return favoriteService.getFavoritesByBlogId(blogId)
+                              .size();
+    }
+
+    @Named("mapReaction")
+    public long mapReaction(long blogId) {
+        var service = reactionStrategyFactory.getStrategy("Blog");
+        var result = service.getAllReactionById(blogId);
+        return result.size();
+    }
+
+    @Named("mapView")
+    public long mapView(long blogId) {
+        var result = viewService.getViewByBlogId(blogId);
+        if (result == null) {
+            return 0;
+        }
+        return result.getCount();
     }
 }

@@ -5,6 +5,7 @@ import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.dto.req.UserUpdateReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
+import OOSE_Final_Project.Blog.enums.ELevelPoint;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,5 +33,9 @@ public interface IUserService {
     UserRes updateUserAvatar(Long id, MultipartFile avatar) throws IOException;
 
     User findByUsernameOrEmail(String id);
+
+    List<UserRes> findUsersByIds(List<Long> ids);
+
+    UserRes updateLevel(String username, ELevelPoint point);
 
 }

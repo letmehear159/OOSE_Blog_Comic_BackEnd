@@ -9,7 +9,7 @@ public class AuthorBlogRes {
 
     private String displayName;
 
-    private Long level;
+    private double level;
 
     private String avatar;
 
@@ -29,7 +29,7 @@ public class AuthorBlogRes {
 
         private String displayName;
 
-        private Long level;
+        private double level;
 
         private String avatar;
 
@@ -45,7 +45,7 @@ public class AuthorBlogRes {
             return this;
         }
 
-        public Builder level(Long level) {
+        public Builder level(double level) {
             this.level = level;
             return this;
         }

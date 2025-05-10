@@ -15,4 +15,6 @@ public class BlogReq {
 
     @NonNull
     String content;
+
+    String introduction;
 }

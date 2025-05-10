@@ -14,7 +14,7 @@ public class UserReportRes {
 
     ERole role;
 
-    long level;
+    double level;
 
     private UserReportRes(Builder builder) {
         this.displayName = builder.displayName;
@@ -31,7 +31,7 @@ public class UserReportRes {
 
         private ERole role;
 
-        private long level;
+        private double level;
 
         public Builder displayName(String displayName) {
             this.displayName = displayName;
@@ -48,7 +48,7 @@ public class UserReportRes {
             return this;
         }
 
-        public Builder level(long level) {
+        public Builder level(double level) {
             this.level = level;
             return this;
         }

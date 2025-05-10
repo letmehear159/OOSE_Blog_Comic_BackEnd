@@ -11,4 +11,6 @@ public interface ViewRepository extends JpaRepository<View, Long> {
 
 
     Optional<View> findByBlogId(Long blogId);
+
+
 }

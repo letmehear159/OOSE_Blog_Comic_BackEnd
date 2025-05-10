@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Table(name = "views")
 @Entity
@@ -20,6 +22,7 @@ public class View extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Blog blog;
 
     long count;

@@ -88,4 +88,12 @@ public class UserController {
         return new ApiResponse<>(HttpStatus.NO_CONTENT, "User deleted successfully", null, null);
     }
 
+    @GetMapping("/listId")
+    public ApiResponse<List<UserRes>> getAllUserIds(
+            @RequestParam List<Long> authorIds
+    ) {
+        var result = userService.findUsersByIds(authorIds);
+        return new ApiResponse<>(HttpStatus.OK, "Fetched all users by ids", result, null);
+    }
+
 }

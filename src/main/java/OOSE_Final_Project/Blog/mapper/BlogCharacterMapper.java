@@ -10,6 +10,10 @@ import OOSE_Final_Project.Blog.repository.BlogComicRepository;
 import OOSE_Final_Project.Blog.repository.CategoryRepository;
 import OOSE_Final_Project.Blog.repository.TagRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
+import OOSE_Final_Project.Blog.service.IFavoriteService;
+import OOSE_Final_Project.Blog.service.IRateService;
+import OOSE_Final_Project.Blog.service.IViewService;
+import OOSE_Final_Project.Blog.service.strategy.reaction.ReactionStrategyFactory;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +27,17 @@ public abstract class BlogCharacterMapper {
     @Autowired
     protected BlogComicRepository blogComicRepository;
 
+    @Autowired
+    IRateService rateService;
+
+    @Autowired
+    IFavoriteService favoriteService;
+
+    @Autowired
+    IViewService viewService;
+
+    @Autowired
+    ReactionStrategyFactory reactionStrategyFactory;
 
 
     @Mapping(target = "author", source = "authorId", qualifiedByName = "mapAuthor")
@@ -33,14 +48,24 @@ public abstract class BlogCharacterMapper {
     public abstract void updateBlogCharacterFromDto(BlogCharacterReq source, @MappingTarget BlogCharacter target);
 
     @Mapping(target = "author", source = "author", qualifiedByName = "mapAuthorResponse")
-//    @Mapping(target = "character", ignore = true)
+    //    @Mapping(target = "character", ignore = true)
     @Mapping(target = "comicId", source = "comic", qualifiedByName = "mapComicId")
+    @Mapping(target = "rating", source = "id", qualifiedByName = "mapRating")
+    @Mapping(target = "favourite", source = "id", qualifiedByName = "mapFavourite")
+    @Mapping(target = "view", source = "id", qualifiedByName = "mapView")
+    @Mapping(target = "reaction", source = "id", qualifiedByName = "mapReaction")
+    @Mapping(target = "rateCount", source = "id", qualifiedByName = "mapRateCount")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateBlogCharacterResponseFromEntityWithoutDetail(
             BlogCharacter source, @MappingTarget BlogCharacterRes target);
 
     @Mapping(target = "author", source = "author", qualifiedByName = "mapAuthorResponse")
     @Mapping(target = "comicId", source = "comic", qualifiedByName = "mapComicId")
+    @Mapping(target = "rating", source = "id", qualifiedByName = "mapRating")
+    @Mapping(target = "favourite", source = "id", qualifiedByName = "mapFavourite")
+    @Mapping(target = "view", source = "id", qualifiedByName = "mapView")
+    @Mapping(target = "reaction", source = "id", qualifiedByName = "mapReaction")
+    @Mapping(target = "rateCount", source = "id", qualifiedByName = "mapRateCount")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateBlogCharacterResponseFromEntity(
             BlogCharacter source, @MappingTarget BlogCharacterRes target);
@@ -61,6 +86,8 @@ public abstract class BlogCharacterMapper {
         return comic.getId();
     }
 
+
+
     @Named("mapAuthor")
     User mapAuthor(Long authorId) {
         return userRepository.findById(authorId)
@@ -75,6 +102,38 @@ public abstract class BlogCharacterMapper {
         return blogComicRepository.findById(comicId)
                                   .orElseThrow(() -> new IllegalArgumentException(
                                           "BlogComic not found with id:" + comicId));
+    }
+
+    @Named("mapRateCount")
+    public long mapRateCount(long blogId) {
+        return rateService.getRatesCountForBlogId(blogId);
+    }
+
+    @Named("mapRating")
+    public double mapRating(long blogId) {
+        return rateService.getRatesForBlogId(blogId);
+    }
+
+    @Named("mapFavourite")
+    public long mapFavourite(long blogId) {
+        return favoriteService.getFavoritesByBlogId(blogId)
+                              .size();
+    }
+
+    @Named("mapReaction")
+    public long mapReaction(long blogId) {
+        var service = reactionStrategyFactory.getStrategy("Blog");
+        var result = service.getAllReactionById(blogId);
+        return result.size();
+    }
+
+    @Named("mapView")
+    public long mapView(long blogId) {
+        var result = viewService.getViewByBlogId(blogId);
+        if (result == null) {
+            return 0;
+        }
+        return result.getCount();
     }
 
 }

@@ -12,7 +12,7 @@ public interface IViewService {
 
     Optional<View> getViewById(Long id);
 
-    Optional<View> getViewByBlogId(Long blogId);
+    View getViewByBlogId(Long blogId);
 
     void deleteView(Long id);
 }

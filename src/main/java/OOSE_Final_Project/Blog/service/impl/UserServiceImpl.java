@@ -4,6 +4,7 @@ import OOSE_Final_Project.Blog.dto.req.UserReq;
 import OOSE_Final_Project.Blog.dto.req.UserUpdateReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
+import OOSE_Final_Project.Blog.enums.ELevelPoint;
 import OOSE_Final_Project.Blog.enums.ELoginType;
 import OOSE_Final_Project.Blog.enums.ERole;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -153,6 +155,32 @@ public class UserServiceImpl implements IUserService {
     public User findByUsernameOrEmail(String id) {
         return userRepository.findByUsernameOrEmail(id)
                              .orElseThrow(() -> new IllegalArgumentException("User Not found"));
+    }
+
+    @Override
+    public List<UserRes> findUsersByIds(List<Long> ids) {
+        var result = ids.stream()
+                        .map(id -> userRepository.findById(id)
+                                                 .orElse(null))
+                        .filter(Objects::nonNull) // bỏ user null
+                        .map(user -> {
+                            UserRes userRes = new UserRes();
+                            userMapper.updateUserResponseFromEntity(user, userRes);
+                            return userRes;
+                        })
+                        .toList();
+
+        return result;
+    }
+
+    @Override
+    public UserRes updateLevel(String username, ELevelPoint point) {
+        var user = userRepository.findByUsername(username)
+                                 .orElseThrow(() -> new IllegalArgumentException("User not found with username: " +
+                                                                                         username));
+        user.setLevel(user.getLevel() + point.getPoint());
+        user = userRepository.save(user);
+        return changeToRes(user);
     }
 
     //    @Override

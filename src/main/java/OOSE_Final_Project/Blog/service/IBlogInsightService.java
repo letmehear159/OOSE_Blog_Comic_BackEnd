@@ -18,7 +18,7 @@ public interface IBlogInsightService {
     void deleteById(Long id);
 
 
-    BlogInsightRes update(Long id, BlogInsightReq updatedBlogInsightReq);
+    BlogInsightRes update(Long id, BlogInsightReq updatedBlogInsightReq,MultipartFile thumbnail) throws IOException;
 
     List<BlogInsightRes> findByCharacterId(Long characterId);
 }

@@ -54,8 +54,10 @@ public class ViewServiceImpl implements IViewService {
     }
 
     @Override
-    public Optional<View> getViewByBlogId(Long blogId) {
-        return viewRepository.findByBlogId(blogId);
+    public View getViewByBlogId(Long blogId) {
+        return viewRepository.findByBlogId(blogId)
+                             .orElse(null);
+
     }
 
     @Override

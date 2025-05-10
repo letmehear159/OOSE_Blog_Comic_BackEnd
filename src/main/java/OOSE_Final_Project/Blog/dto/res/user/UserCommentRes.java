@@ -10,11 +10,11 @@ public class UserCommentRes {
 
     String displayName;
 
-    Long level;
+    double level;
 
     String avatar;
 
-    private UserCommentRes(Long userId, String displayName, Long level, String avatar) {
+    private UserCommentRes(Long userId, String displayName, double level, String avatar) {
         this.userId = userId;
         this.displayName = displayName;
         this.level = level;
@@ -27,7 +27,7 @@ public class UserCommentRes {
 
         private String displayName;
 
-        private Long level;
+        private double level;
 
         private String avatar;
 
@@ -41,7 +41,7 @@ public class UserCommentRes {
             return this;
         }
 
-        public Builder level(Long level) {
+        public Builder level(double level) {
             this.level = level;
             return this;
         }

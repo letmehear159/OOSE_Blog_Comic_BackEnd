@@ -34,12 +34,11 @@ public class RateServiceImpl implements IRateService {
                           .isPresent()) {
             throw new IllegalArgumentException("Rate already exists");
         }
-        
+
         // Kiểm tra giá trị rateStar hợp lệ (giả sử từ 1 đến 5)
         if (rate.getRateStar() < 1 || rate.getRateStar() > 5) {
             throw new IllegalArgumentException("Rate star must be between 1 and 5");
         }
-
 
 
         rate = rateRepository.save(rate);
@@ -113,4 +112,25 @@ public class RateServiceImpl implements IRateService {
                     )
                     .toList();
     }
+
+    @Override
+    public long getRatesCountForBlogId(Long blogId) {
+        var result = rateRepository.findByBlogId(blogId);
+        return result == null ? 0 : result.size();
+    }
+
+    @Override
+    public double getRatesForBlogId(Long blogId) {
+        var result = rateRepository.findByBlogId(blogId);
+        double total = 0;
+        if (!result.isEmpty()) {
+            for (Rate rate : result) {
+                total += rate.getRateStar();
+            }
+        }
+
+        return result.isEmpty() ? 0 : total / result.size();
+    }
+
+
 }

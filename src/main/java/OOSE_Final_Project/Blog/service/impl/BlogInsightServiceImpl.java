@@ -4,6 +4,7 @@ import OOSE_Final_Project.Blog.dto.req.blog.BlogInsightReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogInsightRes;
 import OOSE_Final_Project.Blog.entity.blog.BlogInsight;
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
+import OOSE_Final_Project.Blog.enums.EBlogType;
 import OOSE_Final_Project.Blog.mapper.BlogInsightMapper;
 import OOSE_Final_Project.Blog.repository.BlogInsightRepository;
 import OOSE_Final_Project.Blog.service.IBlogInsightService;
@@ -37,6 +38,9 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
         String thumbnailName = FileUtil.storeFile(thumbnail);
 
         blogInsight.setThumbnail(thumbnailName);
+
+        blogInsight.setType(EBlogType.INSIGHT);
+
         blogInsight = blogInsightRepository.save(blogInsight);
 
         BlogInsightRes blogInsightRes = new BlogInsightRes();
@@ -78,13 +82,23 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
     }
 
     @Override
-    public BlogInsightRes update(Long id, BlogInsightReq updatedBlogInsightReq) {
+    public BlogInsightRes update(Long id, BlogInsightReq updatedBlogInsightReq, MultipartFile thumbnail)
+            throws IOException {
         BlogInsight existing = blogInsightRepository.findById(id)
                                                     .orElseThrow(() -> new IllegalArgumentException(
                                                             "Blog insight not found with id: " + id));
         blogInsightMapper.updateBlogInsightFromDto(updatedBlogInsightReq, existing);
 
+        if (thumbnail != null) {
+            FileUtil.deleteFile(existing.getThumbnail());
+
+            var fileName = FileUtil.storeFile(thumbnail);
+            existing.setThumbnail(fileName);
+        }
+
         existing = blogInsightRepository.save(existing);
+
+
 
         BlogInsightRes blogInsightRes = new BlogInsightRes();
 

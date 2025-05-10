@@ -4,8 +4,9 @@ import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogComicReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogComicRes;
-import OOSE_Final_Project.Blog.repository.BlogComicRepository;
+import OOSE_Final_Project.Blog.observer.BlogViewLevelPublisher;
 import OOSE_Final_Project.Blog.service.IBlogComicService;
+import OOSE_Final_Project.Blog.service.IViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,14 @@ public class BlogComicController {
     @Autowired
     IBlogComicService blogComicService;
 
-    @Autowired
-    BlogComicRepository blogComicRepository;
 
-    @PostMapping("")
+    @Autowired
+    private IViewService viewService;
+
+    @Autowired
+    private BlogViewLevelPublisher publisher;
+
+    @PostMapping(value = "", consumes = {"multipart/form-data"})
     public ApiResponse<BlogComicRes> save(
             @RequestPart("blogComicRequest") BlogComicReq blogComicReq,
             @RequestPart("thumbnail") MultipartFile thumbnail) throws IOException {
@@ -42,13 +47,15 @@ public class BlogComicController {
     @GetMapping("/{blogId}")
     public ApiResponse<BlogComicRes> getBlogCharacterById(@PathVariable Long blogId) {
         var result = blogComicService.findById(blogId);
+        publisher.notifyObservers(result);
         return new ApiResponse<>(HttpStatus.CREATED, "Get bloc comic by Id", result, null);
     }
 
     @PutMapping("/{blogId}")
     public ApiResponse<BlogComicRes> update(
-            @PathVariable Long blogId, @RequestBody BlogComicReq blogComicReq) {
-        var result = blogComicService.update(blogId, blogComicReq);
+            @PathVariable String blogId, @RequestPart("blogComicReq") BlogComicReq blogComicReq,
+            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
+        var result = blogComicService.update(Long.valueOf(blogId), blogComicReq, thumbnail);
         return new ApiResponse<>(HttpStatus.OK, "Update a blog comic", result, null);
     }
 

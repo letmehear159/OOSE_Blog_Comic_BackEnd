@@ -4,16 +4,15 @@ import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogRes;
 import OOSE_Final_Project.Blog.entity.blog.Blog;
+import OOSE_Final_Project.Blog.enums.EBlogStatus;
+import OOSE_Final_Project.Blog.observer.BlogPublisher;
 import OOSE_Final_Project.Blog.service.IBlogService;
 import OOSE_Final_Project.Blog.specification.BlogSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +22,10 @@ public class BlogController {
 
     @Autowired
     IBlogService blogService;
+
+    @Autowired
+    BlogPublisher blogPublisher;
+
 
     @GetMapping("/search")
     public ApiResponse<ResultPaginationDTO> getAllBlogCharacter(
@@ -48,5 +51,22 @@ public class BlogController {
     ) {
         var result = blogService.getBlogsWithFilterAndPageable(categoryIds, tagIds, pageable);
         return new ApiResponse<>(HttpStatus.OK, "Get all blogs with filter and pagination", result, null);
+    }
+
+    @PatchMapping("/review/{id}")
+    public ApiResponse<BlogRes> updateBlogStatus(
+            @PathVariable Long id, @RequestBody
+            EBlogStatus status) {
+        var result = blogService.updateBlogStatus(id, status);
+        blogPublisher.notifyObservers(result);
+        return new ApiResponse<>(HttpStatus.OK, "Update status of blogs", result, null);
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<BlogRes> getBlogType(
+            @PathVariable Long id
+    ) {
+        var result = blogService.getBlogById(id);
+        return new ApiResponse<>(HttpStatus.OK, "Get blog type with id", result, null);
     }
 }

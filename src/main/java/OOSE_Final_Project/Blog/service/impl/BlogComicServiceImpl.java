@@ -5,6 +5,7 @@ import OOSE_Final_Project.Blog.dto.req.blog.BlogComicReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogComicRes;
 import OOSE_Final_Project.Blog.entity.blog.BlogComic;
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
+import OOSE_Final_Project.Blog.enums.EBlogType;
 import OOSE_Final_Project.Blog.mapper.BlogComicMapper;
 import OOSE_Final_Project.Blog.repository.BlogComicRepository;
 import OOSE_Final_Project.Blog.service.IBlogComicService;
@@ -39,6 +40,8 @@ public class BlogComicServiceImpl implements IBlogComicService {
         String thumbnailName = FileUtil.storeFile(thumbnail);
 
         blogComic.setThumbnail(thumbnailName);
+
+        blogComic.setType(EBlogType.COMIC);
         blogComic = blogComicRepository.save(blogComic);
 
         BlogComicRes blogComicRes = new BlogComicRes();
@@ -80,11 +83,18 @@ public class BlogComicServiceImpl implements IBlogComicService {
     }
 
     @Override
-    public BlogComicRes update(Long id, BlogComicReq blogComicReq) {
+    public BlogComicRes update(Long id, BlogComicReq blogComicReq, MultipartFile thumbnail) throws IOException {
         BlogComic existing = blogComicRepository.findById(id)
                                                 .orElseThrow(() -> new IllegalArgumentException(
                                                         "BlogComic not found with id: " + id));
         blogComicMapper.updateBlogComicFromDto(blogComicReq, existing);
+
+        if (thumbnail != null) {
+            FileUtil.deleteFile(existing.getThumbnail());
+
+            var fileName = FileUtil.storeFile(thumbnail);
+            existing.setThumbnail(fileName);
+        }
 
         existing = blogComicRepository.save(existing);
 

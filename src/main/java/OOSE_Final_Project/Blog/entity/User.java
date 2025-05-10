@@ -30,7 +30,7 @@ public class User extends BaseEntity {
 
     private EUserStatus accountStatus;
 
-    private long level;
+    private double level;
 
     private ELoginType loginType;
 

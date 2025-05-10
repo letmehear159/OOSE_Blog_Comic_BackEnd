@@ -6,6 +6,7 @@ import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
 import OOSE_Final_Project.Blog.entity.Character;
 import OOSE_Final_Project.Blog.entity.blog.BlogCharacter;
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
+import OOSE_Final_Project.Blog.enums.EBlogType;
 import OOSE_Final_Project.Blog.mapper.BlogCharacterMapper;
 import OOSE_Final_Project.Blog.repository.BlogCharacterRepository;
 import OOSE_Final_Project.Blog.repository.CharacterRepository;
@@ -36,6 +37,7 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
     @Autowired
     private CharacterRepository characterRepository;
 
+
     @Override
     public BlogCharacterRes save(BlogCharacterReq blogCharacterRequest, MultipartFile thumbnail) throws IOException {
         BlogCharacter blogCharacter = new BlogCharacter();
@@ -50,6 +52,7 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
         character = characterRepository.save(character);
 
         blogCharacter.setCharacter(character);
+        blogCharacter.setType(EBlogType.CHARACTER);
 
         String thumbnailName = FileUtil.storeFile(thumbnail);
 
@@ -137,17 +140,6 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
                     .toList();
     }
 
-    @Override
-    public BlogCharacterRes updateBlogStatus(Long id, EBlogStatus status) {
-        var blog = blogCharacterRepository.findById(id)
-                                          .orElseThrow(
-                                                  () -> new IllegalArgumentException("Blog not found with id: " + id));
-        blog.setStatus(status);
-        blog = blogCharacterRepository.save(blog);
-        BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
-        blogCharacterMapper.updateBlogCharacterResponseFromEntity(blog, blogCharacterRes);
-        return blogCharacterRes;
-    }
 
     @Override
     public ResultPaginationDTO findAll(Pageable pageable) {

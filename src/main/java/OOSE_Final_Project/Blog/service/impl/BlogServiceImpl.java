@@ -1,10 +1,12 @@
 package OOSE_Final_Project.Blog.service.impl;
 
 import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
+import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogRes;
 import OOSE_Final_Project.Blog.entity.blog.Blog;
 import OOSE_Final_Project.Blog.entity.blog.BlogComic;
 import OOSE_Final_Project.Blog.entity.blog.BlogInsight;
+import OOSE_Final_Project.Blog.enums.EBlogStatus;
 import OOSE_Final_Project.Blog.mapper.BlogMapper;
 import OOSE_Final_Project.Blog.repository.BlogComicRepository;
 import OOSE_Final_Project.Blog.repository.BlogInsightRepository;
@@ -153,6 +155,28 @@ public class BlogServiceImpl implements IBlogService {
                                   .meta(meta)
                                   .result(pagedBlogs)
                                   .build();
+    }
+
+    @Override
+    public BlogRes updateBlogStatus(Long id, EBlogStatus status) {
+        var blog = blogRepository.findById(id)
+                                 .orElseThrow(
+                                         () -> new IllegalArgumentException("Blog not found with id: " + id));
+        blog.setStatus(status);
+        blog = blogRepository.save(blog);
+        BlogCharacterRes blogCharacterRes = new BlogCharacterRes();
+        blogMapper.updateToBlogResponseFromEntity(blog, blogCharacterRes);
+        return blogCharacterRes;
+    }
+
+    @Override
+    public BlogRes getBlogById(Long id) {
+        var blog = blogRepository.findById(id)
+                                 .orElseThrow(() -> new IllegalArgumentException("Blog not found with id: " + id));
+
+        BlogRes blogRes = new BlogRes();
+        blogMapper.updateToBlogResponseFromEntity(blog, blogRes);
+        return blogRes;
     }
 
     ResultPaginationDTO toResultPaginationDTO(Page<Blog> blogPage, List<BlogRes> blogResponses) {

@@ -20,7 +20,7 @@ public class UserRes {
 
     private String avatar;
 
-    private long level;
+    private double level;
 
     EUserStatus accountStatus;
 

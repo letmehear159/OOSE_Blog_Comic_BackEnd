@@ -4,9 +4,9 @@ import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogCharacterReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
-import OOSE_Final_Project.Blog.enums.EBlogStatus;
-import OOSE_Final_Project.Blog.observer.BlogPublisher;
+import OOSE_Final_Project.Blog.observer.BlogViewLevelPublisher;
 import OOSE_Final_Project.Blog.service.IBlogCharacterService;
+import OOSE_Final_Project.Blog.service.IViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,8 +23,12 @@ public class BlogCharacterController {
     @Autowired
     IBlogCharacterService blogCharacterService;
 
+
     @Autowired
-    BlogPublisher blogPublisher;
+    BlogViewLevelPublisher publisher;
+
+    @Autowired
+    private IViewService viewService;
 
     @PostMapping(value = "", consumes = {"multipart/form-data"})
     public ApiResponse<BlogCharacterRes> save(
@@ -45,6 +49,7 @@ public class BlogCharacterController {
             @PathVariable Long blogId, @RequestPart("blogCharacterRequest") BlogCharacterReq blogCharacterRequest,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
         var result = blogCharacterService.update(blogId, blogCharacterRequest, thumbnail);
+        publisher.notifyObservers(result);
         return new ApiResponse<>(HttpStatus.OK, "Update a blog character", result, null);
     }
 
@@ -57,6 +62,7 @@ public class BlogCharacterController {
     @GetMapping("/{blogId}")
     public ApiResponse<BlogCharacterRes> findById(@PathVariable String blogId) {
         var result = blogCharacterService.findById(Long.valueOf(blogId));
+        viewService.incrementViewCount(Long.valueOf(blogId));
         return new ApiResponse<>(HttpStatus.OK, "Find a blog character", result, null);
     }
 
@@ -66,14 +72,6 @@ public class BlogCharacterController {
         return new ApiResponse<>(HttpStatus.CREATED, "Get blog character related to this character", result, null);
     }
 
-    @PatchMapping("/review/{id}")
-    public ApiResponse<BlogCharacterRes> updateBlogStatus(
-            @PathVariable Long id, @RequestBody
-            EBlogStatus status) {
-        var result = blogCharacterService.updateBlogStatus(id, status);
-        blogPublisher.notifyObservers(result);
-        return new ApiResponse<>(HttpStatus.OK, "Update status of blogs", result, null);
-    }
 
     @GetMapping("")
     public ApiResponse<ResultPaginationDTO> getBlogWithPagination(Pageable pageable) {
