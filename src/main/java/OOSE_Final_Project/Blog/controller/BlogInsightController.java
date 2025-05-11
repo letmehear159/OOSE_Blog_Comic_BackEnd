@@ -65,6 +65,12 @@ public class BlogInsightController {
     public ApiResponse<BlogInsightRes> getById(@PathVariable Long blogId) {
         var result = blogInsightService.findById(blogId);
         publisher.notifyObservers(result);
+        return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight by  ID", result, null);
+    }
+
+    @GetMapping("/comic/{comicId}")
+    public ApiResponse<List<BlogInsightRes>> getAllByComicId(@PathVariable Long comicId) {
+        var result = blogInsightService.findByComicId(comicId);
         return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight by character ID", result, null);
     }
 }

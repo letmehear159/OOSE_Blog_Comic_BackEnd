@@ -15,4 +15,6 @@ public interface BlogInsightRepository extends JpaRepository<BlogInsight, Long>,
     List<BlogInsight> findByBlogCharacterId(Long id);
 
     Page<BlogInsight> findAll(Pageable pageable);
+
+    List<BlogInsight> findByComicId(Long id);
 }

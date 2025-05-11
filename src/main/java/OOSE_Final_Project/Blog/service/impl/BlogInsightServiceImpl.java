@@ -99,7 +99,6 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
         existing = blogInsightRepository.save(existing);
 
 
-
         BlogInsightRes blogInsightRes = new BlogInsightRes();
 
         blogInsightMapper.updateBlogInsightResponseFromEntity(existing, blogInsightRes);
@@ -113,6 +112,18 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
         return blogs.stream()
                     .map(blog -> {
 
+                        BlogInsightRes blogInsightRes = new BlogInsightRes();
+                        blogInsightMapper.updateBlogInsightResponseFromEntity(blog, blogInsightRes);
+                        return blogInsightRes;
+                    })
+                    .toList();
+    }
+
+    @Override
+    public List<BlogInsightRes> findByComicId(Long comicId) {
+        var blogs = blogInsightRepository.findByComicId((comicId));
+        return blogs.stream()
+                    .map(blog -> {
                         BlogInsightRes blogInsightRes = new BlogInsightRes();
                         blogInsightMapper.updateBlogInsightResponseFromEntity(blog, blogInsightRes);
                         return blogInsightRes;

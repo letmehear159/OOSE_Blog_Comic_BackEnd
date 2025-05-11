@@ -21,4 +21,6 @@ public interface IBlogInsightService {
     BlogInsightRes update(Long id, BlogInsightReq updatedBlogInsightReq,MultipartFile thumbnail) throws IOException;
 
     List<BlogInsightRes> findByCharacterId(Long characterId);
+
+    List<BlogInsightRes> findByComicId(Long comicId);
 }
