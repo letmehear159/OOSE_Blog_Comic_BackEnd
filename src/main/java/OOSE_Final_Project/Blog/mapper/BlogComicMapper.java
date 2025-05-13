@@ -48,8 +48,6 @@ public abstract class BlogComicMapper {
     @Mapping(target = "author", source = "authorId", qualifiedByName = "mapAuthor")
     @Mapping(target = "categories", source = "categories", qualifiedByName = "mapCategories")
     @Mapping(target = "tags", source = "tags", qualifiedByName = "mapTags")
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateBlogComicFromDto(BlogComicReq source, @MappingTarget BlogComic target);
 
@@ -77,7 +75,6 @@ public abstract class BlogComicMapper {
         return userRepository.findById(authorId)
                              .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + authorId));
     }
-
 
 
     @Named("mapCategories")

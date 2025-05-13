@@ -38,4 +38,5 @@ public interface IUserService {
 
     UserRes updateLevel(String username, ELevelPoint point);
 
+    String updateUserToken(Long id, UserUpdateReq userDetails);
 }

@@ -36,6 +36,12 @@ public class UserOTPFacade {
         sendOTPToEmail(user, otp);
     }
 
+    public void generateOTPWithEmail(String email) {
+        var user = userService.getUserByEmail(email);
+        OTP otp = otpService.generateOTP(user.getId());
+        sendOTPToEmail(user, otp);
+    }
+
     void sendOTPToEmail(UserRes user, OTP otp) {
         try {
             MessageDTO messageDTO = MessageDTO.builder()
@@ -62,10 +68,15 @@ public class UserOTPFacade {
 
     }
 
-    public boolean verifyOTP(Long userId, String otp,String email) {
-        var result = otpService.verifyOTP(userId, otp,email);
+    public boolean verifyOTP(Long userId, String otp, String email) {
+        var result = otpService.verifyOTP(userId, otp, email);
         if (!result) {
             throw new IllegalArgumentException("OTP verification failed");
+        }
+        if (userId == null) {
+            var user=userService.getUserByEmail(email);
+            userService.updateUserStatus(user.getId(), EUserStatus.ACTIVE);
+            return true;
         }
         userService.updateUserStatus(userId, EUserStatus.ACTIVE);
         return true;

@@ -33,5 +33,10 @@ public class OtpController {
         return new ApiResponse<>(HttpStatus.CREATED, "Generate new OTP for forgot password", Boolean.TRUE, null);
     }
 
+    @GetMapping("/email/{email}")
+    public ApiResponse<Boolean> generateNewOTPWithEmail(@PathVariable String email) {
+        userOTPFacade.generateOTPWithEmail(email);
+        return new ApiResponse<>(HttpStatus.CREATED, "Generate new OTP", Boolean.TRUE, null);
+    }
 
 }

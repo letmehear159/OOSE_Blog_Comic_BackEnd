@@ -43,6 +43,8 @@ public class ReportController {
         return (new ApiResponse<>(HttpStatus.OK, "All unhandled" + type + " report", res, null));
     }
 
+    @PatchMapping("")
+
 
     @DeleteMapping("")
     public ApiResponse<Boolean> deleteReport(

@@ -12,6 +12,7 @@ import OOSE_Final_Project.Blog.mapper.UserMapper;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IUserService;
 import OOSE_Final_Project.Blog.util.FileUtil;
+import OOSE_Final_Project.Blog.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    SecurityUtil securityUtil;
 
 
     @Override
@@ -181,6 +185,15 @@ public class UserServiceImpl implements IUserService {
         user.setLevel(user.getLevel() + point.getPoint());
         user = userRepository.save(user);
         return changeToRes(user);
+    }
+
+    @Override
+    public String updateUserToken(Long id, UserUpdateReq userDetails) {
+        var res = this.updateUser(id, userDetails);
+        var user = userRepository.findByUsername(res.getUsername())
+                                 .orElse(null);
+        return securityUtil.createAccessToken(user);
+
     }
 
     //    @Override

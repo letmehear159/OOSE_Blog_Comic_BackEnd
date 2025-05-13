@@ -53,16 +53,16 @@ public class SecurityConfiguration {
                                 // .authenticated()
 
                                 )
-//                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults())
-//                                                .authenticationEntryPoint(
-//                                                                customAuthenticationEntryPoint)
-//                                                .jwt(jwt -> jwt.jwtAuthenticationConverter(
-//                                                                jwtAuthenticationConverter())))
-//                                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(
-//                                                customOAuth2UserService))
-//                                                .successHandler(successHandler))
-//                                .exceptionHandling(exception -> exception
-//                                                .authenticationEntryPoint(customAuthenticationEntryPoint))
+                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults())
+                                                .authenticationEntryPoint(
+                                                                customAuthenticationEntryPoint)
+                                                .jwt(jwt -> jwt.jwtAuthenticationConverter(
+                                                                jwtAuthenticationConverter())))
+                                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(
+                                                customOAuth2UserService))
+                                                .successHandler(successHandler))
+                                .exceptionHandling(exception -> exception
+                                                .authenticationEntryPoint(customAuthenticationEntryPoint))
                                 .formLogin(f -> f.disable())
                                 .sessionManagement(
                                                 session -> session.sessionCreationPolicy(

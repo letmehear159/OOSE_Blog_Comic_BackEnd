@@ -12,6 +12,7 @@ import OOSE_Final_Project.Blog.repository.UserRepository;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
@@ -34,10 +35,24 @@ public abstract class CommentMapper {
     public abstract void updateCommentFromDto(CommentReq source, @MappingTarget Comment target);
 
     @Mapping(target = "userCommentResponse", source = "author", qualifiedByName = "mapCommentResponse")
-    @Mapping(target = "content", source = "content")
-    @Mapping(target = "commentId", source = "id")
     @Mapping(target = "hasChildComment", source = "children", qualifiedByName = "hasChildren")
+    @Mapping(target = "children", source = "children", qualifiedByName = "mapChildren")
     public abstract void updateCommentResponseFromEntity(Comment source, @MappingTarget CommentRes target);
+
+    @Named("mapChildren")
+    List<CommentRes> mapChildren(List<Comment> comments) {
+        if(comments!=null) {
+            var children = comments.stream()
+                                   .map(c -> {
+                                       CommentRes res = new CommentRes();
+                                       updateCommentResponseFromEntity(c, res);
+                                       return res;
+                                   })
+                                   .toList();
+            return children;
+        }
+        return new ArrayList<>();
+    }
 
     @Named("mapCommentResponse")
     UserCommentRes mapCommentResponse(User author) {
@@ -48,6 +63,7 @@ public abstract class CommentMapper {
                                            .level(author.getLevel())
                                            .build();
     }
+
 
     @Named("hasChildren")
     boolean hasChildren(List<Comment> children) {

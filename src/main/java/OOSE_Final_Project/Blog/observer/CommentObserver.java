@@ -23,7 +23,7 @@ public class CommentObserver implements Observer {
         // Nếu là comment cha thì không cần làm gì
         // Nếu là comment con thì cần tìm comment cha gần nhất để lấy userId thông báo.
         CommentRes commentRes = (CommentRes) data;
-        Comment comment = commentRepository.findById(commentRes.getCommentId())
+        Comment comment = commentRepository.findById(commentRes.getId())
                                            .orElseThrow(() -> new RuntimeException("Error in saving comment"));
 
         if (comment.getParent() == null) {

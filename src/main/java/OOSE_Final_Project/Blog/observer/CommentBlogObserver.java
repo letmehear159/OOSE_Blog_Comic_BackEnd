@@ -21,7 +21,7 @@ public class CommentBlogObserver implements Observer {
     public void update(Object data) {
         // Cần có dữ liệu author id
         CommentRes commentRes = (CommentRes) data;
-        Comment comment = commentRepository.findById(commentRes.getCommentId())
+        Comment comment = commentRepository.findById(commentRes.getId())
                 .orElseThrow(() -> new RuntimeException("Error in saving comment"));
 
         long authorId = comment.getBlog()

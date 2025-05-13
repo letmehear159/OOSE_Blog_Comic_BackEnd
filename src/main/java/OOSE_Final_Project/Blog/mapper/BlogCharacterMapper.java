@@ -42,8 +42,6 @@ public abstract class BlogCharacterMapper {
 
     @Mapping(target = "author", source = "authorId", qualifiedByName = "mapAuthor")
     @Mapping(target = "comic", source = "comicId", qualifiedByName = "mapComic")
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateBlogCharacterFromDto(BlogCharacterReq source, @MappingTarget BlogCharacter target);
 

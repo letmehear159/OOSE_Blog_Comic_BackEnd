@@ -54,7 +54,15 @@ public class UserController {
     @PutMapping("/{id}")
     public ApiResponse<UserRes> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateReq userDetails) {
         UserRes updated = userService.updateUser(id, userDetails);
+
         return new ApiResponse<>(HttpStatus.OK, "User updated successfully", updated, null);
+    }
+
+    @PutMapping("/token/{id}")
+    public ApiResponse<String> updateUserToken(@PathVariable Long id, @Valid @RequestBody UserUpdateReq userDetails) {
+        var result = userService.updateUserToken(id, userDetails);
+
+        return new ApiResponse<>(HttpStatus.OK, "User updated successfully and return token", result, null);
     }
 
     // Cập nhật thông tin user

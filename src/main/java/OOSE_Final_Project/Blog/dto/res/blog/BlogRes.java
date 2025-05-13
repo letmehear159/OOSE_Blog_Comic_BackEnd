@@ -6,6 +6,8 @@ import OOSE_Final_Project.Blog.enums.EBlogType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class BlogRes {
@@ -35,4 +37,9 @@ public class BlogRes {
     long view;
 
     long reaction;
+
+    LocalDateTime createdAt;
+
+    LocalDateTime updatedAt;
+
 }
