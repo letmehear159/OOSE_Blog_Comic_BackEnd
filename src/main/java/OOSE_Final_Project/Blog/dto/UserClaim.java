@@ -11,6 +11,8 @@ import lombok.Setter;
 
 public class UserClaim {
 
+    Long id;
+
     ERole role;
 
     String username;
