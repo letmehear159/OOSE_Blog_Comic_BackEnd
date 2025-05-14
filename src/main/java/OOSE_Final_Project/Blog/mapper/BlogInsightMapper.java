@@ -66,6 +66,7 @@ public abstract class BlogInsightMapper {
     @Mapping(target = "view", source = "id", qualifiedByName = "mapView")
     @Mapping(target = "reaction", source = "id", qualifiedByName = "mapReaction")
     @Mapping(target = "rateCount", source = "id", qualifiedByName = "mapRateCount")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateBlogInsightResponseFromEntity(
             BlogInsight source, @MappingTarget BlogInsightRes target);
 

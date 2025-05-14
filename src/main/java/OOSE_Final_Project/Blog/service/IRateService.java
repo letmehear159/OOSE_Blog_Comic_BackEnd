@@ -24,4 +24,6 @@ public interface IRateService {
 
     double getRatesForBlogId(Long blogId);
 
+    long getAllRatesCount();
+
 }

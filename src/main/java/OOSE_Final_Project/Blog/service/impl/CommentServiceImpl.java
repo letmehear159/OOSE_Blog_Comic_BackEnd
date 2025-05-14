@@ -83,6 +83,11 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
+    public long getCommentCountAll() {
+        return commentRepository.count();
+    }
+
+    @Override
     public CommentRes updateComment(Long id, Comment commentDetails) {
         Comment comment = commentRepository.findById(id)
                                            .orElseThrow(() -> new IllegalArgumentException(

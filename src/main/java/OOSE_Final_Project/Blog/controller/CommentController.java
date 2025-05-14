@@ -67,4 +67,10 @@ public class CommentController {
         var result = commentService.getCommentCountByBlogId(Long.valueOf(blogId));
         return new ApiResponse<>(HttpStatus.OK, "Get comment count of a blog", result, null);
     }
+
+    @GetMapping("/count-all")
+    public ApiResponse<Long> getCommentCount() {
+        var result = commentService.getCommentCountAll();
+        return new ApiResponse<>(HttpStatus.OK, "Get comment count all ", result, null);
+    }
 }

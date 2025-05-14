@@ -49,7 +49,7 @@ public class BlogCharacterController {
             @PathVariable Long blogId, @RequestPart("blogCharacterRequest") BlogCharacterReq blogCharacterRequest,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
         var result = blogCharacterService.update(blogId, blogCharacterRequest, thumbnail);
-        publisher.notifyObservers(result);
+
         return new ApiResponse<>(HttpStatus.OK, "Update a blog character", result, null);
     }
 
@@ -58,11 +58,10 @@ public class BlogCharacterController {
         blogCharacterService.deleteById(blogId);
         return new ApiResponse<>(HttpStatus.OK, "Delete a blog character", Boolean.TRUE, null);
     }
-
     @GetMapping("/{blogId}")
     public ApiResponse<BlogCharacterRes> findById(@PathVariable String blogId) {
         var result = blogCharacterService.findById(Long.valueOf(blogId));
-        viewService.incrementViewCount(Long.valueOf(blogId));
+        publisher.notifyObservers(result);
         return new ApiResponse<>(HttpStatus.OK, "Find a blog character", result, null);
     }
 

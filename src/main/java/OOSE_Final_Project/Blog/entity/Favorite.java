@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "favorites")
@@ -20,10 +22,12 @@ public class Favorite extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     User user;
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Blog blog;
 
 }

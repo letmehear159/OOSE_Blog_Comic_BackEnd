@@ -80,4 +80,10 @@ public class ReactionBlogServiceImpl implements IReactionBlogService {
                 .map(this::changeToResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public long getAllReaction() {
+        return reactionBlogRepository.count();
+    }
+
 }

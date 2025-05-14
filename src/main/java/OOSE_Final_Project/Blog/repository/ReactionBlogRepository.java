@@ -4,6 +4,7 @@ import OOSE_Final_Project.Blog.entity.reaction.ReactionBlog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,7 @@ public interface ReactionBlogRepository extends JpaRepository<ReactionBlog, Long
     List<ReactionBlog> findByBlogId(Long blogId);
 
     List<ReactionBlog> findAllByBlogId(Long id);
+
+    long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }
 

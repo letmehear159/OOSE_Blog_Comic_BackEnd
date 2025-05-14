@@ -132,5 +132,10 @@ public class RateServiceImpl implements IRateService {
         return result.isEmpty() ? 0 : total / result.size();
     }
 
+    @Override
+    public long getAllRatesCount() {
+        return rateRepository.count();
+    }
+
 
 }

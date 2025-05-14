@@ -196,6 +196,12 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    @Override
+    public Long getCountOfUsers(ERole role) {
+        return (long) userRepository.findByRole(role)
+                                    .size();
+    }
+
     //    @Override
     //    public UserRes updateUserPassword(Long id, String newPassword) {
     //        var user = userRepository.findById(id)

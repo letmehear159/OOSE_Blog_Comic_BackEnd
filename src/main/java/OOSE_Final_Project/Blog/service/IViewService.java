@@ -15,4 +15,6 @@ public interface IViewService {
     View getViewByBlogId(Long blogId);
 
     void deleteView(Long id);
+
+    long getAllViewsCount();
 }

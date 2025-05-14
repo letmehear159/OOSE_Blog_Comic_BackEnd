@@ -4,6 +4,7 @@ package OOSE_Final_Project.Blog.observer;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogRes;
 import OOSE_Final_Project.Blog.repository.BlogRepository;
 import OOSE_Final_Project.Blog.service.IViewService;
+import OOSE_Final_Project.Blog.service.impl.ViewLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,20 +17,16 @@ public class BlogViewObserver implements Observer {
     @Autowired
     IViewService viewService;
 
+    @Autowired
+    ViewLogService viewLogService;
+
     @Override
     public void update(Object data) {
 
         BlogRes blogRes = (BlogRes) data;
 
-        var blog = blogRepository.findById(blogRes.getId())
-                                 .orElse(null);
-        if (blog == null) {
-            return;
-        }
-        var view = viewService.getViewByBlogId(blogRes.getId());
-        if (view != null) {
-            viewService.incrementViewCount(blogRes.getId());
-        }
+
+        viewLogService.logView(blogRes.getId(), null);
     }
 
     @Override

@@ -17,4 +17,7 @@ public interface IReactionService {
     ReactionRes updateReaction(Long id, EReaction reaction);
 
     void deleteReaction(Long id);
+
+    long getAllReaction();
+
 }

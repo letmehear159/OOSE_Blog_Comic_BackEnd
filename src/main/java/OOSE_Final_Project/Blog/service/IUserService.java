@@ -6,6 +6,7 @@ import OOSE_Final_Project.Blog.dto.req.UserUpdateReq;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.ELevelPoint;
+import OOSE_Final_Project.Blog.enums.ERole;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,4 +40,6 @@ public interface IUserService {
     UserRes updateLevel(String username, ELevelPoint point);
 
     String updateUserToken(Long id, UserUpdateReq userDetails);
+
+    Long getCountOfUsers(ERole role);
 }

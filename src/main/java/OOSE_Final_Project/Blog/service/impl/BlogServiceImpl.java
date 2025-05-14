@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.service.impl;
 
+import OOSE_Final_Project.Blog.dto.DailyBlogStatsDTO;
 import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogCharacterRes;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogRes;
@@ -8,9 +9,7 @@ import OOSE_Final_Project.Blog.entity.blog.BlogComic;
 import OOSE_Final_Project.Blog.entity.blog.BlogInsight;
 import OOSE_Final_Project.Blog.enums.EBlogStatus;
 import OOSE_Final_Project.Blog.mapper.BlogMapper;
-import OOSE_Final_Project.Blog.repository.BlogComicRepository;
-import OOSE_Final_Project.Blog.repository.BlogInsightRepository;
-import OOSE_Final_Project.Blog.repository.BlogRepository;
+import OOSE_Final_Project.Blog.repository.*;
 import OOSE_Final_Project.Blog.service.IBlogService;
 import OOSE_Final_Project.Blog.specification.BlogComicSpecification;
 import OOSE_Final_Project.Blog.specification.BlogInsightSpecification;
@@ -21,10 +20,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(rollbackOn = Exception.class)
@@ -41,6 +44,22 @@ public class BlogServiceImpl implements IBlogService {
 
     @Autowired
     BlogInsightRepository blogInsightRepository;
+
+    @Autowired
+    private RateRepository rateRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private ReactionCommentRepository reactionCommentRepository;
+
+    @Autowired
+    private ReactionBlogRepository reactionBlogRepository;
+
+
+    @Autowired
+    private ViewLogRepository viewLogRepository;
 
 
     @Override
@@ -179,6 +198,29 @@ public class BlogServiceImpl implements IBlogService {
         return blogRes;
     }
 
+    public long getTodayBlogCount() {
+        // Lấy thời gian hiện tại
+        LocalDateTime startOfDay = LocalDate.now()
+                                            .atStartOfDay(); // 00:00 hôm nay
+        LocalDateTime endOfDay = LocalDateTime.now();              // thời điểm hiện tại
+
+        // Lọc các blog có createdAt nằm trong hôm nay
+        return blogRepository.findAll()
+                             .stream()
+                             .filter(blog -> blog.getCreatedAt() != null)
+                             .filter(blog -> !blog.getCreatedAt()
+                                                  .isBefore(startOfDay)
+                                     && !blog.getCreatedAt()
+                                             .isAfter(endOfDay))
+                             .count();
+    }
+
+    @Override
+    public long getAllBlogsCount() {
+        return blogRepository.findAll()
+                             .size();
+    }
+
     @Override
     public ResultPaginationDTO getBlogsWithPageable(Pageable pageable) {
         var pageBlog = blogRepository.findAll(pageable);
@@ -207,5 +249,40 @@ public class BlogServiceImpl implements IBlogService {
                                   .meta(meta)
                                   .result(blogResponses)
                                   .build();
+    }
+
+    public List<DailyBlogStatsDTO> getLast5DaysStats() {
+        LocalDate today = LocalDate.now();
+
+        // Tạo danh sách 5 ngày gần nhất
+        List<LocalDate> last5Days = IntStream.rangeClosed(0, 4)
+                                             .mapToObj(today::minusDays)
+                                             .sorted() // đảm bảo theo thứ tự tăng dần
+                                             .collect(Collectors.toList());
+
+        List<DailyBlogStatsDTO> result = new ArrayList<>();
+
+        for (LocalDate date : last5Days) {
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.atTime(LocalTime.MAX);
+
+            long blogCount = blogRepository.countByCreatedAtBetween(start, end);
+            long rateCount = rateRepository.countByCreatedAtBetween(start, end);
+            long commentCount = commentRepository.countByCreatedAtBetween(start, end);
+            long reactionCommentCount = reactionCommentRepository.countByCreatedAtBetween(start, end); // nếu có
+            long reactionBlogCount = reactionBlogRepository.countByCreatedAtBetween(start, end); // nếu có
+            var reactionCount = reactionBlogCount + reactionCommentCount;
+            long views = viewLogRepository.countByCreatedAtBetween(start, end); // nếu có
+            // Reaction entity
+
+            result.add(new DailyBlogStatsDTO(date, blogCount, rateCount, commentCount, reactionCount, views));
+        }
+
+        return result;
+    }
+
+    @Override
+    public void deleteBlogById(Long id) {
+
     }
 }

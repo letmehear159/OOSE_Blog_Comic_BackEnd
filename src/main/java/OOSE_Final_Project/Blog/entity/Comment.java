@@ -35,6 +35,7 @@ public class Comment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Comment parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -3,6 +3,7 @@ package OOSE_Final_Project.Blog.controller;
 import OOSE_Final_Project.Blog.dto.req.UserUpdateReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.user.UserRes;
+import OOSE_Final_Project.Blog.enums.ERole;
 import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.service.IUserService;
 import jakarta.validation.Valid;
@@ -104,4 +105,9 @@ public class UserController {
         return new ApiResponse<>(HttpStatus.OK, "Fetched all users by ids", result, null);
     }
 
+    @GetMapping("/role-count")
+    public ApiResponse<Long> getRoleCount(@RequestParam ERole role) {
+        var result = userService.getCountOfUsers(role);
+        return new ApiResponse<>(HttpStatus.OK, "Get user count for role", result, null);
+    }
 }

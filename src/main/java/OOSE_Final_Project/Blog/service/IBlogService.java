@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.service;
 
+import OOSE_Final_Project.Blog.dto.DailyBlogStatsDTO;
 import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogRes;
 import OOSE_Final_Project.Blog.entity.blog.Blog;
@@ -23,4 +24,11 @@ public interface IBlogService {
 
     ResultPaginationDTO getBlogsWithPageable(Pageable pageable);
 
+    public long getTodayBlogCount();
+
+    long getAllBlogsCount();
+
+    public List<DailyBlogStatsDTO> getLast5DaysStats();
+
+    void deleteBlogById(Long id);
 }

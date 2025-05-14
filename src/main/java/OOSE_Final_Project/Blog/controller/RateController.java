@@ -52,4 +52,11 @@ public class RateController {
         List<RateRes> rates = rateService.getAllRates();
         return new ApiResponse<>(HttpStatus.OK, "Rates retrieved successfully", rates, null);
     }
+
+    @GetMapping("/count-all")
+    public ApiResponse<Long> getAllRatesCount() {
+        var rates = rateService.getAllRatesCount();
+        return new ApiResponse<>(HttpStatus.OK, "Rate count retrieved successfully", rates, null);
+    }
+
 }

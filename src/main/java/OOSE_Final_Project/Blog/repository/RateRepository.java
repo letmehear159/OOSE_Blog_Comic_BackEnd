@@ -4,6 +4,7 @@ import OOSE_Final_Project.Blog.entity.Rate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,5 @@ public interface RateRepository extends JpaRepository<Rate, Long> {
 
     List<Rate> findByUserId(Long userId);
 
+    long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }

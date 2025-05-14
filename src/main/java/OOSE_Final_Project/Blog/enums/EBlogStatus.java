@@ -5,5 +5,4 @@ public enum EBlogStatus {
     HIDDEN,
     PENDING,
     PUBLISHED,
-
 }

@@ -24,4 +24,5 @@ public interface ICommentService {
 
     int getCommentCountByBlogId(Long blogId);
 
+    long getCommentCountAll();
 }

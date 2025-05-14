@@ -55,8 +55,8 @@ public class ReactionCommentServiceImpl implements IReactionCommentService {
     @Override
     public ReactionRes updateReaction(Long id, EReaction reaction) {
         var oldReaction = reactionCommentRepository.findById(id)
-                .orElseThrow(
-                        () -> new IllegalArgumentException("Reaction not found"));
+                                                   .orElseThrow(
+                                                           () -> new IllegalArgumentException("Reaction not found"));
         if (oldReaction.getReaction() == reaction) {
             return changeToResponse(oldReaction);
         }
@@ -74,6 +74,11 @@ public class ReactionCommentServiceImpl implements IReactionCommentService {
         reactionCommentRepository.deleteById(id);
     }
 
+    @Override
+    public long getAllReaction() {
+        return reactionCommentRepository.count();
+    }
+
     ReactionRes changeToResponse(ReactionComment reactionComment) {
         ReactionRes reactionRes = new ReactionRes();
         reactionMapper.updateReactionCommentResponseFromEntity(reactionComment, reactionRes);
@@ -82,7 +87,7 @@ public class ReactionCommentServiceImpl implements IReactionCommentService {
 
     List<ReactionRes> changeToResponse(List<ReactionComment> reactionComments) {
         return reactionComments.stream()
-                .map(this::changeToResponse)
-                .collect(Collectors.toList());
+                               .map(this::changeToResponse)
+                               .collect(Collectors.toList());
     }
 }

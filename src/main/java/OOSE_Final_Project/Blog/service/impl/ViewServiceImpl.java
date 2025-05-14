@@ -67,4 +67,12 @@ public class ViewServiceImpl implements IViewService {
         }
         viewRepository.deleteById(id);
     }
+
+    @Override
+    public long getAllViewsCount() {
+        var result = viewRepository.findAll();
+        return result.stream()
+                     .mapToLong(View::getCount)
+                     .sum();
+    }
 }

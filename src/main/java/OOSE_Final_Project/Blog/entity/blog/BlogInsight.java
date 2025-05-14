@@ -5,6 +5,8 @@ import OOSE_Final_Project.Blog.entity.Tag;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -26,10 +28,12 @@ public class BlogInsight extends Blog {
 
     @ManyToOne
     @JoinColumn(name = "comic_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     BlogComic comic;
 
     @ManyToOne
     @JoinColumn(name = "character_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     BlogCharacter blogCharacter;
 
 }

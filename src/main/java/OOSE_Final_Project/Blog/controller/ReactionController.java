@@ -61,4 +61,15 @@ public class ReactionController {
         return (new ApiResponse<>(HttpStatus.OK, "Reaction deleted", Boolean.TRUE, null));
     }
 
+    @GetMapping("count-all")
+    public ApiResponse<Long> countAllReactions() {
+        IReactionService reactionService = reactionStrategyFactory.getStrategy("Blog");
+        long total = 0;
+        total += reactionService.getAllReactions()
+                                .size();
+        reactionService = reactionStrategyFactory.getStrategy("Comment");
+        total += reactionService.getAllReactions()
+                                .size();
+        return (new ApiResponse<>(HttpStatus.OK, "Total reactions", total, null));
+    }
 }

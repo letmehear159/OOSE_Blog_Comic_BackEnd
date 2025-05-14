@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Table(name = "follows")
 @Entity
@@ -19,10 +21,12 @@ public class Follow extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     User user;
 
     @ManyToOne
     @JoinColumn(name = "blogger_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     User blogger;
 
 }
