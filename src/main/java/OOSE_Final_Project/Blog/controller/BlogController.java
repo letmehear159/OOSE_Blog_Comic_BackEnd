@@ -43,6 +43,12 @@ public class BlogController {
         return new ApiResponse<>(HttpStatus.OK, "Get all blogs", result, null);
     }
 
+    @GetMapping("")
+    public ApiResponse<ResultPaginationDTO> getAllBlogs(Pageable pageable) {
+        var result = blogService.getBlogsWithPageable(pageable);
+        return new ApiResponse<>(HttpStatus.OK, "Get all blogs with pagination", result, null);
+    }
+
     @GetMapping("/filter")
     public ApiResponse<ResultPaginationDTO> searchByCat(
             @RequestParam List<Long> categoryIds,

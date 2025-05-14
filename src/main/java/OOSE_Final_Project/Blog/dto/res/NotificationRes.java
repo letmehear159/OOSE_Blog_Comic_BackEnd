@@ -4,6 +4,8 @@ import OOSE_Final_Project.Blog.dto.res.user.UserNotificationRes;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class NotificationRes {
@@ -17,4 +19,8 @@ public class NotificationRes {
     boolean isRead;
 
     String url;
+
+    LocalDateTime createdAt;
+
+    LocalDateTime updatedAt;
 }

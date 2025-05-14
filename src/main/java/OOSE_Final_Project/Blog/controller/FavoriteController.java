@@ -14,13 +14,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/favorites")
 public class FavoriteController {
+
     @Autowired
     private IFavoriteService favoriteService;
 
     @PostMapping
-    public ApiResponse<Favorite> createFavorite(@RequestBody FavoriteReq favoriteReq) {
+    public ApiResponse<Boolean> createFavorite(@RequestBody FavoriteReq favoriteReq) {
         Favorite result = favoriteService.createFavorite(favoriteReq);
-        return new ApiResponse<>(HttpStatus.CREATED, "Create Favorite successfully", result, null);
+        return new ApiResponse<>(HttpStatus.CREATED, "Create Favorite successfully", true, null);
     }
 
     @GetMapping
@@ -41,12 +42,20 @@ public class FavoriteController {
         return new ApiResponse<>(HttpStatus.OK, "Get favorites by blogId", favorites, null);
     }
 
+    @GetMapping("/blog-count/{blogId}")
+    public ApiResponse<Integer> getFavoriteCountByBlogId(@PathVariable Long blogId) {
+        List<Favorite> favorites = favoriteService.getFavoritesByBlogId(blogId);
+        return new ApiResponse<>(HttpStatus.OK, "Get favorites by blogId", favorites.size(), null);
+    }
+
     @GetMapping("/user/{userId}/blog/{blogId}")
     public ApiResponse<Favorite> getFavoriteByUserIdAndBlogId(@PathVariable Long userId, @PathVariable Long blogId) {
         Optional<Favorite> favorite = favoriteService.getFavoriteByUserIdAndBlogId(userId, blogId);
         return favorite
                 .map(f -> new ApiResponse<>(HttpStatus.OK, "Found favorite", f, null))
-                .orElseGet(() -> new ApiResponse<>(HttpStatus.NOT_FOUND, "Favorite not found", null, "No favorite with given userId and blogId"));
+                .orElseGet(() -> new ApiResponse<>(
+                        HttpStatus.NOT_FOUND, "Favorite not found", null,
+                        "No favorite with given userId and blogId"));
     }
 
     @DeleteMapping("/{id}")

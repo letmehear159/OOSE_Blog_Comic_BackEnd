@@ -51,7 +51,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public List<CommentRes> getAllComments() {
-        var comments=commentRepository.findAll();
+        var comments = commentRepository.findAll();
         return this.changeEntityToRes(comments);
     }
 
@@ -74,6 +74,12 @@ public class CommentServiceImpl implements ICommentService {
     public List<CommentRes> getCommentsByParentIsNullAndBlogId(Long blogId) {
         var comments = commentRepository.findByParentIsNullAndBlogId(blogId);
         return this.changeEntityToRes(comments);
+    }
+
+    @Override
+    public int getCommentCountByBlogId(Long blogId) {
+        var comments = commentRepository.findByBlogId(blogId);
+        return comments.size();
     }
 
     @Override

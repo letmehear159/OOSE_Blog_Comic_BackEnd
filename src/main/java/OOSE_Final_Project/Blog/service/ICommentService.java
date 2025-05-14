@@ -22,4 +22,6 @@ public interface ICommentService {
 
     public List<CommentRes> getCommentsByParentIsNullAndBlogId(Long blogId);
 
+    int getCommentCountByBlogId(Long blogId);
+
 }

@@ -1,7 +1,9 @@
 package OOSE_Final_Project.Blog.service;
 
+import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogInsightReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogInsightRes;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,4 +25,6 @@ public interface IBlogInsightService {
     List<BlogInsightRes> findByCharacterId(Long characterId);
 
     List<BlogInsightRes> findByComicId(Long comicId);
+
+    ResultPaginationDTO findAll(Pageable pageable);
 }

@@ -61,4 +61,10 @@ public class CommentController {
         commentService.deleteComment(Long.valueOf(commentId));
         return new ApiResponse<>(HttpStatus.OK, "Delete comment", Boolean.TRUE, null);
     }
+
+    @GetMapping("/count/{blogId}")
+    public ApiResponse<Integer> getCommentCount(@PathVariable String blogId) {
+        var result = commentService.getCommentCountByBlogId(Long.valueOf(blogId));
+        return new ApiResponse<>(HttpStatus.OK, "Get comment count of a blog", result, null);
+    }
 }

@@ -37,7 +37,7 @@ public class CommentObserver implements Observer {
                                               .getId();
             if (authorCommentParent == commentRes.getUserCommentResponse()
                                                  .getUserId()) {
-                continue;
+                return;
             }
             UserCommentRes sender = commentRes.getUserCommentResponse();
             NotificationReq notificationReq = NotificationReq.builder()

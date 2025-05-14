@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.service.impl;
 
+import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogInsightReq;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogInsightRes;
 import OOSE_Final_Project.Blog.entity.blog.BlogInsight;
@@ -11,6 +12,8 @@ import OOSE_Final_Project.Blog.service.IBlogInsightService;
 import OOSE_Final_Project.Blog.util.FileUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -129,5 +132,31 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
                         return blogInsightRes;
                     })
                     .toList();
+    }
+
+    @Override
+    public ResultPaginationDTO findAll(Pageable pageable) {
+        Page<BlogInsight> blogPage = blogInsightRepository.findAll(pageable);
+        var blogInsightResList = blogPage.getContent()
+                                         .stream()
+                                         .map(b -> {
+                                             BlogInsightRes blogInsightRes = new BlogInsightRes();
+                                             blogInsightMapper.updateBlogInsightResponseFromEntity(
+                                                     b, blogInsightRes);
+                                             return blogInsightRes;
+                                         })
+                                         .toList();
+
+        var meta = ResultPaginationDTO.Meta.builder()
+                                           .pages(blogPage.getTotalPages())
+                                           .total(blogPage.getTotalElements())
+                                           .pageSize(blogPage.getSize())
+                                           .page(blogPage.getNumber() + 1)
+                                           .build();
+        return ResultPaginationDTO.builder()
+                                  .meta(meta)
+                                  .result(blogInsightResList)
+                                  .build();
+
     }
 }

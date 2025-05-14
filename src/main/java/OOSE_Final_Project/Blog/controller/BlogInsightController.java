@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.controller;
 
+import OOSE_Final_Project.Blog.dto.ResultPaginationDTO;
 import OOSE_Final_Project.Blog.dto.req.blog.BlogInsightReq;
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
 import OOSE_Final_Project.Blog.dto.res.blog.BlogInsightRes;
@@ -7,6 +8,7 @@ import OOSE_Final_Project.Blog.observer.BlogViewLevelPublisher;
 import OOSE_Final_Project.Blog.service.IBlogInsightService;
 import OOSE_Final_Project.Blog.service.IViewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +37,7 @@ public class BlogInsightController {
         return new ApiResponse<>(HttpStatus.CREATED, "Create a blog insight", result, null);
     }
 
-    @GetMapping("")
+    @GetMapping("/all")
     public ApiResponse<List<BlogInsightRes>> getAllBlogCharacter() {
         var result = blogInsightService.findAll();
         return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight", result, null);
@@ -72,5 +74,11 @@ public class BlogInsightController {
     public ApiResponse<List<BlogInsightRes>> getAllByComicId(@PathVariable Long comicId) {
         var result = blogInsightService.findByComicId(comicId);
         return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight by character ID", result, null);
+    }
+
+    @GetMapping("")
+    public ApiResponse<ResultPaginationDTO> getBlogWithPagination(Pageable pageable) {
+        var result = blogInsightService.findAll(pageable);
+        return new ApiResponse<>(HttpStatus.OK, "Get all blog insight with pagination", result, null);
     }
 }

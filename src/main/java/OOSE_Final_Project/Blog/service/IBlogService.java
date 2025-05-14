@@ -21,4 +21,6 @@ public interface IBlogService {
 
     BlogRes getBlogById(Long id);
 
+    ResultPaginationDTO getBlogsWithPageable(Pageable pageable);
+
 }

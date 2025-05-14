@@ -179,6 +179,23 @@ public class BlogServiceImpl implements IBlogService {
         return blogRes;
     }
 
+    @Override
+    public ResultPaginationDTO getBlogsWithPageable(Pageable pageable) {
+        var pageBlog = blogRepository.findAll(pageable);
+        List<BlogRes> blogResponses = pageBlog.getContent()
+                                              .stream()
+                                              .map(
+                                                      blog -> {
+                                                          BlogRes blogRes = new BlogRes();
+                                                          blogMapper.updateToBlogResponseFromEntity(blog, blogRes);
+                                                          return blogRes;
+                                                      }
+                                              )
+                                              .toList();
+        return toResultPaginationDTO(pageBlog, blogResponses);
+
+    }
+
     ResultPaginationDTO toResultPaginationDTO(Page<Blog> blogPage, List<BlogRes> blogResponses) {
         var meta = ResultPaginationDTO.Meta.builder()
                                            .pages(blogPage.getTotalPages())

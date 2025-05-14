@@ -1,16 +1,24 @@
 package OOSE_Final_Project.Blog.dto.res.user;
 
+import OOSE_Final_Project.Blog.enums.ELoginType;
+
 public class UserNotificationRes {
 
     private Long userId;
+
     private String displayName;
+
     private String avatar;
+
+    private ELoginType loginType;
+
 
     // Constructor private để bắt buộc dùng builder
     private UserNotificationRes(Builder builder) {
         this.userId = builder.userId;
         this.displayName = builder.displayName;
         this.avatar = builder.avatar;
+        this.loginType = builder.loginType;
     }
 
     public static Builder builder() {
@@ -18,9 +26,14 @@ public class UserNotificationRes {
     }
 
     public static class Builder {
+
         private Long userId;
+
         private String displayName;
+
         private String avatar;
+
+        private ELoginType loginType;
 
         public Builder userId(Long userId) {
             this.userId = userId;
@@ -37,9 +50,15 @@ public class UserNotificationRes {
             return this;
         }
 
+        public Builder loginType(ELoginType loginType) {
+            this.loginType = loginType;
+            return this;
+        }
+
         public UserNotificationRes build() {
             return new UserNotificationRes(this);
         }
+
     }
 
     // Getters (nếu cần)
@@ -53,5 +72,9 @@ public class UserNotificationRes {
 
     public String getAvatar() {
         return avatar;
+    }
+
+    public ELoginType getLoginType() {
+        return loginType;
     }
 }

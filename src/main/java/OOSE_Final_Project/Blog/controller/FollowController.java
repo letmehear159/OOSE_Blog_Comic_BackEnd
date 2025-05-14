@@ -25,13 +25,24 @@ public class FollowController {
 
     @GetMapping("")
     public ApiResponse<List<Follow>> getAllFollows() {
-        var result=followService.getAllFollows();
+        var result = followService.getAllFollows();
         return new ApiResponse<>(HttpStatus.OK, "Get all follows", result, null);
     }
 
     @DeleteMapping("")
-    public ApiResponse<Boolean> unfollow(@RequestBody FollowReq followReq) {
+    public ApiResponse<Boolean> unfollow(@RequestParam long userId, @RequestParam long bloggerId) {
+        FollowReq followReq = new FollowReq();
+        followReq.setUserId(userId);
+        followReq.setBloggerId(bloggerId);
         followService.deleteFollow(followReq);
-        return new ApiResponse<>(HttpStatus.OK,"Unfollow a blogger",Boolean.TRUE, null);
+        return new ApiResponse<>(HttpStatus.OK, "Unfollow a blogger", Boolean.TRUE, null);
+    }
+
+    @GetMapping("/find")
+    public ApiResponse<Boolean> find(@RequestParam long userId, @RequestParam long bloggerId) {
+        followService.getFollowByUserIdAndBloggerId(userId, bloggerId)
+                     .orElseThrow();
+        return new ApiResponse<>(
+                HttpStatus.OK, "Find a blogger", Boolean.TRUE, null);
     }
 }

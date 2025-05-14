@@ -36,6 +36,7 @@ public abstract class NotificationMapper {
         return new UserNotificationRes.Builder().userId(sender.getId())
                                                 .avatar(sender.getAvatar())
                                                 .displayName(sender.getDisplayName())
+                                                .loginType(sender.getLoginType())
                                                 .build();
     }
 

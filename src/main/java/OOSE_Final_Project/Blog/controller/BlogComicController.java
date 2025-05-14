@@ -69,7 +69,7 @@ public class BlogComicController {
     @GetMapping("")
     public ApiResponse<ResultPaginationDTO> getBlogWithPagination(Pageable pageable) {
         var result = blogComicService.findAll(pageable);
-        return new ApiResponse<>(HttpStatus.OK, "Get all blog characters with pagination", result, null);
+        return new ApiResponse<>(HttpStatus.OK, "Get all blog comic with pagination", result, null);
     }
 
 }
