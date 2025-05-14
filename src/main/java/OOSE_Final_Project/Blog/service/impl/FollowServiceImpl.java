@@ -1,5 +1,11 @@
 package OOSE_Final_Project.Blog.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import OOSE_Final_Project.Blog.dto.req.FollowReq;
 import OOSE_Final_Project.Blog.entity.Follow;
 import OOSE_Final_Project.Blog.entity.User;
@@ -7,11 +13,6 @@ import OOSE_Final_Project.Blog.repository.FollowRepository;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.service.IFollowService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(rollbackOn = Exception.class)
@@ -69,12 +70,12 @@ public class FollowServiceImpl implements IFollowService {
     }
 
     @Override
-    public List<Follow> getFollowsByUserId(Long userId) {
+    public List<Follow> getFollowingByUserId(Long userId) {
         return followRepository.findByUserId(userId);
     }
 
     @Override
-    public List<Follow> getFollowsByBloggerId(Long bloggerId) {
+    public List<Follow> getFollowersByBloggerId(Long bloggerId) {
         return followRepository.findByBloggerId(bloggerId);
     }
 

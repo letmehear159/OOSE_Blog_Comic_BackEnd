@@ -45,4 +45,22 @@ public class FollowController {
         return new ApiResponse<>(
                 HttpStatus.OK, "Find a blogger", Boolean.TRUE, null);
     }
+
+    /**
+     * Lấy danh sách blogger mà một người dùng đang theo dõi
+     */
+    @GetMapping("/user/{userId}")
+    public ApiResponse<List<Follow>> getFollowingByUser(@PathVariable Long userId) {
+        var result = followService.getFollowingByUserId(userId);
+        return new ApiResponse<>(HttpStatus.OK, "Get all bloggers followed by user", result, null);
+    }
+    
+    /**
+     * Lấy danh sách người dùng đang theo dõi một blogger
+     */
+    @GetMapping("/blogger/{bloggerId}")
+    public ApiResponse<List<Follow>> getFollowersByBlogger(@PathVariable Long bloggerId) {
+        var result = followService.getFollowersByBloggerId(bloggerId);
+        return new ApiResponse<>(HttpStatus.OK, "Get all followers of blogger", result, null);
+    }
 }

@@ -1,7 +1,11 @@
 package OOSE_Final_Project.Blog.util;
 
-import OOSE_Final_Project.Blog.dto.UserClaim;
-import OOSE_Final_Project.Blog.entity.User;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -9,14 +13,16 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import OOSE_Final_Project.Blog.dto.UserClaim;
+import OOSE_Final_Project.Blog.entity.User;
 
 @Service
 public class SecurityUtil {
@@ -49,6 +55,7 @@ public class SecurityUtil {
         scopes.add(role);
 
         UserClaim userClaim = UserClaim.builder()
+                                        .id(user.getId())
                                        .role(user.getRole())
                                        .username(user.getUsername())
                                        .email(user.getEmail())
