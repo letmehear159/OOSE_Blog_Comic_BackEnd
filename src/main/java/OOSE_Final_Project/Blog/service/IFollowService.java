@@ -1,10 +1,10 @@
 package OOSE_Final_Project.Blog.service;
 
-import OOSE_Final_Project.Blog.dto.req.FollowReq;
-import OOSE_Final_Project.Blog.entity.Follow;
-
 import java.util.List;
 import java.util.Optional;
+
+import OOSE_Final_Project.Blog.dto.req.FollowReq;
+import OOSE_Final_Project.Blog.entity.Follow;
 
 public interface IFollowService {
     Follow createFollow(FollowReq follow);
@@ -13,9 +13,9 @@ public interface IFollowService {
 
     Optional<Follow> getFollowById(Long id);
 
-    List<Follow> getFollowsByUserId(Long userId);
+    List<Follow> getFollowingByUserId(Long userId);
 
-    List<Follow> getFollowsByBloggerId(Long bloggerId);
+    List<Follow> getFollowersByBloggerId(Long bloggerId);
 
     void deleteFollow(FollowReq follow);
 
