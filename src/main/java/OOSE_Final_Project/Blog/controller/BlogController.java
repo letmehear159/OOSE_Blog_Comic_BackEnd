@@ -9,6 +9,7 @@ import OOSE_Final_Project.Blog.enums.EBlogStatus;
 import OOSE_Final_Project.Blog.observer.BlogPublisher;
 import OOSE_Final_Project.Blog.service.IBlogService;
 import OOSE_Final_Project.Blog.service.IViewService;
+import OOSE_Final_Project.Blog.service.impl.ImageUploadService;
 import OOSE_Final_Project.Blog.specification.BlogSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,8 @@ public class BlogController {
     @Autowired
     IViewService viewService;
 
+    @Autowired
+    ImageUploadService imageUploadService;
 
     @GetMapping("/search")
     public ApiResponse<ResultPaginationDTO> getAllBlogCharacter(
@@ -109,4 +112,7 @@ public class BlogController {
         return new ApiResponse<>(HttpStatus.OK, "Get statistic", result, null);
 
     }
+
+
+
 }

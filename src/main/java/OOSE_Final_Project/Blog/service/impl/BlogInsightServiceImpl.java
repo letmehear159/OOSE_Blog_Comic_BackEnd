@@ -9,7 +9,6 @@ import OOSE_Final_Project.Blog.enums.EBlogType;
 import OOSE_Final_Project.Blog.mapper.BlogInsightMapper;
 import OOSE_Final_Project.Blog.repository.BlogInsightRepository;
 import OOSE_Final_Project.Blog.service.IBlogInsightService;
-import OOSE_Final_Project.Blog.util.FileUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +29,9 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
     @Autowired
     BlogInsightMapper blogInsightMapper;
 
+    @Autowired
+    ImageUploadService imageUploadService;
+
 
     @Override
     public BlogInsightRes save(BlogInsightReq BlogInsightReq, MultipartFile thumbnail) throws IOException {
@@ -37,8 +39,8 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
 
         blogInsightMapper.updateBlogInsightFromDto(BlogInsightReq, blogInsight);
         blogInsight.setStatus(EBlogStatus.PENDING);
-
-        String thumbnailName = FileUtil.storeFile(thumbnail);
+        //        FileUtil.storeFile(thumbnail);
+        String thumbnailName = imageUploadService.uploadImage(thumbnail);
 
         blogInsight.setThumbnail(thumbnailName);
 
@@ -93,9 +95,8 @@ public class BlogInsightServiceImpl implements IBlogInsightService {
         blogInsightMapper.updateBlogInsightFromDto(updatedBlogInsightReq, existing);
 
         if (thumbnail != null) {
-            FileUtil.deleteFile(existing.getThumbnail());
-
-            var fileName = FileUtil.storeFile(thumbnail);
+//            FileUtil.storeFile(thumbnail);
+            var fileName = imageUploadService.uploadImage(thumbnail);
             existing.setThumbnail(fileName);
         }
 

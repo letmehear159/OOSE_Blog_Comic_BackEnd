@@ -18,7 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
-.env
+.env.dev
+.env.prod
 /uploads/
 /previews/
 

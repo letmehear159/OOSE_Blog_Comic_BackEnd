@@ -11,7 +11,6 @@ import OOSE_Final_Project.Blog.mapper.BlogCharacterMapper;
 import OOSE_Final_Project.Blog.repository.BlogCharacterRepository;
 import OOSE_Final_Project.Blog.repository.CharacterRepository;
 import OOSE_Final_Project.Blog.service.IBlogCharacterService;
-import OOSE_Final_Project.Blog.util.FileUtil;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,8 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
     @Autowired
     private CharacterRepository characterRepository;
 
+    @Autowired
+    ImageUploadService imageUploadService;
 
     @Override
     public BlogCharacterRes save(BlogCharacterReq blogCharacterRequest, MultipartFile thumbnail) throws IOException {
@@ -54,7 +55,8 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
         blogCharacter.setCharacter(character);
         blogCharacter.setType(EBlogType.CHARACTER);
 
-        String thumbnailName = FileUtil.storeFile(thumbnail);
+        String thumbnailName = imageUploadService.uploadImage(thumbnail);
+        //                FileUtil.storeFile(thumbnail);
 
         blogCharacter.setThumbnail(thumbnailName);
 
@@ -107,15 +109,8 @@ public class BlogCharacterServiceImpl implements IBlogCharacterService {
         blogCharacterMapper.updateBlogCharacterFromDto(updatedBlogCharacter, existing);
 
         var character = characterRepository.save(existing.getCharacter());
-
-        if (thumbnail != null) {
-            FileUtil.deleteFile(existing.getThumbnail());
-
-            var fileName = FileUtil.storeFile(thumbnail);
-            existing.setThumbnail(fileName);
-        }
-
-
+        var fileName = imageUploadService.uploadImage(thumbnail);
+        existing.setThumbnail(fileName);
         existing.setCharacter(character);
 
         existing = blogCharacterRepository.save(existing);

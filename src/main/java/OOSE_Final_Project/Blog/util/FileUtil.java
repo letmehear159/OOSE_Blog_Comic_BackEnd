@@ -7,6 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +23,7 @@ public class FileUtil {
 
     public static boolean isImageFile(MultipartFile file) throws FileUploadException {
 
-        List<String> allowedExtensions = Arrays.asList("pdf", "jpg", "jpeg", "png","webp");
+        List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "webp");
         final String fileName = file.getOriginalFilename();
 
         // Check file empty
@@ -45,14 +50,22 @@ public class FileUtil {
         // Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
         String uniqueFilename = UUID.randomUUID() + "_" + filename;
 
-        String absPath = new File(UploadPathHolder.uploadDir).getAbsolutePath();
-        File folder = new File(absPath);
-        if (!folder.exists()) {
-            folder.mkdirs(); // Tạo thư mục nếu chưa có
+        // Dùng đường tuyệt đối từ cấu hình (đã set bằng ENV)
+        Path uploadPath = Paths.get(UploadPathHolder.uploadDir)
+                               .toAbsolutePath()
+                               .normalize();
+
+        // Tạo thư mục nếu chưa tồn tại
+        Files.createDirectories(uploadPath);
+
+        // Tạo file đích
+        Path targetPath = uploadPath.resolve(uniqueFilename);
+        System.out.println(">>> Check path: " + targetPath);
+        // Lưu file vào disk
+        try (InputStream inputStream = file.getInputStream()) {
+            Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
         }
 
-        File dest = new File(folder, uniqueFilename);
-        file.transferTo(dest);
         return uniqueFilename;
     }
 

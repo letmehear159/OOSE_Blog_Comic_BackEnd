@@ -1,7 +1,9 @@
 package OOSE_Final_Project.Blog.controller;
 
 import OOSE_Final_Project.Blog.dto.res.ApiResponse;
+import OOSE_Final_Project.Blog.service.impl.ImageUploadService;
 import OOSE_Final_Project.Blog.util.FileUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +31,17 @@ public class UploadController {
     @Value("${project.upload-file.base-preview-uri}")
     private String upload_base_preview_uri;
 
+    @Autowired
+    private ImageUploadService imageUploadService;
+
     @PostMapping("")
     public ResponseEntity<ApiResponse<Map<String, List<String>>>> uploadMultipleImages(
             @RequestParam("images") MultipartFile[] files) {
         List<String> urls = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
-                urls.add(BASE_URL+ "/" + upload_base_uri  + FileUtil.storeFile(file));
+                String url = imageUploadService.uploadImage(file);
+                urls.add(url);
             }
             Map<String, List<String>> response = new HashMap<>();
             response.put("urls", urls);
@@ -54,7 +60,7 @@ public class UploadController {
         List<String> urls = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
-                urls.add(BASE_URL+ "/" + upload_base_preview_uri  + FileUtil.storePreviewFile(file));
+                urls.add(BASE_URL + "/" + upload_base_preview_uri + FileUtil.storePreviewFile(file));
             }
             Map<String, List<String>> response = new HashMap<>();
             response.put("urls", urls);
