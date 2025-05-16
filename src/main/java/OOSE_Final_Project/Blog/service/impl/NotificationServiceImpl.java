@@ -80,6 +80,12 @@ public class NotificationServiceImpl implements INotificationService {
         notificationRepository.deleteById(id);
     }
 
+    @Override
+    public void deleteAllNotificationsByUserId(Long userId) {
+        notificationRepository.deleteByReceiverId(userId);
+        return;
+    }
+
     public List<NotificationRes> changeToRes(List<Notification> notifications) {
         return notifications.stream()
                             .map(notification ->

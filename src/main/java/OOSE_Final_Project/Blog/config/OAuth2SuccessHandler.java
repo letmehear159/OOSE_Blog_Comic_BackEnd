@@ -3,6 +3,7 @@ package OOSE_Final_Project.Blog.config;
 import OOSE_Final_Project.Blog.entity.User;
 import OOSE_Final_Project.Blog.enums.ELoginType;
 import OOSE_Final_Project.Blog.enums.ERole;
+import OOSE_Final_Project.Blog.enums.EUserStatus;
 import OOSE_Final_Project.Blog.repository.UserRepository;
 import OOSE_Final_Project.Blog.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,6 +57,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                        .password("")
                        .loginType(ELoginType.GOOGLE)
                        .role(ERole.USER)
+                       .accountStatus(EUserStatus.ACTIVE)
                        .username(displayName)
                        .build();
             userRepository.save(user);

@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/notifications")
 public class NotificationController {
+
     @Autowired
     private INotificationService notificationService;
 
@@ -42,4 +43,17 @@ public class NotificationController {
         notificationService.deleteNotification(id);
         return new ApiResponse<>(HttpStatus.NO_CONTENT, "Notification deleted", Boolean.TRUE, null);
     }
+
+    @GetMapping("")
+    public ApiResponse<List<NotificationRes>> getAllNotifications() {
+        List<NotificationRes> result = notificationService.getAllNotifications();
+        return new ApiResponse<>(HttpStatus.OK, "Fetched all notifications", result, null);
+    }
+
+    @DeleteMapping("")
+    public ApiResponse<Boolean> deleteAllNotificationsByUserId(@RequestParam Long userId) {
+        notificationService.deleteAllNotificationsByUserId(userId);
+        return new ApiResponse<>(HttpStatus.OK, "Delete all notifications", Boolean.TRUE, null);
+    }
+
 }

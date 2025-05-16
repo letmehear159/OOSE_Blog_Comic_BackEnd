@@ -235,7 +235,6 @@ public class BlogServiceImpl implements IBlogService {
                                               )
                                               .toList();
         return toResultPaginationDTO(pageBlog, blogResponses);
-
     }
 
     ResultPaginationDTO toResultPaginationDTO(Page<Blog> blogPage, List<BlogRes> blogResponses) {

@@ -6,6 +6,7 @@ import OOSE_Final_Project.Blog.dto.res.NotificationRes;
 import java.util.List;
 
 public interface INotificationService {
+
     NotificationRes createNotification(NotificationReq notification);
 
     List<NotificationRes> getAllNotifications();
@@ -19,4 +20,6 @@ public interface INotificationService {
     NotificationRes markNotificationAsRead(Long id);
 
     void deleteNotification(Long id);
+
+    void deleteAllNotificationsByUserId(Long userId);
 }
