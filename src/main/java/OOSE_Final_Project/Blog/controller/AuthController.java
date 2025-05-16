@@ -63,14 +63,22 @@ public class AuthController {
                              .setAuthentication(authentication);
 
         var currentUser = userService.findByUsernameOrEmail(loginReq.getIdentifier());
-        if (!currentUser.getAccountStatus()
-                        .equals(EUserStatus.ACTIVE)) {
+        if (currentUser.getAccountStatus()
+                       .equals(EUserStatus.VERIFYING)) {
             return ResponseEntity.status(HttpStatus.OK)
                                  .body(new ApiResponse<>(
                                          ErrorCode.VERIFYING_EMAIL.getHttpStatus(),
                                          ErrorCode.VERIFYING_EMAIL.getMessage(),
                                          new LoginRes(null, currentUser.getId()),
                                          ErrorCode.VERIFYING_EMAIL.name()));
+        } else if (currentUser.getAccountStatus()
+                              .equals(EUserStatus.BANNED)) {
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .body(new ApiResponse<>(
+                                         ErrorCode.UNAUTHORIZED.getHttpStatus(),
+                                         ErrorCode.UNAUTHORIZED.getMessage(),
+                                         new LoginRes(null, currentUser.getId()),
+                                         ErrorCode.UNAUTHORIZED.name()));
         }
 
         String accessToken = securityUtil.createAccessToken(currentUser);

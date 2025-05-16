@@ -8,10 +8,7 @@ import OOSE_Final_Project.Blog.service.IFavoriteService;
 import OOSE_Final_Project.Blog.service.IRateService;
 import OOSE_Final_Project.Blog.service.IViewService;
 import OOSE_Final_Project.Blog.service.strategy.reaction.ReactionStrategyFactory;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
@@ -36,6 +33,7 @@ public abstract class BlogMapper {
     @Mapping(target = "view", source = "id", qualifiedByName = "mapView")
     @Mapping(target = "reaction", source = "id", qualifiedByName = "mapReaction")
     @Mapping(target = "rateCount", source = "id", qualifiedByName = "mapRateCount")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateToBlogResponseFromEntity(
             Blog source, @MappingTarget BlogRes target);
 

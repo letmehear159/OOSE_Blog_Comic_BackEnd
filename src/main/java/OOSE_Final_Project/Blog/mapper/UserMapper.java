@@ -15,13 +15,14 @@ public abstract class UserMapper {
     PasswordEncoder passwordEncoder;
 
     @Mapping(target = "password", source = "password", qualifiedByName = "mapPassword")
-    @Mapping(target = "avatar",ignore = true)
+    @Mapping(target = "avatar", ignore = true)
     public abstract void transformToEntityFromRequest(UserReq source, @MappingTarget User target);
 
     @Mapping(target = "password", source = "password", qualifiedByName = "mapPassword")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateEntityFromRequest(UserUpdateReq source, @MappingTarget User target);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateUserResponseFromEntity(User source, @MappingTarget UserRes target);
 
     @Named("mapPassword")

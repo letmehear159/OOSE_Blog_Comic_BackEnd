@@ -76,6 +76,8 @@ public class BlogInsightController {
         return new ApiResponse<>(HttpStatus.CREATED, "Get all blog insight by character ID", result, null);
     }
 
+
+
     @GetMapping("")
     public ApiResponse<ResultPaginationDTO> getBlogWithPagination(Pageable pageable) {
         var result = blogInsightService.findAll(pageable);

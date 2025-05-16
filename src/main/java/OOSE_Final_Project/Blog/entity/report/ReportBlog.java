@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Table(name = "report_blogs")
 @Entity
@@ -20,5 +22,6 @@ public class ReportBlog extends ReportBase {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Blog blog;
 }
