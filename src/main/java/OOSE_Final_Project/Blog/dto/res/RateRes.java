@@ -13,7 +13,7 @@ public class RateRes {
 
     long rating;
 
-    long rateStar;
+    double rateStar;
 
     long id;
 }

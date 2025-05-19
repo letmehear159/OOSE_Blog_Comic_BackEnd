@@ -20,7 +20,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 public class Rate extends BaseEntity {
 
-    long rateStar;
+    double rateStar;
 
     @ManyToOne
     @JoinColumn(name = "blog_id")

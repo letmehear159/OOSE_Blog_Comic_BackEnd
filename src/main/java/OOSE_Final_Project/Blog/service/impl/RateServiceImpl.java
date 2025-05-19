@@ -73,7 +73,7 @@ public class RateServiceImpl implements IRateService {
     }
 
     @Override
-    public RateRes updateRate(Long id, long rateStar) {
+    public RateRes updateRate(Long id, double rateStar) {
         Rate rate = rateRepository.findById(id)
                                   .orElseThrow(() -> new IllegalArgumentException("Rate not found with id: " + id));
 

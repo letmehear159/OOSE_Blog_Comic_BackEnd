@@ -13,7 +13,7 @@ public interface IRateService {
 
     RateRes getRateByUserIdAndBlogId(Long userId, Long blogId);
 
-    RateRes updateRate(Long id, long rate);
+    RateRes updateRate(Long id, double rate);
 
 
     void deleteRate(Long id);

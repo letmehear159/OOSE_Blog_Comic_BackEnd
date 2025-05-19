@@ -24,8 +24,8 @@ public class RateController {
     }
 
     @GetMapping("/blog/{blogId}")
-    public ApiResponse<List<RateRes>> getRatesByBlogId(@PathVariable Long blogId) {
-        List<RateRes> rates = rateService.getRatesByBlogId(blogId);
+    public ApiResponse<Double> getRatesByBlogId(@PathVariable Long blogId) {
+        var rates = rateService.getRatesForBlogId(blogId);
         return new ApiResponse<>(HttpStatus.OK, "Rates retrieved successfully", rates, null);
     }
 
@@ -36,7 +36,7 @@ public class RateController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<RateRes> updateRate(@PathVariable Long id, @RequestParam long rate) {
+    public ApiResponse<RateRes> updateRate(@PathVariable Long id, @RequestParam double rate) {
         RateRes updated = rateService.updateRate(id, rate);
         return new ApiResponse<>(HttpStatus.OK, "Rate updated successfully", updated, null);
     }
@@ -58,5 +58,12 @@ public class RateController {
         var rates = rateService.getAllRatesCount();
         return new ApiResponse<>(HttpStatus.OK, "Rate count retrieved successfully", rates, null);
     }
+
+    @GetMapping("/count-blog/{blogId}")
+    public ApiResponse<Long> getRateCountForBlogId(@PathVariable Long blogId) {
+        var rates = rateService.getRatesCountForBlogId(blogId);
+        return new ApiResponse<>(HttpStatus.OK, "Rate count retrieved successfully", rates, null);
+    }
+
 
 }

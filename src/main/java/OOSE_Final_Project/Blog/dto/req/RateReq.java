@@ -15,5 +15,5 @@ public class RateReq {
     long blogId;
 
     @NonNull
-    long rateStar;
+    double rateStar;
 }
