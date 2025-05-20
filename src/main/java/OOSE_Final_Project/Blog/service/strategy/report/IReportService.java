@@ -19,5 +19,6 @@ public interface IReportService {
 
      List<ReportRes> getUnHandledReports();
 
+    List<ReportRes> getUnReadReports();
 
 }

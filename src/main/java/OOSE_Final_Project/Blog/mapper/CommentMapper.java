@@ -1,6 +1,7 @@
 package OOSE_Final_Project.Blog.mapper;
 
 import OOSE_Final_Project.Blog.dto.req.CommentReq;
+import OOSE_Final_Project.Blog.dto.res.blog.BlogCommentRes;
 import OOSE_Final_Project.Blog.dto.res.comment.CommentRes;
 import OOSE_Final_Project.Blog.dto.res.user.UserCommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
@@ -37,11 +38,12 @@ public abstract class CommentMapper {
     @Mapping(target = "userCommentResponse", source = "author", qualifiedByName = "mapCommentResponse")
     @Mapping(target = "hasChildComment", source = "children", qualifiedByName = "hasChildren")
     @Mapping(target = "children", source = "children", qualifiedByName = "mapChildren")
+    @Mapping(target = "blog", source = "blog", qualifiedByName = "mapBlogResponse")
     public abstract void updateCommentResponseFromEntity(Comment source, @MappingTarget CommentRes target);
 
     @Named("mapChildren")
     List<CommentRes> mapChildren(List<Comment> comments) {
-        if(comments!=null) {
+        if (comments != null) {
             var children = comments.stream()
                                    .map(c -> {
                                        CommentRes res = new CommentRes();
@@ -68,6 +70,14 @@ public abstract class CommentMapper {
     @Named("hasChildren")
     boolean hasChildren(List<Comment> children) {
         return children != null && !children.isEmpty();
+    }
+
+    @Named("mapBlogResponse")
+    BlogCommentRes mapBlogResponse(Blog blog) {
+        return BlogCommentRes.builder()
+                             .blogType(blog.getType())
+                             .id(blog.getId())
+                             .build();
     }
 
     @Named("mapAuthor")

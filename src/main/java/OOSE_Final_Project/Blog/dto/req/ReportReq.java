@@ -8,13 +8,14 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ReportReq {
+
     long userId;
 
     String reason;
 
     String url;
 
-    @JsonProperty("reportType")
+    @JsonProperty("eReportType")
     EReportType eReportType;
 
     long blogId;

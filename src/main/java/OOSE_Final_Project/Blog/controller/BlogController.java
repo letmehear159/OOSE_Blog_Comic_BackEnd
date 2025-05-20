@@ -113,6 +113,11 @@ public class BlogController {
 
     }
 
+    @DeleteMapping("/{blogId}")
+    public ApiResponse<Boolean> delete(@PathVariable Long blogId) {
+        blogService.deleteBlogById(blogId);
+        return new ApiResponse<>(HttpStatus.OK, "Delete a blog ", Boolean.TRUE, null);
+    }
 
 
 }

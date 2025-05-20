@@ -84,7 +84,13 @@ public class ReportBlogServiceImpl implements IReportBlogService {
 
     @Override
     public List<ReportRes> getUnHandledReports() {
-        var reports = reportBlogRepository.findByHandledFalse();
+        var reports = reportBlogRepository.findByHandledFalseAndReadTrue();
+        return changeToRes(reports);
+    }
+
+    @Override
+    public List<ReportRes> getUnReadReports() {
+        var reports = reportBlogRepository.findByReadFalse();
         return changeToRes(reports);
     }
 

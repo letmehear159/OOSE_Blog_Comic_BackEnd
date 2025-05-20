@@ -52,19 +52,10 @@ public abstract class ReportMapper {
     public abstract void updateReportCommentResponseFromEntity(ReportComment source, @MappingTarget ReportRes target);
 
 
-//    @Named("mapCommentReportType")
-//    String mapCommentReportType() {
-//        return "Comment";
-//    }
-//
-//    @Named("mapBlogReportType")
-//    String mapBlogReportType() {
-//        return "Blog";
-//    }
-
     @Named("mapReporterRes")
     UserReportRes mapReporterRes(User reporter) {
         return new UserReportRes.Builder().avatar(reporter.getAvatar())
+                                          .id(reporter.getId())
                                           .level(reporter.getLevel())
                                           .displayName(reporter.getDisplayName())
                                           .build();

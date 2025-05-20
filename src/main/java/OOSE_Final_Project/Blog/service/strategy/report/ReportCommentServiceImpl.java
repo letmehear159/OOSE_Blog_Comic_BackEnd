@@ -62,7 +62,13 @@ public class ReportCommentServiceImpl implements IReportCommentService {
 
     @Override
     public List<ReportRes> getUnHandledReports() {
-        var reports = reportCommentRepository.findByHandledFalse();
+        var reports = reportCommentRepository.findByHandledFalseAndReadTrue();
+        return changeToRes(reports);
+    }
+
+    @Override
+    public List<ReportRes> getUnReadReports() {
+        var reports = reportCommentRepository.findByReadFalse();
         return changeToRes(reports);
     }
 

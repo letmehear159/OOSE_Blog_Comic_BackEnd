@@ -4,9 +4,11 @@ import OOSE_Final_Project.Blog.dto.req.NotificationReq;
 import OOSE_Final_Project.Blog.dto.res.comment.CommentRes;
 import OOSE_Final_Project.Blog.dto.res.user.UserCommentRes;
 import OOSE_Final_Project.Blog.entity.Comment;
+import OOSE_Final_Project.Blog.enums.EBlogType;
 import OOSE_Final_Project.Blog.repository.CommentRepository;
 import OOSE_Final_Project.Blog.service.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +19,9 @@ public class CommentObserver implements Observer {
 
     @Autowired
     INotificationService notificationService;
+
+    @Value("${FRONT_END_URL}")
+    private String FE_URL;
 
     @Override
     public void update(Object data) {
@@ -39,9 +44,19 @@ public class CommentObserver implements Observer {
                                                  .getUserId()) {
                 return;
             }
+            String blogType;
+            if (commentRes.getBlog()
+                          .getBlogType() == EBlogType.CHARACTER) {
+                blogType = "Character";
+            } else {
+                blogType = "Comic";
+            }
+            String url = FE_URL + "/" + blogType + "/" + commentRes.getBlog()
+                                                                   .getId() + "#comment-" + commentRes.getId();
+
             UserCommentRes sender = commentRes.getUserCommentResponse();
             NotificationReq notificationReq = NotificationReq.builder()
-                                                             .url(null)
+                                                             .url(url)
                                                              .receiverId(authorCommentParent)
                                                              .senderId(sender.getUserId())
                                                              .message(sender.getDisplayName() +

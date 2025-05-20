@@ -1,5 +1,6 @@
 package OOSE_Final_Project.Blog.dto.res.comment;
 
+import OOSE_Final_Project.Blog.dto.res.blog.BlogCommentRes;
 import OOSE_Final_Project.Blog.dto.res.user.UserCommentRes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,8 @@ public class CommentRes {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    BlogCommentRes blog;
 
     List<CommentRes> children;
 }

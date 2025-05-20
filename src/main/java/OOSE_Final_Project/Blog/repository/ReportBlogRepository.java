@@ -10,6 +10,8 @@ import java.util.List;
 public interface ReportBlogRepository extends JpaRepository<ReportBlog, Long> {
 
 
+    List<ReportBlog> findByHandledFalseAndReadTrue();
 
-    List<ReportBlog> findByHandledFalse();
+    List<ReportBlog> findByReadFalse();
+
 }

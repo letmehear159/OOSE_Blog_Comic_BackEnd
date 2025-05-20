@@ -27,6 +27,7 @@ public class ReportBase extends BaseEntity {
 
     EReportType eReportType;
 
+
     @Column(name = "`read`")
     boolean read;
 

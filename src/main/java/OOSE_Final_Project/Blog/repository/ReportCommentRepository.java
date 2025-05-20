@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface ReportCommentRepository extends JpaRepository<ReportComment, Long> {
 
-    List<ReportComment> findByHandledFalse();
+    List<ReportComment> findByHandledFalseAndReadTrue();
+
+    List<ReportComment> findByReadFalse();
 }

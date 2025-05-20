@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 public class UserReportRes {
 
+    long id;
+
     String displayName;
 
     String avatar;
@@ -21,6 +23,7 @@ public class UserReportRes {
         this.avatar = builder.avatar;
         this.role = builder.role;
         this.level = builder.level;
+        this.id = builder.id;
     }
 
     public static class Builder {
@@ -33,6 +36,8 @@ public class UserReportRes {
 
         private double level;
 
+        private long id;
+
         public Builder displayName(String displayName) {
             this.displayName = displayName;
             return this;
@@ -40,6 +45,11 @@ public class UserReportRes {
 
         public Builder avatar(String avatar) {
             this.avatar = avatar;
+            return this;
+        }
+
+        public Builder id(long id) {
+            this.id = id;
             return this;
         }
 

@@ -282,6 +282,7 @@ public class BlogServiceImpl implements IBlogService {
 
     @Override
     public void deleteBlogById(Long id) {
-
+        blogRepository.deleteById(id);
+        return;
     }
 }
