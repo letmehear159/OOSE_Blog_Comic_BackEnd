@@ -14,11 +14,11 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "blogs")
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class Blog extends BaseEntity {
 
     String title;

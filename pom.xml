@@ -28,9 +28,10 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <native.image.mainClass>com.OOSE_Blog_Comic_BackEnd.Blog</native.image.mainClass>
     </properties>
-    <dependencies>
 
+    <dependencies>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -111,23 +112,28 @@
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.turkraft.springfilter</groupId>
-            <artifactId>jpa</artifactId>
-            <version>3.1.9</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.turkraft.springfilter</groupId>-->
+<!--            <artifactId>jpa</artifactId>-->
+<!--            <version>3.1.9</version>-->
+<!--        </dependency>-->
 
         <!--        Cloudinary upload image -->
         <dependency>
             <groupId>com.cloudinary</groupId>
-            <artifactId>cloudinary-http44</artifactId>
+            <artifactId>cloudinary-http45</artifactId>
             <version>1.36.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-core</artifactId>
+            <version>1.36.0</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -156,6 +162,14 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

@@ -11,7 +11,6 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "blog_characters")
 @Getter
 @Setter
-
 public class BlogCharacter extends Blog {
 
 
