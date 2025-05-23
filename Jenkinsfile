@@ -13,25 +13,24 @@ pipeline {
       }
     }
 
-    stage('Load Env') {
+    stage('Prepare .env') {
       steps {
-        script {
-          def props = readFile('.env').split('\n')
-          for (line in props) {
-            if (line && line.contains('=')) {
-              def (key, value) = line.split('=', 2)
-              env."${key.trim()}" = value.trim()
-            }
-          }
+        withCredentials([file(credentialsId: 'blog-comic-env-file', variable: 'ENV_FILE')]) {
+          sh 'cp $ENV_FILE .env'
         }
       }
     }
 
-  stage('Build Native Image') {
-    steps {
-      sh './mvnw -Pnative native:compile -DskipTests'
+    stage('Build Native Image') {
+      steps {
+        sh '''
+          set -a
+          source .env
+          set +a
+          ./mvnw -Pnative native:compile -DskipTests
+        '''
+      }
     }
-  }
 
     stage('Build Docker Image') {
       steps {
