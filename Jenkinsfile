@@ -13,6 +13,20 @@ pipeline {
       }
     }
 
+    stage('Load Env') {
+      steps {
+        script {
+          def props = readFile('.env').split('\n')
+          for (line in props) {
+            if (line && line.contains('=')) {
+              def (key, value) = line.split('=', 2)
+              env."${key.trim()}" = value.trim()
+            }
+          }
+        }
+      }
+    }
+
   stage('Build Native Image') {
     steps {
       sh './mvnw -Pnative native:compile -DskipTests'
