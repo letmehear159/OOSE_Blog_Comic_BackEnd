@@ -18,6 +18,8 @@ public class BlogApplication {
         SpringApplication.run(BlogApplication.class, args);
         System.out.println("Working dir (user.dir) = " + System.getProperty("user.dir"));
         System.out.println("File encoding  = " + Charset.defaultCharset().displayName());
+        System.out.println("Jenkins applied successfully");
+
     }
 
 }
