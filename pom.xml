@@ -28,7 +28,7 @@
     </scm>
     <properties>
         <java.version>21</java.version>
-        <native.image.mainClass>com.OOSE_Blog_Comic_BackEnd.Blog</native.image.mainClass>
+        <native.image.mainClass>OOSE_Final_Project.Blog.BlogApplication</native.image.mainClass>
     </properties>
 
     <dependencies>
@@ -111,14 +111,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>com.turkraft.springfilter</groupId>-->
-<!--            <artifactId>jpa</artifactId>-->
-<!--            <version>3.1.9</version>-->
-<!--        </dependency>-->
-
-        <!--        Cloudinary upload image -->
         <dependency>
             <groupId>com.cloudinary</groupId>
             <artifactId>cloudinary-http45</artifactId>
@@ -170,6 +162,12 @@
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${native.image.mainClass}</mainClass>
+                    <buildArgs>
+                        <arg>-H:+AddAllCharsets</arg>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
