@@ -16,7 +16,10 @@ pipeline {
     stage('Prepare .env') {
       steps {
         withCredentials([file(credentialsId: 'blog-comic-env-file', variable: 'ENV_FILE')]) {
-          sh 'cp $ENV_FILE .env'
+         sh '''
+           rm -f .env
+           cp $ENV_FILE .env
+         '''
         }
       }
     }
